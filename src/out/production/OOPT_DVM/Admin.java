@@ -11,7 +11,6 @@ public class Admin {
 
 	public void refillDrink() {
 		// TODO implement here
-		return null;
 	}
 
 	public boolean systemStart() {

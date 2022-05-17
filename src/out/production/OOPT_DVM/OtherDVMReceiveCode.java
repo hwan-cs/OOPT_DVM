@@ -2,12 +2,12 @@ package dvmProject;
 
 import java.util.*;
 
-public class otherDVMReceiveCode {
+public class OtherDVMReceiveCode {
 
 	public String code;
 	public List<String> msgDesc;
 
-	public otherDVMReceiveCode() {
+	public OtherDVMReceiveCode() {
 	}
 
 	public String getCode() {
@@ -17,12 +17,10 @@ public class otherDVMReceiveCode {
 
 	public void setCode() {
 		// TODO implement here
-		return null;
 	}
 
 	public void setMsgDesc() {
 		// TODO implement here
-		return null;
 	}
 
 	public List<String> getMsgDesc() {

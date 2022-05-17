@@ -1,7 +1,5 @@
 package dvmProject;
 
-import java.util.*;
-
 public class Controller {
 
 	public int choiceDrinkNum;
@@ -15,42 +13,34 @@ public class Controller {
 	public void printMenu() {
 		// TODO implement here
 		//Commit test
-		return null;
 	}
 
 	public void printClosestDVMInfo() {
 		// TODO implement here
-		return null;
 	}
 
 	public void provideDrink() {
 		// TODO implement here
-		return null;
 	}
 
 	public void confirmPayment() {
 		// TODO implement here
-		return null;
 	}
 
 	public void selectDrink() {
 		// TODO implement here
-		return null;
 	}
 
 	public void selectOption() {
 		// TODO implement here
-		return null;
 	}
 
 	public void printSendInfo() {
 		// TODO implement here
-		return null;
 	}
 
 	public void printOption() {
 		// TODO implement here
-		return null;
 	}
 
 	public String inpVerificationCode() {
@@ -70,7 +60,6 @@ public class Controller {
 
 	public void setHaveToPay() {
 		// TODO implement here
-		return null;
 	}
 
 	public int getHaveToPay() {

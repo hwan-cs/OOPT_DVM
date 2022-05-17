@@ -16,7 +16,6 @@ public class Receiver {
 
 	public void setReceiverID() {
 		// TODO implement here
-		return null;
 	}
 
 	public int responseStockConfirmMsg() {
