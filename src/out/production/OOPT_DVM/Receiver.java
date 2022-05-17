@@ -2,11 +2,13 @@ package dvmProject;
 
 import java.util.*;
 
-public class Receiver {
+public class Receiver extends Thread{
 
 	public String receiverID;
+	private DVM dvm;
 
-	public Receiver() {
+	public Receiver(DVM dvm) {
+		this.dvm = dvm;
 	}
 
 	public String getReceiverID() {
@@ -33,4 +35,9 @@ public class Receiver {
 		return 0;
 	}
 
+	@Override
+	public void run() {
+		super.run();
+		System.out.println("flag_run()");
+	}
 }

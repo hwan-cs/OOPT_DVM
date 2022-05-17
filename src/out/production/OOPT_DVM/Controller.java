@@ -1,30 +1,150 @@
 package dvmProject;
 
-public class Controller {
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-	public int choiceDrinkNum;
-	public String choiceDrinkCode;
+public class Controller extends JDialog {
+
+	private DVM dvm;
+	private int choiceDrinkNum = 0;
+	private String choiceDrinkCode = "00";
 	public Card card;
 	public int haveToPay;
+	JPanel jp; // 패널 초기화
+	JButton[] drinkBtns;	//printMenuBtn
 
-	public Controller() {
+	TextField drinkCodeTf;	//음료 코드 텍스트 창
+	TextField drinkNumTf;	//음료 개수 텍스트 창
+
+	JButton confirmBtn;
+
+	public Controller(DVM dvm) {
+		this.dvm = dvm;
+		createDrinkMenuBtn(this.dvm);	//create btn
+		printOption();
+		createTextField();
+
+	}
+
+	private void createTextField(){
+		this.drinkCodeTf = new TextField("음료 코드: "+ this.choiceDrinkCode);
+		this.drinkNumTf = new TextField("음료 개수: "+ this.choiceDrinkNum);
+		this.drinkCodeTf.setSize(100 ,10);
+		this.drinkNumTf.setSize(100, 10);
+	}
+
+	private void createDrinkMenuBtn(DVM dvm){
+		this.drinkBtns = new JButton[20];
+		this.confirmBtn = new JButton("확인");
+		for (int i=0; i < drinkBtns.length; i++){
+			drinkBtns[i] = new JButton(dvm.getDrinkList()[i].drinkCode+ "." +dvm.getDrinkList()[i].getName().toString());
+		}
+	}
+
+	private void drinkBtnListener(JButton[] jButtons, DVM dvm){
+		for(int i=0; i < drinkBtns.length; i++){
+			int finalI = i;
+			jButtons[i].addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(choiceDrinkCode.equals(dvm.getDrinkList()[finalI].getDrinkCode())){
+						choiceDrinkNum++;
+					}
+					else{
+						choiceDrinkCode = dvm.getDrinkList()[finalI].getDrinkCode();
+						choiceDrinkNum = 1;
+					}
+					drinkCodeTf.setText("음료 코드: "+ choiceDrinkCode);
+					drinkNumTf.setText("음료 개수: "+ choiceDrinkNum);
+				}
+			});
+		}
+	}
+
+	private void confirmBtnListener(JFrame jFrame, JButton jButton, DVM dvm){
+		jButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//확인 버튼 다음
+				jFrame.dispose();
+				//
+				//최단거리 계산
+				String[] calcedDVM = dvm.getCalcDVMInfo();
+				//
+			}
+		});
 	}
 
 	public void printMenu() {
-		// TODO implement here
-		//Commit test
+		System.out.println("flag_printMenu()");
+
+		JPanel jp2 = new JPanel();
+		JFrame jf = new JFrame("메뉴선택");	//메뉴 선택창 객체 생성
+
+		for (JButton jButton: this.drinkBtns){
+			jp2.add(jButton);	//버튼들을 패널에 추가한다.
+		}
+		jp2.add(this.drinkCodeTf);	//code출력 텍스트필트
+		jp2.add(this.drinkNumTf);	//개수 출력 텍스트 필드
+		jp2.add(this.confirmBtn);	//확인 버튼
+		jf.add(jp2);
+		jf.setSize(400, 500); // 윈도우의 크기 가로x세로
+		jf.setVisible(true); // 창을 보여줄떄 true, 숨길때 false
+		jf.setDefaultCloseOperation(DISPOSE_ON_CLOSE); // x 버튼을 눌렀을때 종료
+
+		drinkBtnListener(this.drinkBtns, dvm);
+		confirmBtnListener(jf, confirmBtn, dvm);
 	}
 
-	public void printClosestDVMInfo() {
-		// TODO implement here
+	public void printClosestDVMInfo(String[] calcedDVM, JFrame jFrame) {
+		jFrame = new JFrame("최단거리 계산된 DVM 출력");
+		JPanel jp2 = new JPanel();
+
+		JButton calcedDVMBtn = new JButton("continue");
+		TextField calcedDVM_id = new TextField("DVM: id: " + calcedDVM[0]);	//계산된 DVMid
+		TextField calcedDVM_x = new TextField("x: " + calcedDVM[1]);	//계산된 DVM_x좌표
+		TextField calcedDVM_y = new TextField("y: " + calcedDVM[2]);	//계산된 DVM_y좌표
+
+		jp2.add(calcedDVM_id);
+		jp2.add(calcedDVM_x);
+		jp2.add(calcedDVM_y);
+		jp2.add(calcedDVMBtn);
+
+		jFrame.add(jp2);
+
+		JFrame finalJFrame = jFrame;
+
+		calcedDVMBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				finalJFrame.dispose();
+				confirmPayment(dvm);
+			}
+		});
+
+		//문제점 함수 안에서 함수 호출시 리턴되면서 다꺼져버림,,,,, dialog마다 새로만들 필요성 존재함.
+
 	}
 
 	public void provideDrink() {
 		// TODO implement here
 	}
 
-	public void confirmPayment() {
-		// TODO implement here
+	public void confirmPayment(DVM dvm) {
+		//setbalance있어야됨!
+
+		String drinkName = dvm.getDrinkList()[Integer.parseInt(getDrinkCode())+1].getName();
+		int drinkNum = this.getDrinkNum();
+		TextField noticeTf = new TextField("구매함?" + drinkName + drinkNum);	//notice
+		JButton jButton = new JButton("확인");
+		JPanel jp2 = new JPanel();
+		JFrame jf = new JFrame("결제 의사 확인");
+
+		jp2.add(noticeTf);
+		jp2.add(jButton);
+		jf.add(jp2);
 	}
 
 	public void selectDrink() {
@@ -32,7 +152,7 @@ public class Controller {
 	}
 
 	public void selectOption() {
-		// TODO implement here
+		//굳이 필요 할까요 ...?
 	}
 
 	public void printSendInfo() {
@@ -40,7 +160,35 @@ public class Controller {
 	}
 
 	public void printOption() {
-		// TODO implement here
+		this.setTitle("DVM3");
+		JButton btn_menu = new JButton("메뉴출력");
+		JButton btn_inpVericode = new JButton("인증코드입력");
+		//create_btn * 2
+
+		jp = new JPanel();
+		jp.add(btn_menu);
+		jp.add(btn_inpVericode);
+		//btn put in the panel
+
+		add(jp);//add JP panel in JFrame
+
+		setSize(400, 300); // 윈도우의 크기 가로x세로
+		setVisible(true); // 창을 보여줄떄 true, 숨길때 false
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE); // x 버튼을 눌렀을때 종료
+
+		btn_menu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				printMenu();
+			}
+		});
+
+		btn_inpVericode.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
 	}
 
 	public String inpVerificationCode() {
@@ -49,13 +197,13 @@ public class Controller {
 	}
 
 	public String getDrinkCode() {
-		// TODO implement here
-		return "";
+
+		return this.choiceDrinkCode;
 	}
 
 	public int getDrinkNum() {
 		// TODO implement here
-		return 0;
+		return this.choiceDrinkNum;
 	}
 
 	public void setHaveToPay() {
