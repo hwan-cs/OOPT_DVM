@@ -16,7 +16,7 @@ public class Admin {
 
 	public boolean systemStart() {
 		// TODO implement here
-		return false;
+		return true;
 	}
 
 }
