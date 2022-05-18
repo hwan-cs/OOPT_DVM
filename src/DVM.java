@@ -131,9 +131,9 @@ public class DVM {
 		// TODO implement here
 	}
 
-	public boolean checkVerificationCode() {
+	public boolean checkVerificationCode(String verifyCode) {
 		// TODO implement here
-		return false;
+		return this.createdCode == verifyCode;
 	}
 
 	private void basicSetting(){

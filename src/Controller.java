@@ -96,7 +96,41 @@ public class Controller extends JDialog {
 		confirmBtnListener(printMenuFrame, confirmBtn, dvm);
 	}
 
+	public void inpVerificationCode() {
+		// TODO implement here
+		System.out.println("flag_verificationcode");
 
+		JFrame verifyFrame = new JFrame("인증코드 입력 프레임");
+		JPanel verifyPanel = new JPanel();
+		JButton button = new JButton("입력");
+		JTextField jtf = new JTextField();
+		jtf.setBounds(150, 100, 200 ,40);
+		jtf.setForeground(Color.BLACK);
+
+		verifyPanel.setLayout(null);
+		verifyPanel.add(jtf);
+
+
+		verifyFrame.add(verifyPanel, BorderLayout.CENTER);
+		verifyFrame.add(button, BorderLayout.SOUTH);
+
+		verifyFrame.setSize(500, 500);
+		verifyFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		verifyFrame.setVisible(true);
+
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String verifyCode = jtf.getText();
+				boolean flag = dvm.checkVerificationCode(verifyCode);
+				if(!flag) {
+					JOptionPane.showMessageDialog(verifyFrame, "인증코드가 다릅니다.","Message", JOptionPane.ERROR_MESSAGE);
+				} else {
+					provideDrink();
+				}
+			}
+		});
+	}
 
 	public void printClosestDVMInfo(String[] calcedDVM) {
 		JFrame printClosestDVMInfoFrame = new JFrame("최단거리 계산된 DVM출력");
@@ -185,14 +219,9 @@ public class Controller extends JDialog {
 		btn_inpVericode.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				inpVerificationCode();
 			}
 		});
-	}
-
-	public String inpVerificationCode() {
-		// TODO implement here
-		return "";
 	}
 
 	public String getDrinkCode() {
