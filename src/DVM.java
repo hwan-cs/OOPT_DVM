@@ -1,29 +1,26 @@
 import java.util.*;
 
 public class DVM {
+	private int dvm3X = 12, dvm3Y = 47;
 
-
-	Card user1Card = new Card(100000); // 임시로 생성한 Card 객체
-	public int id;
-	public int state;
-	public String address; // address가 String 타입? int[] 타입이어야 하는거 아닌가?
-	public Drink[] drinkList = new Drink[20];	//전체 판매 리스트
-	public HashMap<String, Drink> currentSellDrink = new HashMap<String, Drink>(7);
-	public OtherDVMReceiveCode otherDVMReceiveCode;	//외부 DVM으로 부터 온 vericode 하나씩 확인 한후 및 해시맵에 풋한다.
-	public HashMap<String, List<OtherDVMReceiveCode>> ODRCHashMap;	//외부 DVM으로 부터 온 verification code 확인 작업
-	public Network network;
-	public String createdCode;
-	private String[] calcDVMInfo;	//[id, x좌표, y좌표]
-	public List<String[]> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,]
-	public int[] finalDVMLoc;
-	public Msg[] message;
+	private Card user1Card = new Card(100000); // 임시로 생성한 Card 객체
+	private int id;
+	private int state;
+	private String address; // address가 String 타입? int[] 타입이어야 하는거 아닌가?
+	private Drink[] drinkList = new Drink[20];	//전체 판매 리스트
+	private HashMap<String, Drink> currentSellDrink = new HashMap<String, Drink>(7);
+	private OtherDVMReceiveCode otherDVMReceiveCode;	//외부 DVM으로 부터 온 vericode 하나씩 확인 한후 및 해시맵에 풋한다.
+	private HashMap<String, List<OtherDVMReceiveCode>> ODRCHashMap;	//외부 DVM으로 부터 온 verification code 확인 작업
+	private Network network;
+	private String createdCode;
+	private String[] calcDVMInfo;	//[id, x좌표, y좌표] -> 확인된 dvm 변수에서 거리를 계산한 후 저장하는 변수
+	private List<String[]> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,] -> 확인된 dvm이 저장되는 변수
+	private int[] finalDVMLoc; // 최종적으로 최단거리에 있는 DVM의 위치를 담고있는 변수
+	private Msg[] message;
 
 
 	public String[] getCalcDVMInfo() {
-		calcClosestDVMLoc(confirmedDVMList);	//원래 여기 있으면 안됨 다시 생각해서 집어넣다
-		//지금은 tmp임!!!!!
-
-		return calcDVMInfo;
+		return this.calcDVMInfo;
 	}
 
 	public void setCalcDVMInfo(String[] calcDVMInfo) {
@@ -79,32 +76,32 @@ public class DVM {
 		// TODO implement here
 	}
 
-	public int[] calcClosestDVMLoc(List<String[]> confirmedDVMList) {
-		// TODO implement here
-		//다 계산되어 최종적으로 좌표 리턴해야함.
-		//계산하는 알고리즘 작성 요망
-		calcDVMInfo = new String[3];	//tmp
-		calcDVMInfo[0] = "03";			// id
-		calcDVMInfo[1] = "11";			// x좌표
-		calcDVMInfo[2] = "22";			// y좌표
+	public String[] calcClosestDVMLoc(List<String[]> confirmedDVMList) { // getConfirmedDVMList()로 얻은 return 값을 전달함.
+		double min = 141.0; // PFR에서 x, y의 범위가 0 ~ 99 이여서
+		int xd, yd;
+		double d;
+		String dvm_id = "";
+		for(String[] dvmInfo : confirmedDVMList) {
+			int x = Integer.parseInt(dvmInfo[1]);
+			int y = Integer.parseInt(dvmInfo[2]);
 
-
-
-		//지금은 임시임 !
-		setCalcDVMInfo(calcDVMInfo);
-		int[] xy = new int[2];
-		//int x = Integer.parseInt(calcDVMInfo[1]) 최소 거리 dvm x좌표
-		//int y = Integer.parseInt(calcDVMInfo[2]) 최소 거리 dvm y좌표
-
-		xy[0] = Integer.parseInt(calcDVMInfo[1]);
-		xy[1] = Integer.parseInt(calcDVMInfo[2]);
-
-		// 최소 거리 계산 알고리즘 by 휘식
-		int tmpX = 30, tmpY = 75; // 상대dvm의 임시 좌표
-		int dvm3X = 12, dvm3Y = 47; // 좌표 계산 확인하려고 선언한 dvm3의 임시 좌표
-
-
-		return xy;
+			xd = (int) Math.pow((dvm3X - x), 2);
+			yd = (int) Math.pow((dvm3Y - y), 2);
+			d = Math.sqrt(yd+xd);
+			if(min > d) {
+				dvm_id = dvmInfo[0]; // 최소 거리에 있는 dvm_id를 저장한다.
+			}
+		}
+		// 위에서 저장한 dvm_id를 for문으로 confirmedDVMList를 돌면서 위치를 찾는다.
+		for(String[] dvmInfo : confirmedDVMList) {
+			if(dvmInfo[0].equals(dvm_id)) {
+				return dvmInfo; // id, x, y 를 가지고 있는 배열을 리턴
+			}
+		}
+		return null;
+	}
+	public List<String[]> getConfirmedDVMList() {
+		return this.confirmedDVMList;
 	}
 
 	public boolean checkOurDVMStock(String drinkCode) { // 우리 DVM(=DVM3)의 재고 확인
