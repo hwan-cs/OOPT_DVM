@@ -5,8 +5,9 @@ import java.util.*;
 public class Receiver {
 
 	public String receiverID;
-
-	public Receiver() {
+	private DVM dvm;
+	public Receiver(DVM dvm) {
+		this.dvm = dvm;
 	}
 
 	public String getReceiverID() {
