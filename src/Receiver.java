@@ -1,8 +1,5 @@
-package dvmProject;
 
-import java.util.*;
-
-public class Receiver {
+public class Receiver extends Thread{
 
 	public String receiverID;
 	private DVM dvm;
@@ -33,5 +30,9 @@ public class Receiver {
 		// TODO implement here
 		return 0;
 	}
-
+	@Override
+	public void run() {
+		super.run();
+		System.out.println("flag_run()");
+	}
 }

@@ -1,5 +1,3 @@
-package dvmProject;
-
 import java.util.*;
 
 public class DVM {

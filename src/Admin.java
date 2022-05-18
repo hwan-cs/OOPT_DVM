@@ -1,9 +1,5 @@
-package dvmProject;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-import java.util.List;
 
 public class Admin extends JDialog {
 	private Boolean networkConnected;

@@ -1,7 +1,3 @@
-package dvmProject;
-
-import java.util.*;
-
 public class Network {
 	public Network() {
 
