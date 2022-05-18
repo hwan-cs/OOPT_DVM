@@ -103,19 +103,27 @@ public class Controller extends JDialog {
 		JFrame verifyFrame = new JFrame("인증코드 입력 프레임");
 		JPanel verifyPanel = new JPanel();
 		JButton button = new JButton("입력");
-		JTextField jtf = new JTextField();
-		jtf.setBounds(150, 100, 200 ,40);
+		JLabel label = new JLabel("인증코드 입력:");
+		JTextField jtf = new JTextField(10);
+
+		jtf.setBounds(150, 100, 100 ,20);
 		jtf.setForeground(Color.BLACK);
+//		jtf.setMaximumSize(jtf.getPreferredSize());
+
+		label.setSize(80, 80);
+		label.setLocation(70, 70);
 
 		verifyPanel.setLayout(null);
-		verifyPanel.add(jtf);
-
+		verifyPanel.setSize(150, 100);
+		verifyPanel.add(label, BorderLayout.WEST);
+		verifyPanel.add(jtf, BorderLayout.EAST);
 
 		verifyFrame.add(verifyPanel, BorderLayout.CENTER);
 		verifyFrame.add(button, BorderLayout.SOUTH);
 
-		verifyFrame.setSize(500, 500);
-		verifyFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		verifyFrame.setSize(400, 300);
+		verifyFrame.setLocationRelativeTo(null);
+		verifyFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		verifyFrame.setVisible(true);
 
 		button.addActionListener(new ActionListener() {
@@ -125,6 +133,7 @@ public class Controller extends JDialog {
 				boolean flag = dvm.checkVerificationCode(verifyCode);
 				if(!flag) {
 					JOptionPane.showMessageDialog(verifyFrame, "인증코드가 다릅니다.","Message", JOptionPane.ERROR_MESSAGE);
+					jtf.setText("");
 				} else {
 					provideDrink();
 				}
@@ -205,6 +214,7 @@ public class Controller extends JDialog {
 
 		add(jp);//add JP panel in JFrame
 
+		this.setLocationRelativeTo(null);
 		setSize(400, 300); // 윈도우의 크기 가로x세로
 		setVisible(true); // 창을 보여줄떄 true, 숨길때 false
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE); // x 버튼을 눌렀을때 종료

@@ -8,7 +8,7 @@ public class Admin extends JDialog {
 	public Admin(Boolean networkStatus, DVM dvm) {
 		this.networkConnected = networkStatus;
 		this.dvm = dvm;
-		if (networkConnected){
+		if (this.networkConnected){
 			systemStart();
 		}
 	}
