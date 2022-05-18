@@ -1,3 +1,4 @@
+import java.util.HashMap;
 
 public class Main{
     public static void main(String[] args) {
@@ -8,5 +9,6 @@ public class Main{
             receiver.start();   //네트워크 확인 되면 시작
         }
         Admin admin = new Admin(networkConnect, dvm);    //admin에서 system start()
+
     }
 }

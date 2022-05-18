@@ -7,15 +7,15 @@ public class Network {
 		// TODO implement here
 	}
 
-	public void checkOtherDVMDrinkExists() {
+	public void checkOtherDVMDrinkExists(String drinkCode, int drinkNum) {
 		// TODO implement here
 	}
 
-	public void checkOtherDVMStock() {
+	public void checkOtherDVMStock(String drinkCode, int drinkNum) {
 		// TODO implement here
 	}
 
-	public void sendSoldDrinkInfo() {
+	public void sendSoldDrinkInfo(String drinkCode, int drinkNum, String verifyCode) {
 		// TODO implement here
 	}
 }

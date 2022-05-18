@@ -12,21 +12,21 @@ public class Receiver extends Thread{
 		return "";
 	}
 
-	public void setReceiverID() {
+	public void setReceiverID(String receiverID) {
 		// TODO implement here
 	}
 
-	public int responseStockConfirmMsg() {
-		// TODO implement here
-		return 0;
-	}
-
-	public int responseSalesConfirmMsg() {
+	public int responseStockConfirmMsg(Msg msg) {
 		// TODO implement here
 		return 0;
 	}
 
-	public int soldInfo() {
+	public int responseSalesConfirmMsg(Msg msg) {
+		// TODO implement here
+		return 0;
+	}
+
+	public int soldInfo(Msg msg) {
 		// TODO implement here
 		return 0;
 	}

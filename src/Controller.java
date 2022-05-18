@@ -170,7 +170,7 @@ public class Controller extends JDialog {
 
 
 
-	public void provideDrink() {
+	public void provideDrink() { // 음료 제공, 음료 제공시 해당 음료를 구매한 개수만큼 기존 재고에서 차감
 		// TODO implement here
 	}
 
@@ -179,6 +179,7 @@ public class Controller extends JDialog {
 
 		String drinkName = dvm.getDrinkList()[Integer.parseInt(getDrinkCode())+1].getName();
 		int drinkNum = this.getDrinkNum();
+
 		TextField noticeTf = new TextField("구매함?" + drinkName + drinkNum);	//notice
 		JButton jButton = new JButton("확인");
 		JPanel jp2 = new JPanel();

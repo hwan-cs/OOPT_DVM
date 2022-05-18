@@ -13,11 +13,11 @@ public class OtherDVMReceiveCode {
 		return "";
 	}
 
-	public void setCode() {
+	public void setCode(String code) {
 		// TODO implement here
 	}
 
-	public void setMsgDesc() {
+	public void setMsgDesc(List<String> msgDesc) {
 		// TODO implement here
 	}
 
