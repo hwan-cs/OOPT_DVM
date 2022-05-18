@@ -13,6 +13,8 @@ public class Controller extends JDialog {
 	public Card card;
 	public int haveToPay;
 	JPanel jp; // 패널 초기화
+	String[] calcedDVM; //계산된 최단거리.
+
 	JButton[] drinkBtns;	//printMenuBtn
 
 	TextField drinkCodeTf;	//음료 코드 텍스트 창
@@ -25,7 +27,6 @@ public class Controller extends JDialog {
 		createDrinkMenuBtn(this.dvm);	//create btn
 		printOption();
 		createTextField();
-
 	}
 
 	private void createTextField(){
@@ -68,10 +69,9 @@ public class Controller extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//확인 버튼 다음
-				jFrame.dispose();
 				//
 				//최단거리 계산
-				String[] calcedDVM = dvm.getCalcDVMInfo();
+				calcedDVM = dvm.getCalcDVMInfo();
 				//
 			}
 		});
@@ -80,53 +80,54 @@ public class Controller extends JDialog {
 	public void printMenu() {
 		System.out.println("flag_printMenu()");
 
-		JPanel jp2 = new JPanel();
-		JFrame jf = new JFrame("메뉴선택");	//메뉴 선택창 객체 생성
+		JPanel printMenuPanel = new JPanel();
+		JFrame printMenuFrame = new JFrame("메뉴선택");	//메뉴 선택창 객체 생성
 
 		for (JButton jButton: this.drinkBtns){
-			jp2.add(jButton);	//버튼들을 패널에 추가한다.
+			printMenuPanel.add(jButton);	//버튼들을 패널에 추가한다.
 		}
-		jp2.add(this.drinkCodeTf);	//code출력 텍스트필트
-		jp2.add(this.drinkNumTf);	//개수 출력 텍스트 필드
-		jp2.add(this.confirmBtn);	//확인 버튼
-		jf.add(jp2);
-		jf.setSize(400, 500); // 윈도우의 크기 가로x세로
-		jf.setVisible(true); // 창을 보여줄떄 true, 숨길때 false
-		jf.setDefaultCloseOperation(DISPOSE_ON_CLOSE); // x 버튼을 눌렀을때 종료
+		printMenuPanel.add(this.drinkCodeTf);	//code출력 텍스트필트
+		printMenuPanel.add(this.drinkNumTf);	//개수 출력 텍스트 필드
+		printMenuPanel.add(this.confirmBtn);	//확인 버튼
+		printMenuFrame.add(printMenuPanel);
+		printMenuFrame.setSize(400, 500); // 윈도우의 크기 가로x세로
+		printMenuFrame.setVisible(true); // 창을 보여줄떄 true, 숨길때 false
+		printMenuFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE); // x 버튼을 눌렀을때 종료
 
 		drinkBtnListener(this.drinkBtns, dvm);
-		confirmBtnListener(jf, confirmBtn, dvm);
+		confirmBtnListener(printMenuFrame, confirmBtn, dvm);
 	}
 
-	public void printClosestDVMInfo(String[] calcedDVM, JFrame jFrame) {
-		jFrame = new JFrame("최단거리 계산된 DVM 출력");
-		JPanel jp2 = new JPanel();
+
+
+	public void printClosestDVMInfo(String[] calcedDVM) {
+		JFrame printClosestDVMInfoFrame = new JFrame("최단거리 계산된 DVM출력");
+		JPanel printClosestDVMInfoPanel = new JPanel();
 
 		JButton calcedDVMBtn = new JButton("continue");
 		TextField calcedDVM_id = new TextField("DVM: id: " + calcedDVM[0]);	//계산된 DVMid
 		TextField calcedDVM_x = new TextField("x: " + calcedDVM[1]);	//계산된 DVM_x좌표
 		TextField calcedDVM_y = new TextField("y: " + calcedDVM[2]);	//계산된 DVM_y좌표
 
-		jp2.add(calcedDVM_id);
-		jp2.add(calcedDVM_x);
-		jp2.add(calcedDVM_y);
-		jp2.add(calcedDVMBtn);
+		printClosestDVMInfoPanel.add(calcedDVM_id);
+		printClosestDVMInfoPanel.add(calcedDVM_x);
+		printClosestDVMInfoPanel.add(calcedDVM_y);
+		printClosestDVMInfoPanel.add(calcedDVMBtn);
 
-		jFrame.add(jp2);
+		printClosestDVMInfoFrame.add(printClosestDVMInfoPanel);
 
-		JFrame finalJFrame = jFrame;
 
 		calcedDVMBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				finalJFrame.dispose();
 				confirmPayment(dvm);
 			}
 		});
 
 		//문제점 함수 안에서 함수 호출시 리턴되면서 다꺼져버림,,,,, dialog마다 새로만들 필요성 존재함.
-
 	}
+
+	
 
 	public void provideDrink() {
 		// TODO implement here
