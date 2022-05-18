@@ -19,7 +19,6 @@ public class Drink {
 
 	public void setName() {
 		// TODO implement here
-		return null;
 	}
 
 	public int getPrice() {
@@ -29,7 +28,6 @@ public class Drink {
 
 	public void setPrice() {
 		// TODO implement here
-		return null;
 	}
 
 	public int getStock() {
@@ -39,7 +37,6 @@ public class Drink {
 
 	public void setStock() {
 		// TODO implement here
-		return null;
 	}
 
 	public String getDrinkCode() {
@@ -49,6 +46,5 @@ public class Drink {
 
 	public void setDrinkCode() {
 		// TODO implement here
-		return null;
 	}
 }

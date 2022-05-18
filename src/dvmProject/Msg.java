@@ -19,7 +19,6 @@ public class Msg {
 
 	public void setSrcID() {
 		// TODO implement here
-		return null;
 	}
 
 	public String getDstID() {
@@ -29,7 +28,6 @@ public class Msg {
 
 	public void setDstID() {
 		// TODO implement here
-		return null;
 	}
 
 	public String getMsgType() {
@@ -39,12 +37,10 @@ public class Msg {
 
 	public void setMsgType() {
 		// TODO implement here
-		return null;
 	}
 
 	public void setDrinkCode() {
 		// TODO implement here
-		return null;
 	}
 
 	public String getMsgDesc() {
@@ -54,7 +50,6 @@ public class Msg {
 
 	public void setMsgDesc() {
 		// TODO implement here
-		return null;
 	}
 
 }

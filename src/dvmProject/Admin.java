@@ -1,17 +1,20 @@
 package dvmProject;
 
 import java.util.*;
+import javax.swing.*;
 
-public class Admin {
+public class Admin extends JFrame {
 
 	public List<Drink> drinkList;
 
 	public Admin() {
+		setTitle("Swing Test");
+		setSize(300, 400);
+		setVisible(true);
 	}
 
 	public void refillDrink() {
 		// TODO implement here
-		return null;
 	}
 
 	public boolean systemStart() {

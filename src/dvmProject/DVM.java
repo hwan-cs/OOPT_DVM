@@ -21,7 +21,6 @@ public class DVM {
 
 	public void setState() {
 		// TODO implement here
-		return null;
 	}
 
 	public int getID() {
@@ -31,7 +30,6 @@ public class DVM {
 
 	public void setID() {
 		// TODO implement here
-		return null;
 	}
 
 	public int[] getAddress() {
@@ -41,7 +39,6 @@ public class DVM {
 
 	public void setAddress() {
 		// TODO implement here
-		return null;
 	}
 
 	public int[] getLocation() {
@@ -56,17 +53,14 @@ public class DVM {
 
 	public void setDrinkList() {
 		// TODO implement here
-		return null;
 	}
 
 	public void makeSaleConfirmMsgList() {
 		// TODO implement here
-		return null;
 	}
 
 	public void makeStockConfirmMsgList() {
 		// TODO implement here
-		return null;
 	}
 
 	public int[] calcClosestDVMLoc() {
@@ -86,7 +80,6 @@ public class DVM {
 
 	public void sellDrinkAtOtherDVM() {
 		// TODO implement here
-		return null;
 	}
 
 	public boolean cardPayment() {
@@ -107,7 +100,6 @@ public class DVM {
 
 	public void stockRefresh() {
 		// TODO implement here
-		return null;
 	}
 
 	public boolean checkVerificationCode() {
