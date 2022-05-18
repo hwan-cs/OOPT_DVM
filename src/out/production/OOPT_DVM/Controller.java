@@ -53,6 +53,8 @@ public class Controller extends JDialog {
 					//우리 시스템의 재고 파악
 					//아직 미구현상태임
 					//
+
+
 				}
 				else{
 					//다른 DVM의 재고 파악
