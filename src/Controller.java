@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,30 +14,119 @@ public class Controller extends JDialog {
 	JPanel jp; // 패널 초기화
 	String[] calcedDVM; //계산된 최단거리.
 
+//	TextField drinkCodeTf;	//음료 코드 텍스트 창
+//	TextField drinkNumTf;	//음료 개수 텍스트 창
+
 	JButton[] drinkBtns;	//printMenuBtn
-
-	TextField drinkCodeTf;	//음료 코드 텍스트 창
-	TextField drinkNumTf;	//음료 개수 텍스트 창
-
 	JButton confirmBtn;
 
 	public Controller(DVM dvm) {
 		this.dvm = dvm;
 		createDrinkMenuBtn(this.dvm);	//create btn
 		printOption();
-		createTextField();
+//		createTextField();
 	}
 
-	private void createTextField(){
-		this.drinkCodeTf = new TextField("음료 코드: "+ this.choiceDrinkCode);
-		this.drinkNumTf = new TextField("음료 개수: "+ this.choiceDrinkNum);
-		this.drinkCodeTf.setSize(100 ,10);
-		this.drinkNumTf.setSize(100, 10);
-	}
+//	private void createTextField(){
+//		this.drinkCodeTf = new TextField("음료 코드: "+ this.choiceDrinkCode);
+//		this.drinkNumTf = new TextField("음료 개수: "+ this.choiceDrinkNum);
+//		this.drinkCodeTf.setSize(100 ,10);
+//		this.drinkNumTf.setSize(100, 10);
+//	}
+	public void printMenu() {
+		// 메뉴는 그리드 레이아웃 프레임
+		// 선택한 것 알려주는 jlabel, 확인 버튼은 flowlayout?
+		System.out.println("flag_printMenu()");
 
+		JFrame printMenuFrame = new JFrame("메뉴선택");	//메뉴 선택창 객체 생성
+		printMenuFrame.setLayout(new BorderLayout());
+		printMenuFrame.setSize(700, 700);
+
+
+		JPanel printMenuPanel = new JPanel();
+		printMenuPanel.setLayout(new GridLayout(4, 5)); // 한 행에 5개씩, 총 4행
+
+		for (JButton jButton: this.drinkBtns){
+			printMenuPanel.add(jButton);	//버튼들을 패널에 추가한다.
+		}
+
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.setLayout(new FlowLayout());
+
+		JLabel select1 = new JLabel("선택한 음료:");
+		JLabel selecDrinkCode = new JLabel("00");
+		JLabel select2 = new JLabel("개수:");
+		JLabel selecDrinkNum = new JLabel("0");
+		JButton confirmBtn = new JButton("확인");
+
+		bottomPanel.add(select1);
+		bottomPanel.add(selecDrinkCode);
+		bottomPanel.add(select2);
+		bottomPanel.add(selecDrinkNum);
+		bottomPanel.add(confirmBtn);
+		printMenuFrame.add(printMenuPanel, BorderLayout.NORTH);
+		printMenuFrame.add(bottomPanel, BorderLayout.SOUTH);
+		printMenuFrame.setSize(700, 700);
+		printMenuFrame.setLocationRelativeTo(null);
+		printMenuFrame.setVisible(true);
+		printMenuFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+		// 메뉴에 있는 음료버튼 눌렀을 때 버튼 리스너
+		for(int i = 0; i < drinkBtns.length; i++) {
+			int currentIndex = i;
+			drinkBtns[i].addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String codeText = drinkBtns[currentIndex].getText().toString();
+					if(!selecDrinkCode.getText().equals(codeText.split("\\.")[0])) {
+						selecDrinkNum.setText("0");
+						selecDrinkCode.setText(codeText.split("\\.")[0].toString());
+					} else {
+						String numText = selecDrinkNum.getText().toString();
+						int numTextToInt = Integer.parseInt(numText);
+						++numTextToInt;
+						selecDrinkNum.setText(String.valueOf(numTextToInt));
+					}
+//					String numText = selecDrinkNum.getText().toString();
+				}
+			});
+		}
+
+		confirmBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				testFrame(selecDrinkCode.getText(), Integer.parseInt(selecDrinkNum.getText()));
+				selecDrinkCode.setText("00");
+				selecDrinkNum.setText("0");
+			}
+		});
+
+	}
+	public void testFrame(String selecDrinkCode, int selecDrinkNum) {
+		JFrame frame = new JFrame("Frame for Test");
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout());
+
+		JLabel codeLabel = new JLabel("선택한 음료코드: " + selecDrinkCode);
+		codeLabel.setFont(this.getFont().deriveFont(30.0f));
+
+		JLabel numLabel = new JLabel("개수: " + String.valueOf(selecDrinkNum));
+		numLabel.setFont(this.getFont().deriveFont(30.0f));
+
+		panel.add(codeLabel);
+		panel.add(numLabel);
+
+		frame.add(panel);
+		frame.setSize(700, 700);
+		frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+	}
 	private void createDrinkMenuBtn(DVM dvm){
 		this.drinkBtns = new JButton[20];
-		this.confirmBtn = new JButton("확인");
+//		this.confirmBtn = new JButton("확인");
 		for (int i=0; i < drinkBtns.length; i++){
 			drinkBtns[i] = new JButton(dvm.getDrinkList()[i].drinkCode+ "." +dvm.getDrinkList()[i].getName().toString());
 		}
@@ -55,8 +145,8 @@ public class Controller extends JDialog {
 						choiceDrinkCode = dvm.getDrinkList()[finalI].getDrinkCode();
 						choiceDrinkNum = 1;
 					}
-					drinkCodeTf.setText("음료 코드: "+ choiceDrinkCode);
-					drinkNumTf.setText("음료 개수: "+ choiceDrinkNum);
+//					drinkCodeTf.setText("음료 코드: "+ choiceDrinkCode);
+//					drinkNumTf.setText("음료 개수: "+ choiceDrinkNum);
 				}
 			});
 		}
@@ -73,27 +163,6 @@ public class Controller extends JDialog {
 				//
 			}
 		});
-	}
-
-	public void printMenu() {
-		System.out.println("flag_printMenu()");
-
-		JPanel printMenuPanel = new JPanel();
-		JFrame printMenuFrame = new JFrame("메뉴선택");	//메뉴 선택창 객체 생성
-
-		for (JButton jButton: this.drinkBtns){
-			printMenuPanel.add(jButton);	//버튼들을 패널에 추가한다.
-		}
-		printMenuPanel.add(this.drinkCodeTf);	//code출력 텍스트필트
-		printMenuPanel.add(this.drinkNumTf);	//개수 출력 텍스트 필드
-		printMenuPanel.add(this.confirmBtn);	//확인 버튼
-		printMenuFrame.add(printMenuPanel);
-		printMenuFrame.setSize(400, 500); // 윈도우의 크기 가로x세로
-		printMenuFrame.setVisible(true); // 창을 보여줄떄 true, 숨길때 false
-		printMenuFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE); // x 버튼을 눌렀을때 종료
-
-		drinkBtnListener(this.drinkBtns, dvm);
-		confirmBtnListener(printMenuFrame, confirmBtn, dvm);
 	}
 
 	public void inpVerificationCode() {
