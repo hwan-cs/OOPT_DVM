@@ -16,7 +16,6 @@ public class Card {
 
 	public void setBalance() {
 		// TODO implement here
-		return null;
 	}
 
 }

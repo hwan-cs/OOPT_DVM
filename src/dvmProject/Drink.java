@@ -9,46 +9,43 @@ public class Drink {
 	public int stock;
 	public String drinkCode;
 
-	public Drink() {
+	public Drink(String name, int price, int stock, String drinkCode) {
+		this.name = name;
+		this.price = price;
+		this.stock = stock;
+		this.drinkCode = drinkCode;
 	}
 
 	public String getName() {
 		// TODO implement here
-		return "";
+		return this.name;
 	}
 
-	public void setName() {
-		// TODO implement here
-		return null;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int getPrice() {
-		// TODO implement here
-		return 0;
+		return this.price;
 	}
 
-	public void setPrice() {
-		// TODO implement here
-		return null;
+	public void setPrice(int price) {
+		this.price = price;
 	}
 
 	public int getStock() {
-		// TODO implement here
-		return 0;
+		return this.stock;
 	}
 
-	public void setStock() {
-		// TODO implement here
-		return null;
+	public void setStock(int stock) {
+		this.stock = stock;
 	}
 
 	public String getDrinkCode() {
-		// TODO implement here
-		return "";
+		return this.drinkCode;
 	}
 
-	public void setDrinkCode() {
-		// TODO implement here
-		return null;
+	public void setDrinkCode(String drinkCode) {
+		this.drinkCode = drinkCode;
 	}
 }
