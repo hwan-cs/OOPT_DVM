@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
+// 인증코드 다이얼로그 창 클래스
 public class DialogVerficationCode extends JDialog {
     private DVM dvm;
     private JPanel verifyPanel;
