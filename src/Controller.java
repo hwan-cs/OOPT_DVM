@@ -9,10 +9,11 @@ public class Controller extends JDialog {
 	private DVM dvm;
 	private int choiceDrinkNum = 0;
 	private String choiceDrinkCode = "00";
-	public Card card;
-	public int haveToPay;
-	JPanel jp; // 패널 초기화
-	String[] calcedDVM; //계산된 최단거리.
+	private Card card;
+	private int haveToPay;
+	private String[] calcedDVM; //계산된 최단거리.
+	private DialogVerficationCode vcDialog;
+	private DialogOption opDialog;
 
 //	TextField drinkCodeTf;	//음료 코드 텍스트 창
 //	TextField drinkNumTf;	//음료 개수 텍스트 창
@@ -22,11 +23,20 @@ public class Controller extends JDialog {
 
 	public Controller(DVM dvm) {
 		this.dvm = dvm;
+		this.vcDialog = new DialogVerficationCode(this.dvm);
+		this.opDialog = new DialogOption(this.dvm);
 		createDrinkMenuBtn(this.dvm);	//create btn
+//		initLayout();
 		printOption();
+
 //		createTextField();
 	}
-
+	public void initLayout() {
+		setSize(500, 500);
+		setLocationRelativeTo(null);
+		setVisible(true);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE); // x 버튼을 눌렀을때 종료
+	}
 //	private void createTextField(){
 //		this.drinkCodeTf = new TextField("음료 코드: "+ this.choiceDrinkCode);
 //		this.drinkNumTf = new TextField("음료 개수: "+ this.choiceDrinkNum);
@@ -95,7 +105,7 @@ public class Controller extends JDialog {
 		confirmBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+//				dispose();
 				testFrame(selecDrinkCode.getText(), Integer.parseInt(selecDrinkNum.getText()));
 				selecDrinkCode.setText("00");
 				selecDrinkNum.setText("0");
@@ -167,42 +177,20 @@ public class Controller extends JDialog {
 
 	public void inpVerificationCode() {
 		// TODO implement here
-		System.out.println("flag_verificationcode");
+		vcDialog.setVisible(true);
+		JButton okButton = vcDialog.getOkButton();
+		final String[] verifyCode = {vcDialog.getVerifyCodeField()};
 
-		JFrame verifyFrame = new JFrame("인증코드 입력 프레임");
-		JPanel verifyPanel = new JPanel();
-		JButton button = new JButton("입력");
-		JLabel label = new JLabel("인증코드 입력:");
-		JTextField jtf = new JTextField(10);
-
-		jtf.setBounds(150, 100, 100 ,20);
-		jtf.setForeground(Color.BLACK);
-//		jtf.setMaximumSize(jtf.getPreferredSize());
-
-		label.setSize(80, 80);
-		label.setLocation(70, 70);
-
-		verifyPanel.setLayout(null);
-		verifyPanel.setSize(150, 100);
-		verifyPanel.add(label, BorderLayout.WEST);
-		verifyPanel.add(jtf, BorderLayout.EAST);
-
-		verifyFrame.add(verifyPanel, BorderLayout.CENTER);
-		verifyFrame.add(button, BorderLayout.SOUTH);
-
-		verifyFrame.setSize(400, 300);
-		verifyFrame.setLocationRelativeTo(null);
-		verifyFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		verifyFrame.setVisible(true);
-
-		button.addActionListener(new ActionListener() {
+		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String verifyCode = jtf.getText();
-				boolean flag = dvm.checkVerificationCode(verifyCode);
+				verifyCode[0] = vcDialog.getVerifyCodeField();
+//				String verifyCode = jtf.getText();
+				boolean flag = dvm.checkVerificationCode(verifyCode[0]);
+				System.out.println("입력한 인증코드 : " + verifyCode[0]);
 				if(!flag) {
-					JOptionPane.showMessageDialog(verifyFrame, "인증코드가 다릅니다.","Message", JOptionPane.ERROR_MESSAGE);
-					jtf.setText("");
+					JOptionPane.showMessageDialog(vcDialog, "인증코드가 다릅니다.","Message", JOptionPane.ERROR_MESSAGE);
+					vcDialog.setVerifyCodeField("");
 				} else {
 					provideDrink();
 				}
@@ -272,31 +260,18 @@ public class Controller extends JDialog {
 	}
 
 	public void printOption() {
-		this.setTitle("DVM3");
-		JButton btn_menu = new JButton("메뉴출력");
-		JButton btn_inpVericode = new JButton("인증코드입력");
-		//create_btn * 2
+		opDialog.setVisible(true);
+		JButton printMenuBtn = this.opDialog.getPrintMenuBtn();
+		JButton verificationCodeInpBtn = this.opDialog.getVerificationCodeInpBtn();
 
-		jp = new JPanel();
-		jp.add(btn_menu);
-		jp.add(btn_inpVericode);
-		//btn put in the panel
-
-		add(jp);//add JP panel in JFrame
-
-		this.setLocationRelativeTo(null);
-		setSize(400, 300); // 윈도우의 크기 가로x세로
-		setVisible(true); // 창을 보여줄떄 true, 숨길때 false
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE); // x 버튼을 눌렀을때 종료
-
-		btn_menu.addActionListener(new ActionListener() {
+		printMenuBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				printMenu();
 			}
 		});
 
-		btn_inpVericode.addActionListener(new ActionListener() {
+		verificationCodeInpBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				inpVerificationCode();
