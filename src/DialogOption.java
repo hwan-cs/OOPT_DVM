@@ -17,7 +17,7 @@ public class DialogOption extends JDialog {
         optionPanel.add(printMenuBtn);
         optionPanel.add(verificationCodeInpBtn);
         add(optionPanel);
-        setSize(500, 500);
+        setSize(300, 400);
         setVisible(false);
     }
 
