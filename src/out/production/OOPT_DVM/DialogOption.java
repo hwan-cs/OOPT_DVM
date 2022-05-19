@@ -13,9 +13,9 @@ public class DialogOption extends JDialog {
         this.printMenuBtn = new JButton("메뉴 출력");
         this.verificationCodeInpBtn = new JButton("인증 코드 입력");
         this.optionPanel = new JPanel();
-        attachBtn();
+        initLayout();
     }
-    private void attachBtn(){
+    private void initLayout(){
         optionPanel.add(printMenuBtn);
         optionPanel.add(verificationCodeInpBtn);
         add(optionPanel);

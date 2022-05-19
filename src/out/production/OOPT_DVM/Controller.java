@@ -18,12 +18,14 @@ public class Controller extends JDialog {
 	DialogOption dialogOption;
 	DialogPrintMenu dialogPrintMenu;
 	DialogClosetDVM dialogClosetDVM;
+	DialogVerificationCode dialogVerificationCode;
 
 	public Controller(DVM dvm) {
 		this.dvm = dvm;
 		this.dialogOption = new DialogOption();
 		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
 		this.dialogClosetDVM = new DialogClosetDVM(this.dvm);
+		this.dialogVerificationCode = new DialogVerificationCode(this.dvm);
 		printOption();
 	}
 
@@ -103,13 +105,13 @@ public class Controller extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//인증코드 입력 란
+				inpVerificationCode();
 			}
 		});
 	}
 
-	public String inpVerificationCode() {
-		// TODO implement here
-		return "";
+	public void inpVerificationCode() {
+		dialogVerificationCode.setVisible(true);
 	}
 
 	public String getDrinkCode() {
