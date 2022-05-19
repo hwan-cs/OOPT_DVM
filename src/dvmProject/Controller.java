@@ -28,6 +28,7 @@ public class Controller
 
 	private JFrame frame;
 	private JLabel title = new JLabel("Distributed Vending Machine-Team 3\n");
+	private DVM dvm = new DVM();
 	
 	public static void main(String[] args) 
 	{
@@ -124,8 +125,8 @@ public class Controller
 		
 		JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
 		        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setBounds(20,100,frame.getWidth()-40,frame.getWidth()-120);
-		GridLayout layout = new GridLayout(0,4,0,0);
+		scrollPane.setBounds(20,100,frame.getWidth()-60,frame.getWidth()-100);
+		GridLayout layout = new GridLayout(7,4,0,0);
 		layout.setVgap(10);
 		layout.setHgap(10);
 		panel.setLayout(layout);
@@ -137,7 +138,8 @@ public class Controller
 	    {
 	    	for(int j = 0;j<4;j++)
 	    	{
-	    		JLabel item = new JLabel(Integer.toString(counter)+".\t ₩1,000", SwingConstants.CENTER);
+	    		JLabel item = new JLabel("<html>"+Integer.toString(counter)+".\t"+dvm.getDrinkList()[counter-1].getName()+"<br/>"+
+	    				dvm.getDrinkList()[counter-1].getPrice()+"원</html>", SwingConstants.CENTER);
 	    		
 	    		item.setHorizontalTextPosition(SwingConstants.CENTER);
 	    		item.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -145,13 +147,13 @@ public class Controller
 	    		File f = new File(".");
 	    		try {
 	    			Image img = new ImageIcon(f.getCanonicalPath()+"/src/dvmProject/image/"+Integer.toString(counter)+".jpg").getImage();
-	    			item.setIcon(new ImageIcon(img.getScaledInstance(70, 70, Image.SCALE_DEFAULT)));
+	    			item.setIcon(new ImageIcon(img.getScaledInstance(65, 65, Image.SCALE_DEFAULT)));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 	    		counter++;
-	    		item.setFont(new Font("Serif", Font.PLAIN, 14));
+	    		item.setFont(new Font("Serif", Font.PLAIN, 12));
 	    		item.setPreferredSize(new Dimension(100,100));
 	    		item.setForeground(Color.black);
 	    		item.setBorder(border);
@@ -160,14 +162,14 @@ public class Controller
 	    }
 	    JTextField enterDrinkCodeTF = new JTextField();
 	    enterDrinkCodeTF.setText("번호:");
-	    enterDrinkCodeTF.setBounds(18, scrollPane.getY()+scrollPane.getHeight()+20, 450, 50);
+	    enterDrinkCodeTF.setBounds(18, scrollPane.getY()+scrollPane.getHeight()+10, 450, 50);
 	    
 	    JTextField enterNumDrinkTF = new JTextField();
 	    enterNumDrinkTF.setText("개수:");
-	    enterNumDrinkTF.setBounds(18, scrollPane.getY()+scrollPane.getHeight()+20+50, 450, 50);
+	    enterNumDrinkTF.setBounds(18, scrollPane.getY()+scrollPane.getHeight()+20+40, 450, 50);
 	    
 	    JButton okButton = new JButton("확인");
-	    okButton.setBounds(475, scrollPane.getY()+scrollPane.getHeight()+20, 100, 100);
+	    okButton.setBounds(475, scrollPane.getY()+scrollPane.getHeight()+10, 90, 100);
 	    
 	    frame.getContentPane().add(enterDrinkCodeTF);
 	    frame.getContentPane().add(enterNumDrinkTF);
