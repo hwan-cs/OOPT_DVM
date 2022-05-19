@@ -2,57 +2,39 @@ package dvmProject;
 
 import java.util.*;
 
-/**
- * 
- */
-public class otherDVMReceiveCode {
+public class otherDVMReceiveCode 
+{
 
-	/**
-	 * Default constructor
-	 */
-	public otherDVMReceiveCode() {
-	}
-
-	/**
-	 * 
-	 */
 	public String code;
-
-	/**
-	 * 
-	 */
 	public List<String> msgDesc;
 
-	/**
-	 * @return
-	 */
-	public String getCode() {
-		// TODO implement here
-		return "";
+	public otherDVMReceiveCode() 
+	{
+		this.code = "";
+		this.msgDesc = null;
 	}
 
-	/**
-	 * @return
-	 */
-	public void setCode() {
+	public String getCode() 
+	{
 		// TODO implement here
-		return null;
+		return this.code;
 	}
 
-	/**
-	 * @return
-	 */
-	public void setMsgDesc() {
+	public void setCode(String code) 
+	{
 		// TODO implement here
-		return null;
+		this.code = code;
 	}
 
-	/**
-	 * @return
-	 */
-	public List<String> getMsgDesc() {
+	public void setMsgDesc(List<String> msgDesc) 
+	{
 		// TODO implement here
-		return null;
+		this.msgDesc = msgDesc;
 	}
 
+	public List<String> getMsgDesc() 
+	{
+		// TODO implement here
+		return this.msgDesc;
+	}
 }

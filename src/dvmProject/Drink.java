@@ -1,100 +1,59 @@
 package dvmProject;
 
 import java.util.*;
-
-/**
- * 
- */
 public class Drink {
 
-	/**
-	 * Default constructor
-	 */
-	public Drink() {
-	}
-
-	/**
-	 * 
-	 */
 	public String name;
-
-	/**
-	 * 
-	 */
 	public int price;
-
-	/**
-	 * 
-	 */
 	public int stock;
-
-	/**
-	 * 
-	 */
 	public String drinkCode;
 
-	/**
-	 * @return
-	 */
-	public String getName() {
-		// TODO implement here
-		return "";
+	public Drink(String name, int price, int stock, String drinkCode) 
+	{
+		this.name = name;
+		this.price = price;
+		this.stock = stock;
+		this.drinkCode = drinkCode;
 	}
 
-	/**
-	 * @return
-	 */
-	public void setName() {
+	public String getName() 
+	{
 		// TODO implement here
-		return null;
+		return this.name;
 	}
 
-	/**
-	 * @return
-	 */
-	public int getPrice() {
-		// TODO implement here
-		return 0;
+	public void setName(String name) 
+	{
+		this.name = name;
 	}
 
-	/**
-	 * @return
-	 */
-	public void setPrice() {
-		// TODO implement here
-		return null;
+	public int getPrice() 
+	{
+		return this.price;
 	}
 
-	/**
-	 * @return
-	 */
-	public int getStock() {
-		// TODO implement here
-		return 0;
+	public void setPrice(int price) 
+	{
+		this.price = price;
 	}
 
-	/**
-	 * @return
-	 */
-	public void setStock() {
-		// TODO implement here
-		return null;
+	public int getStock() 
+	{
+		return this.stock;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getDrinkCode() {
-		// TODO implement here
-		return "";
+	public void setStock(int stock) 
+	{
+		this.stock = stock;
 	}
 
-	/**
-	 * @return
-	 */
-	public void setDrinkCode() {
-		// TODO implement here
-		return null;
+	public String getDrinkCode() 
+	{
+		return this.drinkCode;
 	}
 
+	public void setDrinkCode(String drinkCode) 
+	{
+		this.drinkCode = drinkCode;
+	}
 }

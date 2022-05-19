@@ -2,36 +2,26 @@ package dvmProject;
 
 import java.util.*;
 
-/**
- * 
- */
-public class Card {
+public class Card 
+{
 
-	/**
-	 * Default constructor
-	 */
-	public Card() {
-	}
-
-	/**
-	 * 
-	 */
 	public int balance;
 
-	/**
-	 * @return
-	 */
-	public int getBalance() {
-		// TODO implement here
-		return 0;
+	public Card(int balance) 
+	{
+		this.balance = balance;
 	}
 
-	/**
-	 * @return
-	 */
-	public void setBalance() {
+	public int getBalance() 
+	{
 		// TODO implement here
-		return null;
+		return this.balance;
+	}
+
+	public void setBalance(int balance) 
+	{
+		// TODO implement here
+		this.balance -= balance;
 	}
 
 }

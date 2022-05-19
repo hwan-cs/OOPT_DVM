@@ -2,36 +2,32 @@ package dvmProject;
 
 import java.util.*;
 
-/**
- * 
- */
-public class Admin {
+public class Admin extends JDialog 
+{
+	private Boolean networkConnected;
+	private DVM dvm;
 
-	/**
-	 * Default constructor
-	 */
-	public Admin() {
+	public Admin(Boolean networkStatus, DVM dvm) 
+	{
+		this.networkConnected = networkStatus;
+		this.dvm = dvm;
+		if (this.networkConnected){
+			systemStart();
+		}
 	}
 
-	/**
-	 * 
-	 */
-	public List<Drink> drinkList;
-
-	/**
-	 * @return
-	 */
-	public void refillDrink() {
-		// TODO implement here
-		return null;
+	public void refillDrink() 
+	{
+		String editDrinkCode = "01"; //임의의 코드
+		int count = 10;				//임의의 변경할 개수
+		Drink editDrink = dvm.getCurrentSellDrink().get(editDrinkCode);
+		editDrink.setStock(editDrink.getStock() + count);
 	}
 
-	/**
-	 * @return
-	 */
-	public boolean systemStart() {
-		// TODO implement here
-		return false;
+	public void systemStart() 
+	{
+		System.out.println("flag_systemstart()");
+		Controller controller = new Controller(dvm);
 	}
 
 }

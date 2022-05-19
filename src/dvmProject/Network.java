@@ -2,47 +2,30 @@ package dvmProject;
 
 import java.util.*;
 
-/**
- * 
- */
-public class Network {
+public class Network 
+{
+	public Network() 
+	{
 
-	/**
-	 * Default constructor
-	 */
-	public Network() {
 	}
 
-	/**
-	 * @return
-	 */
-	public void sendBroadcastMsg() {
+	public void sendBroadcastMsg() 
+	{
 		// TODO implement here
-		return null;
 	}
 
-	/**
-	 * @return
-	 */
-	public void checkOtherDVMDrinkExists() {
+	public void checkOtherDVMDrinkExists(String drinkCode, int drinkNum) 
+	{
 		// TODO implement here
-		return null;
 	}
 
-	/**
-	 * @return
-	 */
-	public void checkOtherDVMStock() {
+	public void checkOtherDVMStock(String drinkCode, int drinkNum) 
+	{
 		// TODO implement here
-		return null;
 	}
 
-	/**
-	 * @return
-	 */
-	public void sendSoldDrinkInfo() {
+	public void sendSoldDrinkInfo(String drinkCode, int drinkNum, String verifyCode) 
+	{
 		// TODO implement here
-		return null;
 	}
-
 }

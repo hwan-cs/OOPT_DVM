@@ -2,60 +2,49 @@ package dvmProject;
 
 import java.util.*;
 
-/**
- * 
- */
-public class Receiver {
+public class Receiver extends Thread
+{
 
-	/**
-	 * Default constructor
-	 */
-	public Receiver() {
-	}
-
-	/**
-	 * 
-	 */
 	public String receiverID;
-
-	/**
-	 * @return
-	 */
-	public String getReceiverID() {
-		// TODO implement here
-		return "";
+	private DVM dvm;
+	public Receiver(DVM dvm) 
+	{
+		this.dvm = dvm;
 	}
 
-	/**
-	 * @return
-	 */
-	public void setReceiverID() {
+	public String getReceiverID() 
+	{
 		// TODO implement here
-		return null;
+		return this.receiverID;
 	}
 
-	/**
-	 * @return
-	 */
-	public int responseStockConfirmMsg() {
+	public void setReceiverID(String receiverID) 
+	{
 		// TODO implement here
-		return 0;
+		this.receiverID = receiverID;
 	}
 
-	/**
-	 * @return
-	 */
-	public int responseSalesConfirmMsg() {
+	public int responseStockConfirmMsg(Msg msg) 
+	{
 		// TODO implement here
 		return 0;
 	}
 
-	/**
-	 * @return
-	 */
-	public int soldInfo() {
+	public int responseSalesConfirmMsg(Msg msg) 
+	{
 		// TODO implement here
 		return 0;
 	}
 
+	public int soldInfo(Msg msg) 
+	{
+		// TODO implement here
+		return 0;
+	}
+	@Override
+	public void run() 
+	{
+		super.run();
+		System.out.println("flag_run()");
+	}
 }
