@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class DialogOption extends JDialog {
+public class DialogOption extends JDialog { // 맨 처음 화면 보여주는 다이얼로그
     private DVM dvm;
     private JButton printMenuBtn;
     private JButton verificationCodeInpBtn;
@@ -22,7 +22,6 @@ public class DialogOption extends JDialog {
         optionPanel.add(printMenuBtn);
         optionPanel.add(verificationCodeInpBtn);
         add(optionPanel);
-
     }
 
     public JButton getPrintMenuBtn() {

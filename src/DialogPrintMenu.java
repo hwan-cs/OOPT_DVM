@@ -44,9 +44,9 @@ public class DialogPrintMenu extends JDialog {
         setTitle("메뉴 선택");
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
-//        setVisible(false);
-//        setSize(650, 700);
-//        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setVisible(false);
+        setSize(650, 700);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public JButton[] getDrinkBtns() {
@@ -120,8 +120,7 @@ public class DialogPrintMenu extends JDialog {
         // Dialog에 붙임
         add(printMenuPanel, BorderLayout.NORTH);
         add(bottomPanel, BorderLayout.CENTER);
-        setVisible(false);
-        setSize(650, 700);
+
     }
 
 
@@ -153,11 +152,9 @@ public class DialogPrintMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                drinkCodeText.setText("00");
-                drinkNumText.setText("0");
+                drinkCodeText.setText("음료 코드: " + "00");
+                drinkNumText.setText("음료 개수: " + "0");
             }
         });
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
     }
 }

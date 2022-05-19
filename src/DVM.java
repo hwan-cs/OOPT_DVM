@@ -130,6 +130,10 @@ public class DVM {
 		return user1Card.getBalance() >= balance;
 	}
 
+	public Card getCard() {
+		return this.user1Card;
+	}
+
 	public int calcPrice(String drinkCode, int drinkNum) {
 		int totalPrice = 0;
 		Drink currDrink = this.currentSellDrink.get(drinkCode);

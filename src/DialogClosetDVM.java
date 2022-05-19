@@ -1,7 +1,7 @@
 
 import javax.swing.*;
 
-public class DialogClosetDVM extends JDialog {
+public class DialogClosetDVM extends JDialog { // 최단거리 DVM 알려주는 다이얼로그
     DVM dvm;
     JTextArea DVMidTextArea;
     JTextArea DVMxLocTextArea;

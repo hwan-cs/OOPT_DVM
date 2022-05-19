@@ -13,22 +13,40 @@ public class Controller extends JDialog {
 	private int haveToPay;
 	private String[] calcedDVM; //계산된 최단거리.
 
+	private DialogPaymentConfirmation pcDialog;
 	private DialogVerficationCode vcDialog;
 	private DialogOption opDialog;
 	private DialogClosetDVM dialogClosetDVM;
 	private DialogPrintMenu dialogPrintMenu;
-
+//	private JFrame mainFrame;
 
 
 	public Controller(DVM dvm) {
 		this.dvm = dvm;
+//		this.mainFrame = new JFrame("MAIN FRAME");
 		this.vcDialog = new DialogVerficationCode(this.dvm);
 		this.opDialog = new DialogOption(this.dvm);
 		this.dialogClosetDVM = new DialogClosetDVM(this.dvm);
 		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
+		this.pcDialog = new DialogPaymentConfirmation(this.dvm);
 		printOption();
+//		init();
 	}
-
+//	public void init() {
+//		JButton enterBtn = new JButton("시작");
+//		this.mainFrame.setLayout(new BorderLayout());
+//		this.mainFrame.add(enterBtn, BorderLayout.CENTER);
+//		this.mainFrame.setSize(700, 700);
+//		this.mainFrame.setVisible(true);
+//		this.mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+//
+//		enterBtn.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				printOption();
+//			}
+//		});
+//	}
 	public void printMenu() {
 		dialogPrintMenu.setVisible(true);
 		JButton printMenuConfirmBtn = dialogPrintMenu.getConfirmBtn();
@@ -77,12 +95,13 @@ public class Controller extends JDialog {
 					//우리 시스템의 재고 파악
 					//아직 미구현상태임
 					//
-
+					pcDialog.setVisible(true);
 				}
 				else{
 					//다른 DVM의 재고 파악
 					//아직 미구현상태임
 					//
+					pcDialog.setVisible(true);
 				}
 			}
 		});
