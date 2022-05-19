@@ -27,9 +27,17 @@ public class DVM {
 		this.calcDVMInfo = calcDVMInfo;
 	}
 
+	public void testForCalcDVMInfo() {
+		this.calcDVMInfo = new String[3];
+		this.calcDVMInfo[0] = "3";
+		this.calcDVMInfo[1] = "7";
+		this.calcDVMInfo[2] = "7";
+	}
+
 	public DVM() {
 		this.id = 3; //임의로 설정
 		this.address = "DVM3";  //임의로 설정
+		testForCalcDVMInfo();
 		basicSetting();
 	}
 
@@ -125,7 +133,7 @@ public class DVM {
 	public int calcPrice(String drinkCode, int drinkNum) {
 		int totalPrice = 0;
 		Drink currDrink = this.currentSellDrink.get(drinkCode);
-		totalPrice += (currDrink.price * drinkNum);
+		totalPrice += (currDrink.getPrice() * drinkNum);
 
 		return totalPrice;
 	}
@@ -154,8 +162,8 @@ public class DVM {
 	}
 
 	private void basicSetting(){
-		this.drinkList[0] = new Drink("콜라", 900, 0, "01");
-		this.drinkList[1] = new Drink("사이다", 1000, 0, "02");
+		this.drinkList[0] = new Drink("콜라", 900, 3, "01");
+		this.drinkList[1] = new Drink("사이다", 1000, 2, "02");
 		this.drinkList[2] = new Drink("녹차", 800, 0, "03");
 		this.drinkList[3] = new Drink("홍차", 700, 0, "04");
 		this.drinkList[4] = new Drink("밀크티", 1100, 0, "05");
@@ -192,4 +200,7 @@ public class DVM {
 	public void setCurrentSellDrink(HashMap<String, Drink> currentSellDrink) {
 		this.currentSellDrink = currentSellDrink;
 	}
+
+
+
 }

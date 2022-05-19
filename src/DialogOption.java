@@ -14,11 +14,15 @@ public class DialogOption extends JDialog {
         initLayout();
     }
     public void initLayout() {
+        setTitle("This is DVM3");
+        setSize(300, 400);
+        setVisible(false);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         optionPanel.add(printMenuBtn);
         optionPanel.add(verificationCodeInpBtn);
         add(optionPanel);
-        setSize(300, 400);
-        setVisible(false);
+
     }
 
     public JButton getPrintMenuBtn() {

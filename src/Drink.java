@@ -1,9 +1,9 @@
 public class Drink {
 
-	public String name;
-	public int price;
-	public int stock;
-	public String drinkCode;
+	private String name;
+	private int price;
+	private int stock;
+	private String drinkCode;
 
 	public Drink(String name, int price, int stock, String drinkCode) {
 		this.name = name;
