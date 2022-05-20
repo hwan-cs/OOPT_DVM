@@ -6,16 +6,22 @@ public class Card {
 
 	public int balance;
 
-	public Card() {
+	private String[] cardInfo;
+
+	//cardinfo[0] == CardNum
+	//cardinfo[1] == Vaild unitl
+	//cardinfo[2] == CVC
+	//cardInfo[3] == PW
+
+	public Card(String[] cardInfo, int balance) {
+		this.cardInfo = cardInfo;
+		this.balance = balance;
 	}
 
 	public int getBalance() {
-		// TODO implement here
-		return 0;
+		return this.balance;
 	}
-
-	public void setBalance() {
-		// TODO implement here
+	public void setBalance(int balance) {
+		this.balance = balance;
 	}
-
 }

@@ -96,6 +96,11 @@ public class DialogPrintMenu extends JDialog {
         setSize(300, 400);
     }
 
+    public void refresh(){
+        drinkCodeText.setText("음료 코드: "+ choiceDrinkCode);
+        drinkNumText.setText("음료 개수: "+ choiceDrinkNum);
+    }
+
     public void clickListener(){
         for(int i=0; i < drinkBtns.length; i++){
             int finalI = i;
@@ -109,18 +114,10 @@ public class DialogPrintMenu extends JDialog {
                         choiceDrinkCode = dvm.getDrinkList()[finalI].getDrinkCode();
                         choiceDrinkNum = 1;
                     }
-                    drinkCodeText.setText("음료 코드: "+ choiceDrinkCode);
-					drinkNumText.setText("음료 개수: "+ choiceDrinkNum);
+                    refresh();
                 }
             });
         }
-
-        confirmBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DialogOption extends JDialog {
+public class DialogOption extends JFrame {
     JButton printMenuBtn;
     JButton verificationCodeInpBtn;
     JPanel optionPanel;
@@ -21,21 +21,14 @@ public class DialogOption extends JDialog {
         add(optionPanel);
         setSize(300, 400);
         setVisible(false);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     public JButton getPrintMenuBtn() {
         return printMenuBtn;
     }
-
-    public void setPrintMenuBtn(JButton printMenuBtn) {
-        this.printMenuBtn = printMenuBtn;
-    }
-
     public JButton getVerificationCodeInpBtn() {
         return verificationCodeInpBtn;
     }
 
-    public void setVerificationCodeInpBtn(JButton verificationCodeInpBtn) {
-        this.verificationCodeInpBtn = verificationCodeInpBtn;
-    }
 }

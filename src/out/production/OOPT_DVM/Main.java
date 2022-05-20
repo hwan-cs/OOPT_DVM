@@ -1,5 +1,7 @@
 package dvmProject;
 
+import DVM_Client.DVMClient;
+
 import javax.swing.*;
 
 public class Main{

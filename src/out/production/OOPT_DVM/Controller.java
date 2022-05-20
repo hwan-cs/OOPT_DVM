@@ -1,12 +1,13 @@
 package dvmProject;
 
+import DVM_Client.DVMClient;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Controller extends JDialog {
-
 	private DVM dvm;
 	private int choiceDrinkNum = 0;
 	private String choiceDrinkCode = "00";
@@ -19,6 +20,8 @@ public class Controller extends JDialog {
 	DialogPrintMenu dialogPrintMenu;
 	DialogClosetDVM dialogClosetDVM;
 	DialogVerificationCode dialogVerificationCode;
+	DialogConfirmPayment dialogConfirmPayment;
+	DialogProvideDrink dialogProvideDrink;
 
 	public Controller(DVM dvm) {
 		this.dvm = dvm;
@@ -26,6 +29,8 @@ public class Controller extends JDialog {
 		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
 		this.dialogClosetDVM = new DialogClosetDVM(this.dvm);
 		this.dialogVerificationCode = new DialogVerificationCode(this.dvm);
+		this.dialogConfirmPayment = new DialogConfirmPayment(this.dvm);
+		this.dialogProvideDrink = new DialogProvideDrink(this.dvm);
 		printOption();
 	}
 
@@ -38,6 +43,17 @@ public class Controller extends JDialog {
 				printClosestDVMInfo();
 				choiceDrinkNum = dialogPrintMenu.getChoiceDrinkNum();
 				choiceDrinkCode = dialogPrintMenu.getChoiceDrinkCode();
+				dvm.setChoiceDrinkCode(choiceDrinkCode);
+				dvm.setChoiceDrinkNum(choiceDrinkNum);
+				dvm.createNetwork();
+
+				try {
+					dvm.network.checkOtherDVMDrinkExists();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					System.out.println("error!!!");
+				}
+
 				dialogPrintMenu.setVisible(false);
 			}
 		});
@@ -51,18 +67,8 @@ public class Controller extends JDialog {
 		printClosetDVMInfoConfirmBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(dvm.getCalcDVMInfo()[0].equals("3")){
-					//우리 시스템의 재고 파악
-					//아직 미구현상태임
-					//
-
-
-				}
-				else{
-					//다른 DVM의 재고 파악
-					//아직 미구현상태임
-					//
-				}
+				dialogClosetDVM.setVisible(false);
+				confirmPayment();
 			}
 		});
 	}
@@ -70,11 +76,51 @@ public class Controller extends JDialog {
 	
 
 	public void provideDrink() {
-		// TODO implement here
+		JButton returnBtn = this.dialogProvideDrink.returnBtn;
+		dialogProvideDrink.settingTextArea(this.choiceDrinkNum, this.dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode)-1].getName());
+		dialogProvideDrink.setVisible(true);
+		returnBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogProvideDrink.setVisible(false);
+			}
+		});
 	}
 
-	public void confirmPayment(DVM dvm) {
+	public void confirmPayment() {
+		JButton yesBtn = dialogConfirmPayment.yesBtn;
+		JButton noBtn = dialogConfirmPayment.noBtn;
 
+		dialogConfirmPayment.settingTextArea(choiceDrinkNum, dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode)-1].getName());
+		dialogConfirmPayment.setVisible(true);
+
+		yesBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (dvm.getCalcDVMInfo()[0].equals("03")){
+					//우리 시스템일 때 내부 계산 후
+					dialogConfirmPayment.setVisible(false);
+					provideDrink();
+				}
+				else{
+					//외부 시스템일때 recheckStock
+				}
+			}
+		});
+
+		noBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogConfirmPayment.setVisible(false);
+				dialogPrintMenu.setChoiceDrinkNum(0);
+				dialogPrintMenu.setChoiceDrinkCode("00");
+				choiceDrinkCode = "00";
+				choiceDrinkNum = 0;
+				dvm.setChoiceDrinkCode(choiceDrinkCode);
+				dvm.setChoiceDrinkNum(choiceDrinkNum);
+				dialogPrintMenu.refresh();
+			}
+		});
 	}
 
 	public void selectDrink() {

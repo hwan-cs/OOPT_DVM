@@ -1,11 +1,14 @@
 package dvmProject;
 
+import Model.Message;
+
 import java.util.*;
 
 public class Receiver extends Thread{
 
 	public String receiverID;
 	private DVM dvm;
+	ArrayList<Message> messages;
 
 	public Receiver(DVM dvm) {
 		this.dvm = dvm;
@@ -25,7 +28,7 @@ public class Receiver extends Thread{
 		return 0;
 	}
 
-	public int responseSalesConfirmMsg() {
+	public int responseSalesConfirmMsg(Message msg) {
 		// TODO implement here
 		return 0;
 	}
@@ -39,5 +42,6 @@ public class Receiver extends Thread{
 	public void run() {
 		super.run();
 		System.out.println("flag_run()");
+
 	}
 }

@@ -1,5 +1,7 @@
 package dvmProject;
 
+import Model.Message;
+
 import java.util.*;
 
 public class DVM {
@@ -13,10 +15,27 @@ public class DVM {
 	public Network network;
 	public String createdCode;
 	private String[] calcDVMInfo;	//[id, x좌표, y좌표]
-	public List<String[]> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,]
+	public ArrayList<String[]> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,]
 	public int[] finalDVMLoc;
-	public Msg[] message;
+	private ArrayList<Message> msgs;
+	private int choiceDrinkNum = 0;
+	private String choiceDrinkCode = "00";
 
+	public int getChoiceDrinkNum() {
+		return choiceDrinkNum;
+	}
+
+	public void setChoiceDrinkNum(int choiceDrinkNum) {
+		this.choiceDrinkNum = choiceDrinkNum;
+	}
+
+	public String getChoiceDrinkCode() {
+		return choiceDrinkCode;
+	}
+
+	public void setChoiceDrinkCode(String choiceDrinkCode) {
+		this.choiceDrinkCode = choiceDrinkCode;
+	}
 
 	public String[] getCalcDVMInfo() {
 		calcClosestDVMLoc(confirmedDVMList);	//원래 여기 있으면 안됨 다시 생각해서 집어넣다
@@ -24,6 +43,11 @@ public class DVM {
 
 		return calcDVMInfo;
 	}
+	public void createNetwork(){
+		this.network = new Network(this.choiceDrinkCode, this.choiceDrinkNum);
+	}
+
+
 
 	public void setCalcDVMInfo(String[] calcDVMInfo) {
 		this.calcDVMInfo = calcDVMInfo;
@@ -78,7 +102,7 @@ public class DVM {
 		// TODO implement here
 	}
 
-	public int[] calcClosestDVMLoc(List<String[]> confirmedDVMList) {
+	public int[] calcClosestDVMLoc(ArrayList<String[]> confirmedDVMList) {
 		// TODO implement here
 		//다 계산되어 최종적으로 좌표 리턴해야함.
 		//계산하는 알고리즘 작성 요망
