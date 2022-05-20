@@ -1,9 +1,13 @@
+import DVM_Client.DVMClient;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// DVMClient에서 msg는 json 타입이다. 제공해준 converter로 json으로 변환 후 인자로 전달
+// DVMClient에서 run을 실행하면 msg가 서버로 전송된다. 그 후 Client가 스스로 종료함
 public class Controller extends JDialog {
 
 	private DVM dvm;
@@ -60,7 +64,6 @@ public class Controller extends JDialog {
 			}
 		});
 	}
-
 
 	public void inpVerificationCode() {
 		// TODO implement here
