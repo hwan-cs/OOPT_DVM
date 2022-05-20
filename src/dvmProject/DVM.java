@@ -223,4 +223,9 @@ public class DVM
 	public void setCurrentSellDrink(HashMap<String, Drink> currentSellDrink) {
 		this.currentSellDrink = currentSellDrink;
 	}
+	
+	public Card getCard()
+	{
+		return this.user1Card;
+	}
 }

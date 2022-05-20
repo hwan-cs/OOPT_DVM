@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.Random;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
@@ -38,6 +39,8 @@ public class Controller
 	private String selectedDrinkName;
 	private int selectedDrinkID;
 	private int selectedDrinkPrice;
+	private String closestDVMID;
+	private double closestDVMDistance;
 	
 	public static void main(String[] args) 
 	{
@@ -72,33 +75,7 @@ public class Controller
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
-		title.setBounds(20, 20, 350, 60);
-		title.setFont(new Font("Serif", Font.BOLD, 14));
-		title.setVerticalAlignment(SwingConstants.CENTER);
-		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setBackground(Color.black);
-		title.setForeground(new Color(126, 171, 85));
-		title.setOpaque(true);
-		frame.getContentPane().add(title);
-		
-		JButton enterVerificationCodeButton = new JButton("Enter Verification Code");
-		enterVerificationCodeButton.setBounds(frame.getWidth()/2-150,frame.getHeight()/2-150, 300, 100);
-		frame.getContentPane().add(enterVerificationCodeButton);
-
-		JButton printMenuButton = new JButton("Print Menu");
-		printMenuButton.setBounds(frame.getWidth()/2-150,frame.getHeight()/2-50, 300, 100);
-
-		printMenuButton.addActionListener(new ActionListener() 
-		{
-			@Override
-			public void actionPerformed(ActionEvent e) 
-			{
-				printMenu();
-			}
-		});
-
-		frame.getContentPane().add(printMenuButton);
+		selectOption();
 	}
 
 	/**
@@ -269,6 +246,8 @@ public class Controller
 		Formatter formatter = new Formatter();
         formatter.format("%.2f", d);
         
+        this.closestDVMID = closestDVM[0];
+        this.closestDVMDistance= Double.parseDouble(formatter.toString());
 	    JButton closestDVMBtn = new JButton("<html>" + closestDVM[0] + "<br/><br/>Distance: "+formatter.toString()+"m</html>");
 	    
 	    closestDVMBtn.setFont(new Font("Serif", Font.PLAIN, 24));
@@ -331,56 +310,78 @@ public class Controller
 			JLabel purchase = new JLabel(this.selectedDrinkName+" " + this.selectedNumDrink+"개, "+this.selectedDrinkPrice*this.selectedNumDrink+"원");
 			purchase.setBounds(20,50,300,100);
 			frame.getContentPane().add(purchase);
-			JLabel cardNumLbl = new JLabel("Card Num");
-			cardNumLbl.setBounds(20,140,100,100);
-			frame.getContentPane().add(cardNumLbl);
+			
+			JLabel cardInfo = new JLabel();
+			cardInfo.setText(dvm.cardPayment(this.selectedDrinkPrice*this.selectedNumDrink) ? "잔액이 충분합니다" : "잔액이 부족합니다");
+			cardInfo.setBounds(frame.getWidth()/2-130, frame.getHeight()/2-200, 300, 200);
+			cardInfo.setFont(new Font("Serif", Font.PLAIN, 32));
+			//카드 잔액에서 차감
+			dvm.getCard().setBalance(dvm.cardPayment(this.selectedDrinkPrice*this.selectedNumDrink) ? this.selectedDrinkPrice*this.selectedNumDrink : 0);
+			
+			JLabel cardBalance = new JLabel("결제 후 남은 잔액: " + dvm.getCard().getBalance()+ "원");
+			cardBalance.setBounds(frame.getWidth()/2 - 120, frame.getHeight()/2-100, 300, 100);
+			cardBalance.setFont(new Font("Serif", Font.BOLD, 20));
+			
+			frame.getContentPane().add(cardInfo);
+			frame.getContentPane().add(cardBalance);
+//			JLabel cardNumLbl = new JLabel("Card Num");
+//			cardNumLbl.setBounds(20,140,100,100);
+//			frame.getContentPane().add(cardNumLbl);
 			
 			//나중에 refactor 아마도
-			JTextField cardNum1 = new JTextField();
-			cardNum1.setBounds(18,200, 120, 40);
-			JTextField cardNum2 = new JTextField();
-			cardNum2.setBounds(148,200, 120, 40);
-			JTextField cardNum3 = new JTextField();
-			cardNum3.setBounds(278,200, 120, 40);
-			JTextField cardNum4 = new JTextField();
-			cardNum4.setBounds(408,200, 120, 40);
-			frame.getContentPane().add(cardNum1);
-			frame.getContentPane().add(cardNum2);
-			frame.getContentPane().add(cardNum3);
-			frame.getContentPane().add(cardNum4);
+//			JTextField cardNum1 = new JTextField();
+//			cardNum1.setBounds(18,200, 120, 40);
+//			JTextField cardNum2 = new JTextField();
+//			cardNum2.setBounds(148,200, 120, 40);
+//			JTextField cardNum3 = new JTextField();
+//			cardNum3.setBounds(278,200, 120, 40);
+//			JTextField cardNum4 = new JTextField();
+//			cardNum4.setBounds(408,200, 120, 40);
+//			frame.getContentPane().add(cardNum1);
+//			frame.getContentPane().add(cardNum2);
+//			frame.getContentPane().add(cardNum3);
+//			frame.getContentPane().add(cardNum4);
 			
-			JLabel validUntilLbl = new JLabel("Valid Until");
-			validUntilLbl.setBounds(60, 300, 100,100);
-			frame.getContentPane().add(validUntilLbl);
-			
-			JTextField validUntilTF = new JTextField();
-			validUntilTF.setBounds(58, 360, 120,50);
-			frame.getContentPane().add(validUntilTF);
-			
-			JLabel cvcLbl = new JLabel("CVC");
-			cvcLbl.setBounds(220, 300, 100,100);
-			frame.getContentPane().add(cvcLbl);
-			
-			JTextField cvcTF = new JTextField();
-			cvcTF.setBounds(218, 360, 120, 50);
-			frame.getContentPane().add(cvcTF);
-			
-			JLabel pwLbl = new JLabel("PW");
-			pwLbl.setBounds(380, 300, 100,100);
-			frame.getContentPane().add(pwLbl);
-			
-			JTextField pwTF = new JTextField();
-			pwTF.setBounds(378, 360, 120, 50);
-			frame.getContentPane().add(pwTF);
-			
-			
+//			JLabel validUntilLbl = new JLabel("Valid Until");
+//			validUntilLbl.setBounds(60, 300, 100,100);
+//			frame.getContentPane().add(validUntilLbl);
+//			
+//			JTextField validUntilTF = new JTextField();
+//			validUntilTF.setBounds(58, 360, 120,50);
+//			frame.getContentPane().add(validUntilTF);
+//			
+//			JLabel cvcLbl = new JLabel("CVC");
+//			cvcLbl.setBounds(220, 300, 100,100);
+//			frame.getContentPane().add(cvcLbl);
+//			
+//			JTextField cvcTF = new JTextField();
+//			cvcTF.setBounds(218, 360, 120, 50);
+//			frame.getContentPane().add(cvcTF);
+//			
+//			JLabel pwLbl = new JLabel("PW");
+//			pwLbl.setBounds(380, 300, 100,100);
+//			frame.getContentPane().add(pwLbl);
+//			
+//			JTextField pwTF = new JTextField();
+//			pwTF.setBounds(378, 360, 120, 50);
+//			frame.getContentPane().add(pwTF);
+//			
+//			
 			JButton okButton = new JButton("확인");
 			okButton.setBounds(50, 550, frame.getWidth()-100, 50);
+			okButton.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent e) 
+				{
+					displayVerificationCode();
+				};
+			});
 			frame.getContentPane().add(okButton);
-			
+//			
 			frame.getContentPane().add(title);
-		    Border border = BorderFactory.createLineBorder(Color.GRAY, 1);
-		    
+//		    Border border = BorderFactory.createLineBorder(Color.GRAY, 1);
+//		    
 		    frame.revalidate();
 		    frame.repaint();
 		}
@@ -392,7 +393,44 @@ public class Controller
 	public void selectOption() 
 	{
 		// TODO implement here
-	
+		frame.getContentPane().removeAll();
+		
+		title.setBounds(20, 20, 350, 60);
+		title.setFont(new Font("Serif", Font.BOLD, 14));
+		title.setVerticalAlignment(SwingConstants.CENTER);
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		title.setBackground(Color.black);
+		title.setForeground(new Color(126, 171, 85));
+		title.setOpaque(true);
+		frame.getContentPane().add(title);
+		
+		JButton enterVerificationCodeButton = new JButton("Enter Verification Code");
+		enterVerificationCodeButton.setBounds(frame.getWidth()/2-150,frame.getHeight()/2-150, 300, 100);
+		enterVerificationCodeButton.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				enterVerificationCode();
+			};
+		});
+		frame.getContentPane().add(enterVerificationCodeButton);
+
+		JButton printMenuButton = new JButton("Print Menu");
+		printMenuButton.setBounds(frame.getWidth()/2-150,frame.getHeight()/2-50, 300, 100);
+
+		printMenuButton.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				printMenu();
+			}
+		});
+
+		frame.getContentPane().add(printMenuButton);
+		frame.revalidate();
+		frame.repaint();
 	}
 
 	/**
@@ -419,9 +457,123 @@ public class Controller
 	public String inpVerificationCode() 
 	{
 		// TODO implement here
-		return "";
+		String[] letters = new String[] {"1", "2", "3", "4", "5","6","7","8","9","a","b","c","d","e","f","g","h","i",
+				"j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+		
+		String result = "";
+		Random generator = new Random();
+		for(int i = 0;i<10;i++)
+			result += letters[generator.nextInt(letters.length)];
+		
+		return result;
 	}
+	
+	public void displayVerificationCode()
+	{
+		frame.getContentPane().removeAll();
+		
+		JLabel yourVerificationCodeLbl = new JLabel("Your verification code is: "+ inpVerificationCode());
+		yourVerificationCodeLbl.setBounds(40, frame.getHeight()/2-250, frame.getWidth()-80, 120);
+		yourVerificationCodeLbl.setFont(new Font("Serif", Font.BOLD, 20));
+		yourVerificationCodeLbl.setHorizontalAlignment(SwingConstants.CENTER);
+	    Border border = BorderFactory.createLineBorder(Color.GRAY, 2);
+	    yourVerificationCodeLbl.setBorder(border);
+	    yourVerificationCodeLbl.setForeground(Color.black);
+	    yourVerificationCodeLbl.setBackground(Color.cyan);
+	    frame.getContentPane().add(yourVerificationCodeLbl);
+	    
+	    JLabel retrieveDrinksFromLbl = new JLabel("Retrieve your drink(s) from: ");
+	    retrieveDrinksFromLbl.setBounds(40, frame.getHeight()/2-120, frame.getWidth()-80, 120);
+	    retrieveDrinksFromLbl.setForeground(Color.black);
+	    retrieveDrinksFromLbl.setBackground(Color.cyan);
+	    retrieveDrinksFromLbl.setFont(new Font("Serif", Font.BOLD, 20));
+	    retrieveDrinksFromLbl.setHorizontalAlignment(SwingConstants.CENTER);
+	    retrieveDrinksFromLbl.setBorder(border);
+	    frame.getContentPane().add(retrieveDrinksFromLbl);
+	    
+	    JLabel closestDVMLbl = new JLabel("<html>" + this.closestDVMID + "<br/><br/>Distance: "+this.closestDVMDistance+"m</html>");
+	    
+	    closestDVMLbl.setFont(new Font("Serif", Font.PLAIN, 24));
+		File f = new File(".");
+		try {
+			Image img = new ImageIcon(f.getCanonicalPath()+"/src/dvmProject/image/vm_image.png").getImage();
+			closestDVMLbl.setIcon(new ImageIcon(img.getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		closestDVMLbl.setBounds(80, frame.getHeight()/2+20, frame.getWidth()-160, 150);
+		closestDVMLbl.setBorder(border);
+		
+		frame.getContentPane().add(closestDVMLbl);
+		frame.getContentPane().add(title);
+		
+		JButton goToMainMenuBtn = new JButton("Go to main menu");
+		goToMainMenuBtn.setBounds(40, frame.getHeight()/2 + 200, frame.getWidth()-80, 80);
+		goToMainMenuBtn.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				selectOption();
+			}
+		});
+		frame.getContentPane().add(goToMainMenuBtn);
+		
+		frame.revalidate();
+		frame.repaint();
+	}
+	
+	public void enterVerificationCode()
+	{
+		frame.getContentPane().removeAll();
+		
+		JTextField enterVerificationCodeTF = new JTextField();
+		enterVerificationCodeTF.setBounds(220, 135, 330, 50);
+	    frame.getContentPane().add(enterVerificationCodeTF);
+		
+	    JLabel enterVerificationCodeLbl = new JLabel("Enter your verification code: ");
+	    enterVerificationCodeLbl.setBounds(40, 100, 200, 120);
+		enterVerificationCodeTF.setHorizontalAlignment(SwingConstants.CENTER);
+	    frame.getContentPane().add(enterVerificationCodeLbl);
 
+	    
+	    JLabel yourBeverageIsLbl = new JLabel("Your beverage is: ");
+	    yourBeverageIsLbl.setBounds(40, frame.getHeight()/2, frame.getWidth()-80, 120);
+	    Border border = BorderFactory.createLineBorder(Color.GRAY, 2);
+	    yourBeverageIsLbl.setBorder(border);
+	    yourBeverageIsLbl.setFont(new Font("Serif", Font.BOLD, 16));
+	    yourBeverageIsLbl.setHorizontalAlignment(SwingConstants.CENTER);
+	    frame.getContentPane().add(yourBeverageIsLbl);
+	    frame.getContentPane().add(title);
+	    
+	    JButton okButton = new JButton("확인");
+	    okButton.setBounds(40, 210, frame.getWidth()-80, 50);
+	    okButton.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				//Check validation code
+			};
+		});
+	    frame.getContentPane().add(okButton);
+	    
+		JButton goToMainMenuBtn = new JButton("Go to main menu");
+		goToMainMenuBtn.setBounds(40, frame.getHeight()/2 + 220, frame.getWidth()-80, 50);
+		goToMainMenuBtn.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				selectOption();
+			}
+		});
+		frame.getContentPane().add(goToMainMenuBtn);
+	    frame.revalidate();
+	    frame.repaint();
+	}
 	/**
 	 * @return
 	 */
