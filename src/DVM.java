@@ -1,10 +1,13 @@
+import Model.Message;
+
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class DVM {
 	private int dvm3X = 12, dvm3Y = 47;
 
 	private Card user1Card = new Card(100000); // 임시로 생성한 Card 객체
-	private int id;
+	private String id;
 	private int state;
 	private String address; // address가 String 타입? int[] 타입이어야 하는거 아닌가?
 	private Drink[] drinkList = new Drink[20];	//전체 판매 리스트
@@ -13,10 +16,10 @@ public class DVM {
 	private HashMap<String, List<OtherDVMReceiveCode>> ODRCHashMap;	//외부 DVM으로 부터 온 verification code 확인 작업
 	private Network network;
 	private String createdCode;
-	private String[] calcDVMInfo;	//[id, x좌표, y좌표] -> 확인된 dvm 변수에서 거리를 계산한 후 저장하는 변수
-	private List<String[]> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,] -> 확인된 dvm이 저장되는 변수
+	private String[] calcDVMInfo = new String[]{"03", String.valueOf(dvm3X), String.valueOf(dvm3Y)};	//[id, x좌표, y좌표] -> 확인된 dvm 변수에서 거리를 계산한 후 저장하는 변수
+	private ArrayList<Message> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,] -> 확인된 dvm이 저장되는 변수
 	private int[] finalDVMLoc; // 최종적으로 최단거리에 있는 DVM의 위치를 담고있는 변수
-	private Msg[] message;
+	private Message[] message;
 	private int choiceDrinkNum = 0;
 	private String choiceDrinkCode = "00";
 
@@ -51,17 +54,10 @@ public class DVM {
 	public Network getNetwork() {
 		return this.network;
 	}
-	public void testForCalcDVMInfo() {
-		this.calcDVMInfo = new String[3];
-		this.calcDVMInfo[0] = "3";
-		this.calcDVMInfo[1] = "7";
-		this.calcDVMInfo[2] = "7";
-	}
 
 	public DVM() {
-		this.id = 3; //임의로 설정
+		this.id = "03"; //임의로 설정
 		this.address = "DVM3";  //임의로 설정
-		testForCalcDVMInfo();
 		basicSetting();
 	}
 
@@ -69,11 +65,11 @@ public class DVM {
 		this.state = state;
 	}
 
-	public int getID() {
+	public String getID() {
 		return id;
 	}
 
-	public void setID(int id) { // id의 타입이 int, String? 둘 중 어떤거?
+	public void setID(String id) { // id의 타입이 int, String? 둘 중 어떤거?
 		this.id = id;
 	}
 
@@ -102,41 +98,57 @@ public class DVM {
 
 	public void makeSaleConfirmMsgList(List<Msg> saleMsgList) {
 		// TODO implement here
+
 	}
 
 	public void makeStockConfirmMsgList(List<Msg> stockMsgList) {
 		// TODO implement here
 	}
 
-	public int[] calcClosestDVMLoc(List<String[]> confirmedDVMList) { // getConfirmedDVMList()로 얻은 return 값을 전달함.
-		// TODO implement here
-		//다 계산되어 최종적으로 좌표 리턴해야함.
-		//계산하는 알고리즘 작성 요망
-		calcDVMInfo = new String[3];	//tmp
-		calcDVMInfo[0] = "03";			//tmp
-		calcDVMInfo[1] = "11";			//tmp
-		calcDVMInfo[2] = "22";			//tmp
-		//지금은 임시임 !
-		setCalcDVMInfo(calcDVMInfo);
-		int[] xy = new int[2];
-		//int x = Integer.parseInt(calcDVMInfo[1]) 최소 거리 dvm x좌표
-		//int y = Integer.parseInt(calcDVMInfo[2]) 최소 거리 dvm y좌표
-
-		xy[0] = Integer.parseInt(calcDVMInfo[1]);
-		xy[1] = Integer.parseInt(calcDVMInfo[2]);
-
-		return xy;
+	public void calcClosestDVMLoc() { // getConfirmedDVMList()로 얻은 return 값을 전달함.
+//		calcDVMInfo = new String[3];
+		// 계산 시작
+		if(checkOurDVMStock(this.choiceDrinkCode)) { // true면 선택한 음료 개수보다 우리DVM의 재고가 더 많음
+			calcDVMInfo[0] = id;
+			calcDVMInfo[1] = String.valueOf(dvm3X);
+			calcDVMInfo[2] = String.valueOf(dvm3Y);
+			// return calcDVMInfo;
+		} else { // 외부 DVM
+			int min = Integer.MAX_VALUE;
+			String srcId = "";
+			int minX = 0, minY = 0;
+			for(Message msg : this.confirmedDVMList) {
+				if(msg.getMsgDescription().getItemNum() != 0) {
+					int x = msg.getMsgDescription().getDvmXCoord();
+					int y = msg.getMsgDescription().getDvmYCoord();
+					// 거리
+					double d = Math.sqrt((int) Math.pow(dvm3X - x, 2) + (int) Math.pow(dvm3Y - y, 2));
+					if (min > d) {
+						srcId = msg.getSrcId();
+						minX = x;
+						minY = y;
+					}
+				}
+			}
+			calcDVMInfo[0] = srcId;
+			calcDVMInfo[1] = String.valueOf(minX);
+			calcDVMInfo[2] = String.valueOf(minY);
+		}
+		// 계산 끝
+		this.confirmedDVMList.clear();
+//		return calcDVMInfo;
 	}
-	public List<String[]> getConfirmedDVMList() {
+
+	public ArrayList<Message> getConfirmedDVMList() {
 		return this.confirmedDVMList;
 	}
 
 	public boolean checkOurDVMStock(String drinkCode) { // 우리 DVM(=DVM3)의 재고 확인
-		// TODO implement here
-		return false;
+
+		return currentSellDrink.get(this.choiceDrinkCode).getStock() > this.choiceDrinkNum;
 	}
 
-	public boolean recheckStock(Msg msg) {
+	public boolean recheckStock(Message msg) {
 		// 인자로 전달받은 msg를 해독 -> 음료코드&음료개수 얻을 수 있음 -> 얻은 정보를 바탕으로 drinkList
 		return false;
 	}
@@ -185,13 +197,13 @@ public class DVM {
 	}
 
 	private void basicSetting(){
-		this.drinkList[0] = new Drink("콜라", 900, 3, "01");
+		this.drinkList[0] = new Drink("콜라", 900, 7, "01");
 		this.drinkList[1] = new Drink("사이다", 1000, 2, "02");
-		this.drinkList[2] = new Drink("녹차", 800, 0, "03");
-		this.drinkList[3] = new Drink("홍차", 700, 0, "04");
-		this.drinkList[4] = new Drink("밀크티", 1100, 0, "05");
-		this.drinkList[5] = new Drink("탄산수", 1200, 0, "06");
-		this.drinkList[6] = new Drink("보리차", 1300, 0, "07");
+		this.drinkList[2] = new Drink("녹차", 800, 8, "03");
+		this.drinkList[3] = new Drink("홍차", 700, 7, "04");
+		this.drinkList[4] = new Drink("밀크티", 1100, 7, "05");
+		this.drinkList[5] = new Drink("탄산수", 1200, 7, "06");
+		this.drinkList[6] = new Drink("보리차", 1300, 7, "07");
 		this.drinkList[7] = new Drink("캔커피", 1400, 0, "08");
 		this.drinkList[8] = new Drink("물", 2300, 0, "09");
 		this.drinkList[9] = new Drink("에너지드링크", 1500, 0, "10");

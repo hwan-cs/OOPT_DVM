@@ -39,5 +39,13 @@ public class ClientThreadTest extends Thread{
                 /* 필수 */
                 server.msgList.remove(server.msgList.size() - 1);
             }
+            Message msg = new Message();
+            msg.setSrcId("03");
+            msg.setDstID("휘식");
+            msg.setMsgType("For test");
+            msg.setMsgDescription(new Message.MessageDescription());
+
     }
 }
+
+

@@ -37,4 +37,11 @@ public class DialogClosetDVM extends JDialog { // 최단거리 DVM 알려주는 
         this.dialogClosetDVMPanel.add(this.dialogClosetDVMConfirmBtn);
         add(this.dialogClosetDVMPanel);
     }
+
+    public void refresh() {
+        this.DVMidTextArea.setText("DVM id:" + this.calculatedDVMInfo[0]);
+        this.DVMxLocTextArea.setText("DVM x:" + this.calculatedDVMInfo[1]);
+        this.DVMyLocTextArea.setText("DVM y:" + this.calculatedDVMInfo[2]);
+    }
+
 }

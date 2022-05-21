@@ -1,10 +1,12 @@
 import DVM_Client.DVMClient;
+import Model.Message;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 // DVMClient에서 msg는 json 타입이다. 제공해준 converter로 json으로 변환 후 인자로 전달
 // DVMClient에서 run을 실행하면 msg가 서버로 전송된다. 그 후 Client가 스스로 종료함
@@ -41,7 +43,7 @@ public class Controller extends JDialog {
 	public void printMenu() {
 		dialogPrintMenu.setVisible(true);
 		JButton printMenuConfirmBtn = dialogPrintMenu.getConfirmBtn();
-		printMenuConfirmBtn.addActionListener(new ActionListener() {
+		printMenuConfirmBtn.addActionListener(new ActionListener() { // 확인버튼
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				printClosestDVMInfo();
@@ -51,15 +53,27 @@ public class Controller extends JDialog {
 				dvm.setChoiceDrinkNum(choiceDrinkNum);
 				dvm.createNetwork();
 
-				try {
-					dvm.getNetwork().checkOtherDVMDrinkExists();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					System.out.println("error!!!");
-				}
+				synchronized (this) {
+					try {
+						dvm.getNetwork().checkOtherDVMDrinkExists();
+						this.wait(1000);
+						ArrayList<Message> tempList = (ArrayList<Message>) (dvm.getConfirmedDVMList().clone());
 
-				dialogPrintMenu.setVisible(false);
+						dvm.getConfirmedDVMList().clear();
+
+						dvm.getNetwork().checkOtherDVMStock(tempList);
+						this.wait(1000);
+						dvm.calcClosestDVMLoc(); // 계산헀음
+						dialogClosetDVM.refresh(); // 리프레쉬
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						System.out.println("error!!!");
+					}
+
+					dialogPrintMenu.setVisible(false);
+				}
 			}
+
 		});
 	}
 

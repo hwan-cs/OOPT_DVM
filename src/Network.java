@@ -18,8 +18,6 @@ public class Network {
 		this.serializer = new Serializer();
 	}
 
-
-
 	public void sendBroadcastMsg(Message msg) {
 		DVMClient dvmClient = new DVMClient("localhost", serializer.message2Json(msg));
 		try {
@@ -31,40 +29,56 @@ public class Network {
 		}
 	}
 
-	public void checkOtherDVMDrinkExists(){	//모두에 전송
-//		Message msg1 = new Message();
-//		Message msg2 = new Message();
-//		Message msg4 = new Message();
-//		Message msg5 = new Message();
-//		Message msg6 = new Message();
-//
-//		msgSetting(msg1, "01");
-//		msgSetting(msg2, "02");
-//		msgSetting(msg4, "04");
-//		msgSetting(msg5, "05");
-//		msgSetting(msg6, "06");
-//
-//		sendBroadcastMsg(msg1);
-//		sendBroadcastMsg(msg2);
-//		sendBroadcastMsg(msg4);
-//		sendBroadcastMsg(msg5);
-//		sendBroadcastMsg(msg6);
+	public void checkOtherDVMDrinkExists(){	// 모두에 전송
+		Message msg1 = new Message();
+		Message msg2 = new Message();
+		Message msg4 = new Message();
+		Message msg5 = new Message();
+		Message msg6 = new Message();
+		Message.MessageDescription msgDesc = new Message.MessageDescription();
+		msgDesc.setItemCode(this.choiceDrinkCode);
+		msgDesc.setItemNum(this.choiceDrinkNum);
+		msgSetting(msg1, "03", "01", "SalesCheckRequest", msgDesc);
+		msgSetting(msg2, "03", "02", "SalesCheckRequest", msgDesc);
+		msgSetting(msg4, "03", "04", "SalesCheckRequest", msgDesc);
+		msgSetting(msg5, "03", "05", "SalesCheckRequest", msgDesc);
+		msgSetting(msg6, "03", "06", "SalesCheckRequest", msgDesc);
+
+		sendBroadcastMsg(msg1);
+		sendBroadcastMsg(msg2);
+		sendBroadcastMsg(msg4);
+		sendBroadcastMsg(msg5);
+		sendBroadcastMsg(msg6);
 	}
 
 
 
-	private void msgSetting(Message msg, String dstId){
-		Message.MessageDescription msgDescription = new Message.MessageDescription();
-		msg.setSrcId("03");
-		msg.setDstID(dstId);
-		msg.setMsgType("음료 판매 확인");
-		msgDescription.setItemCode(choiceDrinkCode);
-		msgDescription.setItemNum(choiceDrinkNum);
-		msg.setMsgDescription(msgDescription);
+	private void msgSetting(Message sendToOtherMsg, String srcID, String dstID, String msgType, Message.MessageDescription msgDesc){
+		sendToOtherMsg.setSrcId(srcID);
+		sendToOtherMsg.setDstID(dstID);
+		sendToOtherMsg.setMsgType(msgType);
+		sendToOtherMsg.setMsgDescription(msgDesc);
 	}
 
-	public void checkOtherDVMStock() {
-		// TODO implement here
+	public void checkOtherDVMStock(ArrayList<Message> confirmedList) {
+		// 음료 재고 확인 메세지 설정
+		for(Message msg: confirmedList) {
+			Message sendToOtherMsg = new Message(); // 상대 DVM으로 보내는 메세지
+			Message.MessageDescription msgDesc = new Message.MessageDescription();
+
+			String srcID = msg.getDstID(); // 도착지 설정
+			String dstID = msg.getSrcId();
+			String msgType = "StockCheckRequest";
+			String drinkCode = msg.getMsgDescription().getItemCode();
+			int drinkNum = msg.getMsgDescription().getItemNum();
+
+			msgDesc.setItemCode(drinkCode);
+			msgDesc.setItemNum(drinkNum);
+
+			msgSetting(sendToOtherMsg, srcID, dstID, msgType, msgDesc);
+
+			sendBroadcastMsg(msg);
+		}
 	}
 
 	public void sendSoldDrinkInfo() {

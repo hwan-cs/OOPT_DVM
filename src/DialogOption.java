@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class DialogOption extends JDialog { // 맨 처음 화면 보여주는 다이얼로그
+public class DialogOption extends JFrame { // 맨 처음 화면 보여주는 다이얼로그
     private DVM dvm;
     private JButton printMenuBtn;
     private JButton verificationCodeInpBtn;
@@ -16,9 +16,9 @@ public class DialogOption extends JDialog { // 맨 처음 화면 보여주는 �
         optionPanel.add(printMenuBtn);
         optionPanel.add(verificationCodeInpBtn);
         add(optionPanel);
-        setSize(300, 400);
+        setSize(500, 500);
         setVisible(false);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     public JButton getPrintMenuBtn() {
