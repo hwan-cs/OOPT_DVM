@@ -15,11 +15,15 @@ public class DVM {
 	public Network network;
 	public String createdCode;
 	private String[] calcDVMInfo;	//[id, x좌표, y좌표]
-	public ArrayList<String[]> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,]
+	public ArrayList<Message> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,]
 	public int[] finalDVMLoc;
 	private ArrayList<Message> msgs;
 	private int choiceDrinkNum = 0;
 	private String choiceDrinkCode = "00";
+
+	public ArrayList<Message> getConfirmedDVMList() {
+		return confirmedDVMList;
+	}
 
 	public int getChoiceDrinkNum() {
 		return choiceDrinkNum;
@@ -38,13 +42,12 @@ public class DVM {
 	}
 
 	public String[] getCalcDVMInfo() {
-		calcClosestDVMLoc(confirmedDVMList);	//원래 여기 있으면 안됨 다시 생각해서 집어넣다
 		//지금은 tmp임!!!!!
 
 		return calcDVMInfo;
 	}
 	public void createNetwork(){
-		this.network = new Network(this.choiceDrinkCode, this.choiceDrinkNum);
+		this.network = new Network(this.confirmedDVMList, this.choiceDrinkCode, this.choiceDrinkNum);
 	}
 
 
@@ -94,8 +97,8 @@ public class DVM {
 		// TODO implement here
 	}
 
-	public void makeSaleConfirmMsgList() {
-		// TODO implement here
+	public void makeSaleConfirmMsgList(Message msg) {
+		confirmedDVMList.add(msg);
 	}
 
 	public void makeStockConfirmMsgList() {
@@ -104,20 +107,14 @@ public class DVM {
 
 	public int[] calcClosestDVMLoc(ArrayList<String[]> confirmedDVMList) {
 		// TODO implement here
+		int[] xy = new int[2];
 		//다 계산되어 최종적으로 좌표 리턴해야함.
 		//계산하는 알고리즘 작성 요망
-		calcDVMInfo = new String[3];	//tmp
-		calcDVMInfo[0] = "03";			//tmp
-		calcDVMInfo[1] = "11";			//tmp
-		calcDVMInfo[2] = "22";			//tmp
+
 		//지금은 임시임 !
-		setCalcDVMInfo(calcDVMInfo);
-		int[] xy = new int[2];
+
 		//int x = Integer.parseInt(calcDVMInfo[1]) 최소 거리 dvm x좌표
 		//int y = Integer.parseInt(calcDVMInfo[2]) 최소 거리 dvm y좌표
-
-		xy[0] = Integer.parseInt(calcDVMInfo[1]);
-		xy[1] = Integer.parseInt(calcDVMInfo[2]);
 
 		return xy;
 	}

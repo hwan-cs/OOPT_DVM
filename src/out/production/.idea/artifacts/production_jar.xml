@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="production:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/production_jar</output-path>
+    <root id="archive" name="production.jar">
+      <element id="module-output" name="production" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/dvm_network_JDK18_1.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

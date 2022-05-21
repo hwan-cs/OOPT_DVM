@@ -10,15 +10,17 @@ public class Network {
 	String choiceDrinkCode;
 	int choiceDrinkNum;
 	Serializer serializer;
-	public Network(String choiceDrinkCode, int choiceDrinkNum) {
+
+	public Network(ArrayList<Message> checkOtherDVMDrinkExistMsgs, String choiceDrinkCode, int choiceDrinkNum) {
 		checkOtherDVMDrinkExistMsgs = new ArrayList<Message>();
 		this.choiceDrinkCode = choiceDrinkCode;
 		this.choiceDrinkNum = choiceDrinkNum;
 		this.serializer = new Serializer();
+		this.checkOtherDVMDrinkExistMsgs = checkOtherDVMDrinkExistMsgs;
 	}
 
 	public void sendBroadcastMsg(Message msg) {
-		DVMClient dvmClient = new DVMClient("192.168.0.13", serializer.message2Json(msg));
+		DVMClient dvmClient = new DVMClient("172.20.10.12", serializer.message2Json(msg));
 		try {
 			dvmClient.run();
 			System.out.println("send");
