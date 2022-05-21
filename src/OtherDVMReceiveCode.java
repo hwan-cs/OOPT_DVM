@@ -1,28 +1,33 @@
+import Model.Message;
+
 import java.util.List;
 
 public class OtherDVMReceiveCode {
 
 	public String code;
-	public List<String> msgDesc;
+	public Message msg;
 
-	public OtherDVMReceiveCode() {
+
+	public OtherDVMReceiveCode(String code, Message msg) {
+		this.code = code;
+		this.msg = msg;
 	}
 
 	public String getCode() {
-		// TODO implement here
-		return "";
+		return this.code;
 	}
 
 	public void setCode(String code) {
-		// TODO implement here
+		this.code = code;
 	}
 
-	public void setMsgDesc(List<String> msgDesc) {
-		// TODO implement here
+	public Message getMsg() {
+		return this.msg;
 	}
 
-	public List<String> getMsgDesc() {
-		// TODO implement here
-		return null;
+	public void setMsg(Message msg) {
+		this.msg = msg;
 	}
+
+
 }

@@ -113,36 +113,25 @@ public class DialogPrintMenu extends JDialog {
         drinkNumText.setText("음료 개수: "+ choiceDrinkNum);
     }
 
-    public void clickListener(){
-        for(int i = 0; i < drinkBtns.length; i++){
+    public void clickListener() {
+        for (int i = 0; i < drinkBtns.length; i++) {
             int finalI = i;
 
             drinkBtns[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     String dCode = dvm.getDrinkList()[finalI].getDrinkCode(); // 음료코드
-                    if(!dvm.getCurrentSellDrink().containsKey(dCode)) {
-                        JOptionPane.showMessageDialog(printMenuPanel, "DVM3에서 판매중인 음료가 아닙니다.", "에러", JOptionPane.ERROR_MESSAGE);
+                    if (choiceDrinkCode.equals(dCode)) {
+                        choiceDrinkNum++;
                     } else {
-                        if (choiceDrinkCode.equals(dCode)) {
-                            choiceDrinkNum++;
-                        } else {
-                            choiceDrinkCode = dCode;
-                            choiceDrinkNum = 1;
-                        }
-                        refresh();
+                        choiceDrinkCode = dCode;
+                        choiceDrinkNum = 1;
                     }
+                    refresh();
                 }
             });
         }
-//        confirmBtn.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                dispose();
-//                drinkCodeText.setText("음료 코드: " + "00");
-//                drinkNumText.setText("음료 개수: " + "0");
-//            }
-//        });
+
     }
 
 }

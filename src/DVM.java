@@ -12,17 +12,40 @@ public class DVM {
 	private String address; // address가 String 타입? int[] 타입이어야 하는거 아닌가?
 	private Drink[] drinkList = new Drink[20];	//전체 판매 리스트
 	private HashMap<String, Drink> currentSellDrink = new HashMap<String, Drink>(7);
-	private OtherDVMReceiveCode otherDVMReceiveCode;	//외부 DVM으로 부터 온 vericode 하나씩 확인 한후 및 해시맵에 풋한다.
-	private HashMap<String, List<OtherDVMReceiveCode>> ODRCHashMap;	//외부 DVM으로 부터 온 verification code 확인 작업
+	private OtherDVMReceiveCode otherDVMReceiveCode;	// 외부 DVM으로 부터 온 verification code 하나씩 확인 한후 및 해시맵에 풋한다.
+	private HashMap<String, Message> ODRCHashMap;	//외부 DVM으로 부터 온 verification code 확인 작업
 	private Network network;
 	private String createdCode;
-	private String[] calcDVMInfo = new String[]{"03", String.valueOf(dvm3X), String.valueOf(dvm3Y)};	//[id, x좌표, y좌표] -> 확인된 dvm 변수에서 거리를 계산한 후 저장하는 변수
+	private String[] calcDVMInfo = new String[3];// = new String[]{"03", String.valueOf(dvm3X), String.valueOf(dvm3Y)};	//[id, x좌표, y좌표] -> 확인된 dvm 변수에서 거리를 계산한 후 저장하는 변수
 	private ArrayList<Message> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,] -> 확인된 dvm이 저장되는 변수
 	private int[] finalDVMLoc; // 최종적으로 최단거리에 있는 DVM의 위치를 담고있는 변수
 	private Message[] message;
 	private int choiceDrinkNum = 0;
 	private String choiceDrinkCode = "00";
 
+	public int getDvm3X() {
+		return dvm3X;
+	}
+
+	public void setDvm3X(int dvm3X) {
+		this.dvm3X = dvm3X;
+	}
+
+	public int getDvm3Y() {
+		return dvm3Y;
+	}
+
+	public void setDvm3Y(int dvm3Y) {
+		this.dvm3Y = dvm3Y;
+	}
+
+	public HashMap<String, Message> getODRCHashMap() {
+		return ODRCHashMap;
+	}
+
+	public void setODRCHashMap(HashMap<String, Message> ODRCHashMap) {
+		this.ODRCHashMap = ODRCHashMap;
+	}
 
 	public String getChoiceDrinkCode() {
 		return this.choiceDrinkCode;
@@ -96,19 +119,10 @@ public class DVM {
 		this.drinkList = drinkList;
 	}
 
-	public void makeSaleConfirmMsgList(List<Msg> saleMsgList) {
-		// TODO implement here
-
-	}
-
-	public void makeStockConfirmMsgList(List<Msg> stockMsgList) {
-		// TODO implement here
-	}
-
 	public void calcClosestDVMLoc() { // getConfirmedDVMList()로 얻은 return 값을 전달함.
 //		calcDVMInfo = new String[3];
 		// 계산 시작
-		if(checkOurDVMStock(this.choiceDrinkCode)) { // true면 선택한 음료 개수보다 우리DVM의 재고가 더 많음
+		if(checkOurDVMStock(this.choiceDrinkCode, this.choiceDrinkNum)) { // true면 선택한 음료 개수보다 우리DVM의 재고가 더 많음
 			calcDVMInfo[0] = id;
 			calcDVMInfo[1] = String.valueOf(dvm3X);
 			calcDVMInfo[2] = String.valueOf(dvm3Y);
@@ -117,16 +131,19 @@ public class DVM {
 			int min = Integer.MAX_VALUE;
 			String srcId = "";
 			int minX = 0, minY = 0;
-			for(Message msg : this.confirmedDVMList) {
-				if(msg.getMsgDescription().getItemNum() != 0) {
-					int x = msg.getMsgDescription().getDvmXCoord();
-					int y = msg.getMsgDescription().getDvmYCoord();
-					// 거리
-					double d = Math.sqrt((int) Math.pow(dvm3X - x, 2) + (int) Math.pow(dvm3Y - y, 2));
-					if (min > d) {
-						srcId = msg.getSrcId();
-						minX = x;
-						minY = y;
+			if(this.confirmedDVMList != null) {
+				for (Message msg : this.confirmedDVMList) {
+//					if (msg.getMsgDescription().getItemNum() != 0)
+					if (msg.getMsgDescription().getItemNum() >= this.choiceDrinkNum) {
+						int x = msg.getMsgDescription().getDvmXCoord();
+						int y = msg.getMsgDescription().getDvmYCoord();
+						// 거리
+						double d = Math.sqrt((int) Math.pow(dvm3X - x, 2) + (int) Math.pow(dvm3Y - y, 2));
+						if (min > d) {
+							srcId = msg.getSrcId();
+							minX = x;
+							minY = y;
+						}
 					}
 				}
 			}
@@ -135,7 +152,9 @@ public class DVM {
 			calcDVMInfo[2] = String.valueOf(minY);
 		}
 		// 계산 끝
-		this.confirmedDVMList.clear();
+		if(this.confirmedDVMList != null) {
+			this.confirmedDVMList.clear();
+		}
 //		return calcDVMInfo;
 	}
 
@@ -143,9 +162,11 @@ public class DVM {
 		return this.confirmedDVMList;
 	}
 
-	public boolean checkOurDVMStock(String drinkCode) { // 우리 DVM(=DVM3)의 재고 확인
-
-		return currentSellDrink.get(this.choiceDrinkCode).getStock() > this.choiceDrinkNum;
+	public boolean checkOurDVMStock(String drinkCode, int drinkNum) { // 우리 DVM(=DVM3)의 재고 확인
+		if(currentSellDrink.get(drinkCode) == null) {
+			return false;
+		}
+		return currentSellDrink.get(drinkCode).getStock() >= drinkNum;
 	}
 
 	public boolean recheckStock(Message msg) {
@@ -235,7 +256,5 @@ public class DVM {
 	public void setCurrentSellDrink(HashMap<String, Drink> currentSellDrink) {
 		this.currentSellDrink = currentSellDrink;
 	}
-
-
 
 }

@@ -4,6 +4,7 @@ import Model.Message;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class dvm_main {
     public static void main(String[] args) {
@@ -31,6 +32,7 @@ public class dvm_main {
         msg.setDstID("hwisik");
         msg.setMsgType("Check, Is it working?");
         msg.setMsgDescription(msgDesc);
+
 //        clientThreadTest.start();
 
     }

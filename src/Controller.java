@@ -46,32 +46,37 @@ public class Controller extends JDialog {
 		printMenuConfirmBtn.addActionListener(new ActionListener() { // 확인버튼
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				printClosestDVMInfo();
 				choiceDrinkNum = dialogPrintMenu.getChoiceDrinkNum();
 				choiceDrinkCode = dialogPrintMenu.getChoiceDrinkCode();
 				dvm.setChoiceDrinkCode(choiceDrinkCode);
 				dvm.setChoiceDrinkNum(choiceDrinkNum);
 				dvm.createNetwork();
-
 				synchronized (this) {
 					try {
 						dvm.getNetwork().checkOtherDVMDrinkExists();
 						this.wait(1000);
-						ArrayList<Message> tempList = (ArrayList<Message>) (dvm.getConfirmedDVMList().clone());
+						if(dvm.getConfirmedDVMList() != null) {
+							ArrayList<Message> tempList = (ArrayList<Message>) (dvm.getConfirmedDVMList().clone());
 
-						dvm.getConfirmedDVMList().clear();
+							dvm.getConfirmedDVMList().clear();
 
-						dvm.getNetwork().checkOtherDVMStock(tempList);
-						this.wait(1000);
-						dvm.calcClosestDVMLoc(); // 계산헀음
-						dialogClosetDVM.refresh(); // 리프레쉬
+							dvm.getNetwork().checkOtherDVMStock(tempList);
+							this.wait(1000);
+							dvm.calcClosestDVMLoc(); // 계산헀음
+							dialogClosetDVM.refresh(); // 리프레쉬
+							printClosestDVMInfo();
+						} else { // null
+							dvm.calcClosestDVMLoc(); // 계산헀음
+							dialogClosetDVM.refresh(); // 리프레쉬
+							printClosestDVMInfo();
+						}
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						System.out.println("error!!!");
 					}
-
-					dialogPrintMenu.setVisible(false);
 				}
+					dialogPrintMenu.setVisible(false);
+//				}
 			}
 
 		});
@@ -101,15 +106,19 @@ public class Controller extends JDialog {
 	}
 
 	public void printClosestDVMInfo() {
-		dialogClosetDVM.setVisible(true);
-		JButton printClosetDVMInfoConfirmBtn = dialogClosetDVM.getDialogClosetDVMConfirmBtn();
-		printClosetDVMInfoConfirmBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dialogClosetDVM.setVisible(false);
-				confirmPayment();
-			}
-		});
+		if(dvm.getCalcDVMInfo()[0].equals("")) {
+			JOptionPane.showMessageDialog(dialogClosetDVM, "음료가 있는 DVM이 존재하지 않습니다.", "Error", JOptionPane.ERROR_MESSAGE);
+		} else {
+			dialogClosetDVM.setVisible(true);
+			JButton printClosetDVMInfoConfirmBtn = dialogClosetDVM.getDialogClosetDVMConfirmBtn();
+			printClosetDVMInfoConfirmBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dialogClosetDVM.setVisible(false);
+					confirmPayment();
+				}
+			});
+		}
 	}
 
 	public void provideDrink() { // 음료 제공, 음료 제공시 해당 음료를 구매한 개수만큼 기존 재고에서 차감
