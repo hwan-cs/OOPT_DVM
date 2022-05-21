@@ -15,6 +15,8 @@ import java.awt.Image;
 import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,6 +27,7 @@ import java.util.Random;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 
 /**
  * 
@@ -41,6 +44,7 @@ public class Controller
 	private int selectedDrinkPrice;
 	private String closestDVMID;
 	private double closestDVMDistance;
+	private int counter;
 	
 	public static void main(String[] args) 
 	{
@@ -118,34 +122,7 @@ public class Controller
 		panel.setLayout(layout);
 		frame.getContentPane().add(scrollPane);
 		frame.getContentPane().add(title);
-	    Border border = BorderFactory.createLineBorder(Color.GRAY, 1);
-	    int counter = 1;
-	    for(int i = 0;i<5;i++)
-	    {
-	    	for(int j = 0;j<4;j++)
-	    	{
-	    		JLabel item = new JLabel("<html>"+Integer.toString(counter)+".\t"+dvm.getDrinkList()[counter-1].getName()+"<br/>"+
-	    				dvm.getDrinkList()[counter-1].getPrice()+"원</html>", SwingConstants.CENTER);
-	    		
-	    		item.setHorizontalTextPosition(SwingConstants.CENTER);
-	    		item.setVerticalTextPosition(SwingConstants.BOTTOM);
-	    		item.setPreferredSize(new Dimension(100,100));
-	    		File f = new File(".");
-	    		try {
-	    			Image img = new ImageIcon(f.getCanonicalPath()+"/src/dvmProject/image/"+Integer.toString(counter)+".jpg").getImage();
-	    			item.setIcon(new ImageIcon(img.getScaledInstance(65, 65, Image.SCALE_DEFAULT)));
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-	    		counter++;
-	    		item.setFont(new Font("Serif", Font.PLAIN, 12));
-	    		item.setPreferredSize(new Dimension(100,100));
-	    		item.setForeground(Color.black);
-	    		item.setBorder(border);
-	    		panel.add(item);
-	    	}
-	    }
+	    
 	    JTextField enterDrinkCodeTF = new JTextField();
 	    enterDrinkCodeTF.setBounds(45, scrollPane.getY()+scrollPane.getHeight()+10, 425, 50);
 	    
@@ -158,6 +135,43 @@ public class Controller
 	    JLabel enterNumDrinkLbl = new JLabel("개수: ");
 	    enterNumDrinkLbl.setBounds(18, scrollPane.getY()+scrollPane.getHeight()+20+40, 30, 50);
 	    
+	    counter = 1;
+	    for(int i = 0;i<5;i++)
+	    {
+	    	for(int j = 0;j<4;j++)
+	    	{
+	    		JLabel item = new JLabel("<html>음료코드: "+Integer.toString(counter)+"<br/>"+
+	    				dvm.getDrinkList()[counter-1].getPrice()+"원</html>", SwingConstants.CENTER);
+	    		item.setHorizontalAlignment(SwingConstants.CENTER);
+	    	    TitledBorder border = BorderFactory.createTitledBorder(dvm.getDrinkList()[counter-1].getName());
+	    		item.setName(Integer.toString(counter));
+	    		item.setHorizontalTextPosition(SwingConstants.CENTER);
+	    		item.setVerticalTextPosition(SwingConstants.BOTTOM);
+	    		item.setPreferredSize(new Dimension(100,100));
+	    		File f = new File(".");
+	    		try {
+	    			Image img = new ImageIcon(f.getCanonicalPath()+"/src/dvmProject/image/"+Integer.toString(counter)+".jpg").getImage();
+	    			item.setIcon(new ImageIcon(img.getScaledInstance(65, 65, Image.SCALE_DEFAULT)));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    		item.addMouseListener(new MouseAdapter() 
+	    		{
+	    			public void mouseClicked(MouseEvent e)
+	    			{
+	    				enterDrinkCodeTF.setText(item.getName());
+	    			}
+	    		});
+	    		counter++;
+	    		item.setFont(new Font("Serif", Font.PLAIN, 12));
+	    		item.setPreferredSize(new Dimension(90,130));
+	    		item.setForeground(Color.black);
+	    		item.setBorder(border);
+	    		panel.add(item);
+	    	}
+	    }
+	    
 	    JButton okButton = new JButton("확인");
 	    okButton.setBounds(475, scrollPane.getY()+scrollPane.getHeight()+10, 90, 100);
 	    okButton.addActionListener(new ActionListener() 
@@ -165,20 +179,22 @@ public class Controller
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				if(enterDrinkCodeTF.getText().matches("^[1-9]\\d*$") && enterNumDrinkTF.getText().matches("^[1-9]\\d*$"))
+				if(enterDrinkCodeTF.getText().replaceAll("\\s+","").matches("^[1-9]\\d*$") && enterNumDrinkTF.getText().replaceAll("\\s+","").matches("^[1-9]\\d*$"))
 				{
-					if(Integer.parseInt(enterDrinkCodeTF.getText()) < 21)
+					if(Integer.parseInt(enterDrinkCodeTF.getText().replaceAll("\\s+","")) < 21 && Integer.parseInt(enterDrinkCodeTF.getText().replaceAll("\\s+","")) > 0)
 					{
+						String drinkCode = Integer.parseInt(enterDrinkCodeTF.getText().replaceAll("\\s+",""))<10 ? "0"+enterDrinkCodeTF.getText().replaceAll("\\s+","")
+								: enterDrinkCodeTF.getText().replaceAll("\\s+","");
 						for (int i = 0;i<dvm.getDrinkList().length;i++)
 						{
-							if(dvm.getDrinkList()[i].getDrinkCode().equals(enterDrinkCodeTF.getText()))
+							if(dvm.getDrinkList()[i].getDrinkCode().equals(drinkCode))
 							{
 								selectedDrinkName = dvm.getDrinkList()[i].getName();
 								selectedDrinkPrice = dvm.getDrinkList()[i].getPrice();
 							}
 						}
-						selectedNumDrink = Integer.parseInt(enterNumDrinkTF.getText());
-						selectedDrinkID = Integer.parseInt(enterDrinkCodeTF.getText());
+						selectedNumDrink = Integer.parseInt(enterNumDrinkTF.getText().replaceAll("\\s+",""));
+						selectedDrinkID = Integer.parseInt(enterDrinkCodeTF.getText().replaceAll("\\s+",""));
 						printClosestDVMInfo();
 					}
 					else
@@ -208,16 +224,16 @@ public class Controller
 	{
 		//Reset Panel
 		frame.getContentPane().removeAll();
-		JPanel panel = new JPanel();
-		panel.setBounds(20,100,frame.getWidth(), 250);
-		frame.getContentPane().add(panel);
+//		JPanel panel = new JPanel();
+//		panel.setBounds(20,100,frame.getWidth(), 250);
+//		frame.getContentPane().add(panel);
 		
-		JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
-		        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setBounds(20,100,frame.getWidth()-60,250);
-		BoxLayout layout = new BoxLayout(panel, BoxLayout.X_AXIS);
-		panel.setLayout(layout);
-		frame.getContentPane().add(scrollPane);
+//		JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
+//		        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//		scrollPane.setBounds(20,100,frame.getWidth()-60,250);
+//		BoxLayout layout = new BoxLayout(panel, BoxLayout.X_AXIS);
+//		panel.setLayout(layout);
+//		frame.getContentPane().add(scrollPane);
 		frame.getContentPane().add(title);
 	    Border border = BorderFactory.createLineBorder(Color.GRAY, 1);
 	    
@@ -249,12 +265,12 @@ public class Controller
         this.closestDVMID = closestDVM[0];
         this.closestDVMDistance= Double.parseDouble(formatter.toString());
 	    JButton closestDVMBtn = new JButton("<html>" + closestDVM[0] + "<br/><br/>Distance: "+formatter.toString()+"m</html>");
-	    
+	    closestDVMBtn.setBounds(40, 150, frame.getWidth()-80, 170);
 	    closestDVMBtn.setFont(new Font("Serif", Font.PLAIN, 24));
 		File f = new File(".");
 		try {
 			Image img = new ImageIcon(f.getCanonicalPath()+"/src/dvmProject/image/vm_image.png").getImage();
-			closestDVMBtn.setIcon(new ImageIcon(img.getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
+			closestDVMBtn.setIcon(new ImageIcon(img.getScaledInstance(150, 150, Image.SCALE_DEFAULT)));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -269,7 +285,7 @@ public class Controller
 			};
 		});
 		
-	    panel.add(closestDVMBtn);
+	    frame.getContentPane().add(closestDVMBtn);
 	    
 	    frame.revalidate();
 	    frame.repaint();
@@ -313,13 +329,15 @@ public class Controller
 			
 			JLabel cardInfo = new JLabel();
 			cardInfo.setText(dvm.cardPayment(this.selectedDrinkPrice*this.selectedNumDrink) ? "잔액이 충분합니다" : "잔액이 부족합니다");
-			cardInfo.setBounds(frame.getWidth()/2-130, frame.getHeight()/2-200, 300, 200);
+			cardInfo.setBounds(0, frame.getHeight()/2-200, frame.getWidth(), 200);
+			cardInfo.setHorizontalAlignment(SwingConstants.CENTER);
 			cardInfo.setFont(new Font("Serif", Font.PLAIN, 32));
 			//카드 잔액에서 차감
 			dvm.getCard().setBalance(dvm.cardPayment(this.selectedDrinkPrice*this.selectedNumDrink) ? this.selectedDrinkPrice*this.selectedNumDrink : 0);
 			
 			JLabel cardBalance = new JLabel("결제 후 남은 잔액: " + dvm.getCard().getBalance()+ "원");
-			cardBalance.setBounds(frame.getWidth()/2 - 120, frame.getHeight()/2-100, 300, 100);
+			cardBalance.setBounds(0, frame.getHeight()/2-100, frame.getWidth(), 100);
+			cardBalance.setHorizontalAlignment(SwingConstants.CENTER);
 			cardBalance.setFont(new Font("Serif", Font.BOLD, 20));
 			
 			frame.getContentPane().add(cardInfo);
@@ -472,7 +490,8 @@ public class Controller
 	{
 		frame.getContentPane().removeAll();
 		
-		JLabel yourVerificationCodeLbl = new JLabel("Your verification code is: "+ inpVerificationCode());
+		dvm.createVerificationCode();
+		JLabel yourVerificationCodeLbl = new JLabel("Your verification code is: "+ dvm.getCreatedCode());
 		yourVerificationCodeLbl.setBounds(40, frame.getHeight()/2-250, frame.getWidth()-80, 120);
 		yourVerificationCodeLbl.setFont(new Font("Serif", Font.BOLD, 20));
 		yourVerificationCodeLbl.setHorizontalAlignment(SwingConstants.CENTER);

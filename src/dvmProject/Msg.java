@@ -70,8 +70,7 @@ public class Msg
 		return this.msgDesc;
 	}
 
-	public void setMsgDesc(String msgDesc)
-	{
+	public void setMsgDesc(String msgDesc) {
 		this.msgDesc = msgDesc;
 	}
 
