@@ -14,7 +14,7 @@ public class ClientThreadTest extends Thread{
     public void run() {
         server = new DVMServer();
         try {
-            while(true) {
+            while(true) { // 실시간으로 MSG 전송 받기위한 '무한루프'
                 getMSG();
             }
         } catch (Exception e) {
@@ -22,7 +22,6 @@ public class ClientThreadTest extends Thread{
         }
     }
     public void getMSG() {
-
             if (server.msgList.size() > 0) {
                 System.out.println("I got MSG\n");
                 Message msg = server.msgList.get(server.msgList.size() - 1);
@@ -37,8 +36,8 @@ public class ClientThreadTest extends Thread{
                         "dvmXCoord : " + server.msgList.get(server.msgList.size() - 1).getMsgDescription().getDvmXCoord() + "\n" +
                         "dvmYCoord : " + server.msgList.get(server.msgList.size() - 1).getMsgDescription().getDvmYCoord() + "\n" +
                         "authCode : " + server.msgList.get(server.msgList.size() - 1).getMsgDescription().getAuthCode() + "\n");
+                /* 필수 */
                 server.msgList.remove(server.msgList.size() - 1);
             }
-
     }
 }

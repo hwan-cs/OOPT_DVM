@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 // DVMClient에서 msg는 json 타입이다. 제공해준 converter로 json으로 변환 후 인자로 전달
 // DVMClient에서 run을 실행하면 msg가 서버로 전송된다. 그 후 Client가 스스로 종료함
+
 public class Controller extends JDialog {
 
 	private DVM dvm;
@@ -17,40 +18,26 @@ public class Controller extends JDialog {
 	private int haveToPay;
 	private String[] calcedDVM; //계산된 최단거리.
 
-	private DialogPaymentConfirmation pcDialog;
-	private DialogVerficationCode vcDialog;
-	private DialogOption opDialog;
+//	private DialogPaymentConfirmation dialogConfirmPayment;
+	private DialogVerficationCode dialogVerificationCode;
+	private DialogOption dialogPrintOption;
 	private DialogClosetDVM dialogClosetDVM;
 	private DialogPrintMenu dialogPrintMenu;
-//	private JFrame mainFrame;
+	private DialogProvideDrink dialogProvideDrink;
+	private DialogConfirmPayment dialogConfirmPayment;
 
 
 	public Controller(DVM dvm) {
 		this.dvm = dvm;
-//		this.mainFrame = new JFrame("MAIN FRAME");
-		this.vcDialog = new DialogVerficationCode(this.dvm);
-		this.opDialog = new DialogOption(this.dvm);
-		this.dialogClosetDVM = new DialogClosetDVM(this.dvm);
+		this.dialogPrintOption = new DialogOption();
 		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
-		this.pcDialog = new DialogPaymentConfirmation(this.dvm);
+		this.dialogClosetDVM = new DialogClosetDVM(this.dvm);
+		this.dialogVerificationCode = new DialogVerficationCode(this.dvm);
+		this.dialogConfirmPayment = new DialogConfirmPayment(this.dvm);
+		this.dialogProvideDrink = new DialogProvideDrink(this.dvm);
 		printOption();
-//		init();
 	}
-//	public void init() {
-//		JButton enterBtn = new JButton("시작");
-//		this.mainFrame.setLayout(new BorderLayout());
-//		this.mainFrame.add(enterBtn, BorderLayout.CENTER);
-//		this.mainFrame.setSize(700, 700);
-//		this.mainFrame.setVisible(true);
-//		this.mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//
-//		enterBtn.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				printOption();
-//			}
-//		});
-//	}
+
 	public void printMenu() {
 		dialogPrintMenu.setVisible(true);
 		JButton printMenuConfirmBtn = dialogPrintMenu.getConfirmBtn();
@@ -60,6 +47,17 @@ public class Controller extends JDialog {
 				printClosestDVMInfo();
 				choiceDrinkNum = dialogPrintMenu.getChoiceDrinkNum();
 				choiceDrinkCode = dialogPrintMenu.getChoiceDrinkCode();
+				dvm.setChoiceDrinkCode(choiceDrinkCode);
+				dvm.setChoiceDrinkNum(choiceDrinkNum);
+				dvm.createNetwork();
+
+				try {
+					dvm.getNetwork().checkOtherDVMDrinkExists();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					System.out.println("error!!!");
+				}
+
 				dialogPrintMenu.setVisible(false);
 			}
 		});
@@ -67,20 +65,20 @@ public class Controller extends JDialog {
 
 	public void inpVerificationCode() {
 		// TODO implement here
-		vcDialog.setVisible(true);
-		JButton okButton = vcDialog.getOkButton();
-		final String[] verifyCode = {vcDialog.getVerifyCodeField()};
+		dialogVerificationCode.setVisible(true);
+		JButton okButton = dialogVerificationCode.getOkButton();
+		final String[] verifyCode = {dialogVerificationCode.getVerifyCodeField()};
 
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				verifyCode[0] = vcDialog.getVerifyCodeField();
+				verifyCode[0] = dialogVerificationCode.getVerifyCodeField();
 //				String verifyCode = jtf.getText();
 				boolean flag = dvm.checkVerificationCode(verifyCode[0]);
 				System.out.println("입력한 인증코드 : " + verifyCode[0]);
 				if(!flag) {
-					JOptionPane.showMessageDialog(vcDialog, "인증코드가 다릅니다.","Message", JOptionPane.ERROR_MESSAGE);
-					vcDialog.setVerifyCodeField("");
+					JOptionPane.showMessageDialog(dialogVerificationCode, "인증코드가 다릅니다.","Message", JOptionPane.ERROR_MESSAGE);
+					dialogVerificationCode.setVerifyCodeField("");
 				} else {
 					provideDrink();
 				}
@@ -94,28 +92,58 @@ public class Controller extends JDialog {
 		printClosetDVMInfoConfirmBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(dvm.getCalcDVMInfo()[0].equals("3")){
-					//우리 시스템의 재고 파악
-					//아직 미구현상태임
-					//
-					pcDialog.setVisible(true);
-				}
-				else{
-					//다른 DVM의 재고 파악
-					//아직 미구현상태임
-					//
-					pcDialog.setVisible(true);
-				}
+				dialogClosetDVM.setVisible(false);
+				confirmPayment();
 			}
 		});
 	}
 
 	public void provideDrink() { // 음료 제공, 음료 제공시 해당 음료를 구매한 개수만큼 기존 재고에서 차감
-		// TODO implement here
+		JButton returnBtn = this.dialogProvideDrink.returnBtn;
+		dialogProvideDrink.settingTextArea(this.choiceDrinkNum, this.dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode)-1].getName());
+		dialogProvideDrink.setVisible(true);
+		returnBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogProvideDrink.setVisible(false);
+			}
+		});
 	}
 
-	public void confirmPayment(DVM dvm) {
+	public void confirmPayment() {
+		JButton yesBtn = dialogConfirmPayment.getYesBtn();
+		JButton noBtn = dialogConfirmPayment.getNoBtn();
 
+		dialogConfirmPayment.settingTextArea(choiceDrinkNum, dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode)-1].getName());
+		dialogConfirmPayment.setVisible(true);
+
+		yesBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (dvm.getCalcDVMInfo()[0].equals("03")){
+					//우리 시스템일 때 내부 계산 후
+					dialogConfirmPayment.setVisible(false);
+					provideDrink();
+				}
+				else{
+					//외부 시스템일때 recheckStock
+				}
+			}
+		});
+
+		noBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogConfirmPayment.setVisible(false);
+				dialogPrintMenu.setChoiceDrinkNum(0);
+				dialogPrintMenu.setChoiceDrinkCode("00");
+				choiceDrinkCode = "00";
+				choiceDrinkNum = 0;
+				dvm.setChoiceDrinkCode(choiceDrinkCode);
+				dvm.setChoiceDrinkNum(choiceDrinkNum);
+				dialogPrintMenu.refresh();
+			}
+		});
 	}
 
 	public void selectDrink() {
@@ -131,9 +159,9 @@ public class Controller extends JDialog {
 	}
 
 	public void printOption() {
-		opDialog.setVisible(true);
-		JButton printMenuBtn = this.opDialog.getPrintMenuBtn();
-		JButton verificationCodeInpBtn = this.opDialog.getVerificationCodeInpBtn();
+		dialogPrintOption.setVisible(true);
+		JButton printMenuBtn = this.dialogPrintOption.getPrintMenuBtn();
+		JButton verificationCodeInpBtn = this.dialogPrintOption.getVerificationCodeInpBtn();
 
 		printMenuBtn.addActionListener(new ActionListener() {
 			@Override

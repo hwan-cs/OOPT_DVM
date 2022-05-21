@@ -16,6 +16,7 @@ public class ServerThreadTest extends Thread {
         }
     }
     public void getMsg() {
+        /* 무쓸모 여기에다 선언하면 안될듯?*/
 //        if(server.msgList.size() > 0) {
 //            System.out.println("srcID : " + server.msgList.get(server.msgList.size() - 1).getSrcId() + "\n" +
 //                    "dstID : " + server.msgList.get(server.msgList.size() - 1).getDstID() + "\n" +

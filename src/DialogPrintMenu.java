@@ -12,12 +12,8 @@ public class DialogPrintMenu extends JDialog {
     private JPanel printMenuPanel;
     private JButton[] drinkBtns;
     private JButton confirmBtn;
-//    private JTextField drinkNumText;
-//    private JTextField drinkCodeText;
-    JTextArea drinkNumText;
-    JTextArea drinkCodeText;
-//    private JLabel drinkCodeTitle;
-//    private JLabel drinkNumTitle;
+    private JTextArea drinkNumText;
+    private JTextArea drinkCodeText;
     private JPanel bottomPanel;
 
     public DialogPrintMenu(DVM dvm){
@@ -25,12 +21,8 @@ public class DialogPrintMenu extends JDialog {
         this.drinkListlength = dvm.getDrinkList().length;
         this.printMenuPanel = new JPanel(new GridLayout(5, 4));
         this.drinkBtns = new JButton[this.drinkListlength];
-//        this.drinkCodeText = new JTextArea("음료 코드: ");
-//        this.drinkNumText = new JTextArea("음료 개수: ");
         this.confirmBtn = new JButton("확인");
         this.bottomPanel = new JPanel(new FlowLayout());
-//        this.drinkCodeTitle = new JLabel("음료 코드: ");
-//        this.drinkNumTitle = new JLabel("음료 개수: ");
         this.drinkCodeText = new JTextArea("음료 코드: ");
         this.drinkNumText = new JTextArea("음료 개수: ");
 
@@ -101,28 +93,25 @@ public class DialogPrintMenu extends JDialog {
         for (int i = 0; i < this.drinkListlength; i++){
             this.drinkBtns[i] = new JButton(dvm.getDrinkList()[i].getDrinkCode() + "." + dvm.getDrinkList()[i].getName());
         }
-
     }
 
-    public void attachBtnAndText(){ // 버튼과 텍스트 추가
+    public void attachBtnAndText(){
+        for (int i=0; i<this.drinkListlength; i++)
+            this.printMenuPanel.add(drinkBtns[i]);
 
-        /* 메뉴Panel에 붙인다. */
-        for (int i = 0; i < this.drinkListlength; i++) { this.printMenuPanel.add(drinkBtns[i]); }
+        this.printMenuPanel.add(drinkCodeText);
+        this.printMenuPanel.add(drinkNumText);
+        this.printMenuPanel.add(confirmBtn);
 
-        /* 음료 코드 : [코드 표시되는 창] 음료 개수: [개수 표시되는 창] */
-//        this.bottomPanel.add(drinkCodeTitle);
-        this.bottomPanel.add(drinkCodeText);
-//        this.bottomPanel.add(drinkNumTitle);
-        this.bottomPanel.add(drinkNumText);
-        this.bottomPanel.add(confirmBtn);
-        /**/
-
-        // Dialog에 붙임
-        add(printMenuPanel, BorderLayout.NORTH);
-        add(bottomPanel, BorderLayout.CENTER);
-
+        add(printMenuPanel);
+        setVisible(false);
+        setSize(300, 400);
     }
 
+    public void refresh(){
+        drinkCodeText.setText("음료 코드: "+ choiceDrinkCode);
+        drinkNumText.setText("음료 개수: "+ choiceDrinkNum);
+    }
 
     public void clickListener(){
         for(int i = 0; i < drinkBtns.length; i++){
@@ -141,20 +130,19 @@ public class DialogPrintMenu extends JDialog {
                             choiceDrinkCode = dCode;
                             choiceDrinkNum = 1;
                         }
-                        drinkCodeText.setText("음료 코드: " + choiceDrinkCode);
-                        drinkNumText.setText("음료 개수: " + choiceDrinkNum);
+                        refresh();
                     }
                 }
             });
         }
-
-        confirmBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                drinkCodeText.setText("음료 코드: " + "00");
-                drinkNumText.setText("음료 개수: " + "0");
-            }
-        });
+//        confirmBtn.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                dispose();
+//                drinkCodeText.setText("음료 코드: " + "00");
+//                drinkNumText.setText("음료 개수: " + "0");
+//            }
+//        });
     }
+
 }

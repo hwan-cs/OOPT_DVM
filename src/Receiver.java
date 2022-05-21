@@ -1,8 +1,12 @@
+import Model.Message;
+import java.util.*;
 
 public class Receiver extends Thread{
 
 	public String receiverID;
 	private DVM dvm;
+	private ArrayList<Message> messages;
+
 	public Receiver(DVM dvm) {
 		this.dvm = dvm;
 	}

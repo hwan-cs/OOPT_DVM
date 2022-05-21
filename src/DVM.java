@@ -17,7 +17,25 @@ public class DVM {
 	private List<String[]> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,] -> 확인된 dvm이 저장되는 변수
 	private int[] finalDVMLoc; // 최종적으로 최단거리에 있는 DVM의 위치를 담고있는 변수
 	private Msg[] message;
+	private int choiceDrinkNum = 0;
+	private String choiceDrinkCode = "00";
 
+
+	public String getChoiceDrinkCode() {
+		return this.choiceDrinkCode;
+	}
+
+	public void setChoiceDrinkCode(String choiceDrinkCode) {
+		this.choiceDrinkCode = choiceDrinkCode;
+	}
+
+	public int getChoiceDrinkNum() {
+		return this.choiceDrinkNum;
+	}
+
+	public void setChoiceDrinkNum(int choiceDrinkNum) {
+		this.choiceDrinkNum = choiceDrinkNum;
+	}
 
 	public String[] getCalcDVMInfo() {
 		return this.calcDVMInfo;
@@ -27,6 +45,12 @@ public class DVM {
 		this.calcDVMInfo = calcDVMInfo;
 	}
 
+	public void createNetwork() {
+		this.network = new Network(this.choiceDrinkCode, this.choiceDrinkNum);
+	}
+	public Network getNetwork() {
+		return this.network;
+	}
 	public void testForCalcDVMInfo() {
 		this.calcDVMInfo = new String[3];
 		this.calcDVMInfo[0] = "3";
@@ -84,29 +108,24 @@ public class DVM {
 		// TODO implement here
 	}
 
-	public String[] calcClosestDVMLoc(List<String[]> confirmedDVMList) { // getConfirmedDVMList()로 얻은 return 값을 전달함.
-		double min = 141.0; // PFR에서 x, y의 범위가 0 ~ 99 이여서
-		int xd, yd;
-		double d;
-		String dvm_id = "";
-		for(String[] dvmInfo : confirmedDVMList) {
-			int x = Integer.parseInt(dvmInfo[1]);
-			int y = Integer.parseInt(dvmInfo[2]);
+	public int[] calcClosestDVMLoc(List<String[]> confirmedDVMList) { // getConfirmedDVMList()로 얻은 return 값을 전달함.
+		// TODO implement here
+		//다 계산되어 최종적으로 좌표 리턴해야함.
+		//계산하는 알고리즘 작성 요망
+		calcDVMInfo = new String[3];	//tmp
+		calcDVMInfo[0] = "03";			//tmp
+		calcDVMInfo[1] = "11";			//tmp
+		calcDVMInfo[2] = "22";			//tmp
+		//지금은 임시임 !
+		setCalcDVMInfo(calcDVMInfo);
+		int[] xy = new int[2];
+		//int x = Integer.parseInt(calcDVMInfo[1]) 최소 거리 dvm x좌표
+		//int y = Integer.parseInt(calcDVMInfo[2]) 최소 거리 dvm y좌표
 
-			xd = (int) Math.pow((dvm3X - x), 2);
-			yd = (int) Math.pow((dvm3Y - y), 2);
-			d = Math.sqrt(yd+xd);
-			if(min > d) {
-				dvm_id = dvmInfo[0]; // 최소 거리에 있는 dvm_id를 저장한다.
-			}
-		}
-		// 위에서 저장한 dvm_id를 for문으로 confirmedDVMList를 돌면서 위치를 찾는다.
-		for(String[] dvmInfo : confirmedDVMList) {
-			if(dvmInfo[0].equals(dvm_id)) {
-				return dvmInfo; // id, x, y 를 가지고 있는 배열을 리턴
-			}
-		}
-		return null;
+		xy[0] = Integer.parseInt(calcDVMInfo[1]);
+		xy[1] = Integer.parseInt(calcDVMInfo[2]);
+
+		return xy;
 	}
 	public List<String[]> getConfirmedDVMList() {
 		return this.confirmedDVMList;

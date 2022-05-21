@@ -1,10 +1,10 @@
 public class Msg {
 
-	public String src_id;
-	public String dst_id;
-	public String msgType;
-	public String msgDesc;
-	public String drinkCode;
+	private String src_id;
+	private String dst_id;
+	private String msgType;
+	private String msgDesc;
+	private String drinkCode;
 
 	// MsgDesc는 msgType마다 다르게 구성됨
 	// 재고 확인 요청 : 음료코드_음료개수 => BroadCast
