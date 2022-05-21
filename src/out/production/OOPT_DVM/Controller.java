@@ -48,7 +48,7 @@ public class Controller extends JDialog {
 				dvm.createNetwork();
 
 				try {
-					dvm.network.checkOtherDVMDrinkExists();
+					dvm.network.checkOtherDVMDrinkExists();//전송!
 				} catch (Exception ex) {
 					ex.printStackTrace();
 					System.out.println("error!!!");

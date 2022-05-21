@@ -1,4 +1,9 @@
 package dvmProject;
 
-public class DialogCardPayment {
+import javax.swing.*;
+
+public class DialogCardPayment extends JDialog {
+    public DialogCardPayment(DVM dvm){
+
+    }
 }
