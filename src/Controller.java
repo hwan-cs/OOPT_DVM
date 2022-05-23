@@ -27,6 +27,7 @@ public class Controller extends JDialog {
 	private DialogPrintMenu dialogPrintMenu;
 	private DialogProvideDrink dialogProvideDrink;
 	private DialogConfirmPayment dialogConfirmPayment;
+	private DialogPaymentConfirmation dialogPaymentConfirmation;
 	private JButton printClosetDVMInfoConfirmBtn;
 
 	public Controller(DVM dvm) {
@@ -38,6 +39,7 @@ public class Controller extends JDialog {
 		this.dialogConfirmPayment = new DialogConfirmPayment(this.dvm);
 		this.dialogProvideDrink = new DialogProvideDrink(this.dvm);
 		this.printClosetDVMInfoConfirmBtn = new JButton();
+//		this.dialogPaymentConfirmation = new DialogPaymentConfirmation(this.dvm);
 		printOption();
 	}
 
@@ -144,27 +146,36 @@ public class Controller extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialogProvideDrink.setVisible(false);
+				dialogPaymentConfirmation.dispose();
+				dialogProvideDrink.dispose();
 			}
 		});
 	}
 
 	public void confirmPayment(String drinkCode, int drinkNum, int totalPrice) {
-		JButton yesBtn = dialogConfirmPayment.getYesBtn();
-		JButton noBtn = dialogConfirmPayment.getNoBtn();
 
-		String choiceDrinkName = dvm.getDrinkList()[Integer.parseInt(drinkCode)-1].getName();
-
-		dialogConfirmPayment.settingTextArea(choiceDrinkName, drinkNum, totalPrice);
-		dialogConfirmPayment.setVisible(true);
-
-		yesBtn.addActionListener(new ActionListener() {
+//		JButton yesBtn = dialogConfirmPayment.getYesBtn();
+//		JButton noBtn = dialogConfirmPayment.getNoBtn();
+//
+//		String choiceDrinkName = dvm.getDrinkList()[Integer.parseInt(drinkCode)-1].getName();
+//
+//		dialogConfirmPayment.settingTextArea(choiceDrinkName, drinkNum);
+//		dialogConfirmPayment.setVisible(true);
+		dialogPaymentConfirmation = new DialogPaymentConfirmation(this.dvm);
+//		dialogPaymentConfirmation.setVisible(true);
+		JButton okBtn = dialogPaymentConfirmation.getOkBtn();
+		okBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialogConfirmPayment.dispose();
+//				dialogConfirmPayment.dispose();
 				if (dvm.getCalcDVMInfo()[0].equals("03")){
-					//우리 시스템일 때 내부 계산 후
+//					우리 시스템일 때 내부 계산 후
+					dialogPaymentConfirmation.dispose();
 //					dialogConfirmPayment.setVisible(false);
+
 					provideDrink();
+					dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
+					dialogPaymentConfirmation.getBalanceLabel().setText("현재 잔액: " + String.valueOf(dvm.getCard().getBalance()));
 				}
 				else{
 					//외부 시스템일때 recheckStock
@@ -172,7 +183,7 @@ public class Controller extends JDialog {
 			}
 		});
 
-		noBtn.addActionListener(new ActionListener() {
+		dialogPaymentConfirmation.getNoBtn().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialogConfirmPayment.setVisible(false);
