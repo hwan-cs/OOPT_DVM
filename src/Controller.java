@@ -44,6 +44,11 @@ public class Controller extends JDialog {
 		JButton printMenuConfirmBtn = dialogPrintMenu.getConfirmBtn();
 
 		printMenuConfirmBtn.addActionListener(new ActionListener() { // 확인버튼
+			int input = JOptionPane.showConfirmDialog(null,choiceDrinkCode+" " +choiceDrinkNum+"개를 "+dvm.getCurrentSellDrink().get(choiceDrinkCode).getPrice()*choiceDrinkNum+"원을 지불하고 구매 합니다.");
+
+			if(input == JOptionPane.OK_OPTION) {
+
+			}
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				choiceDrinkNum = dialogPrintMenu.getChoiceDrinkNum();

@@ -77,6 +77,7 @@ public class DialogPrintMenu extends JDialog {
 
         // 음료 개수 라벨 위치 설정
         enterDrinkNumLbl.setBounds(18, scrollPane.getY()+scrollPane.getHeight()+20+40, 30, 50);
+        confirmBtn.setBounds(475, scrollPane.getY()+scrollPane.getHeight()+10, 90, 100); // 버튼의 위치 설정
     }
 
     public JLabel[] getDrinkBtns() {
