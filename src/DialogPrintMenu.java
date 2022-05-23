@@ -1,68 +1,113 @@
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class DialogPrintMenu extends JDialog {
     private int drinkListlength;
+    private String title = "Distributed Vending Machine-Team 3";
     private int choiceDrinkNum = 0; // 음료 버튼 눌렀을 때 음료 선택 개수
     private String choiceDrinkCode = ""; // 음료 버튼 눌렀을 때 음료 코드
     private DVM dvm;
     private JPanel printMenuPanel;
-    private JButton[] drinkBtns;
+//    private JButton[] drinkBtns;
     private JButton confirmBtn;
-    private JTextArea drinkNumText;
-    private JTextArea drinkCodeText;
-    private JPanel bottomPanel;
+    JTextField enterDrinkCodeTF;
+    JLabel enterDrinkCodeLbl;
+    JTextField enterDrinkNumTF;
+    JLabel enterDrinkNumLbl;
+    //    private JTextArea drinkNumText;
+    //    private JTextArea drinkCodeText;
+    private int counter;
+    private JScrollPane scrollPane;
+    private JLabel item[];
+    private int frameW = 600, frameH = 750;
+
 
     public DialogPrintMenu(DVM dvm){
         this.dvm = dvm;
+//        this.item = new JLabel[20];
         this.drinkListlength = dvm.getDrinkList().length;
-        this.printMenuPanel = new JPanel(new GridLayout(5, 4));
-        this.drinkBtns = new JButton[this.drinkListlength];
+        this.printMenuPanel = new JPanel();
+        this.item = new JLabel[20];
+//        this.drinkBtns = new JButton[this.drinkListlength];
         this.confirmBtn = new JButton("확인");
-        this.bottomPanel = new JPanel(new FlowLayout());
-        this.drinkCodeText = new JTextArea("음료 코드: ");
-        this.drinkNumText = new JTextArea("음료 개수: ");
-
+//        this.bottomPanel = new JPanel(new FlowLayout());
+//        this.drinkCodeText = new JTextArea("음료 코드: ");
+//        this.drinkNumText = new JTextArea("음료 개수: ");
+        this.enterDrinkCodeTF = new JTextField();
+        this.enterDrinkNumTF = new JTextField("0");
+        this.enterDrinkCodeLbl = new JLabel("번호: ");
+        this.enterDrinkNumLbl = new JLabel("개수:");
+        this.scrollPane = new JScrollPane();
         init();
-        createButtonAndText();
+//        createButtonAndText();
         attachBtnAndText();
-        clickListener();
+//        clickListener();
     }
 
     public void init() {
+        printMenuPanel.setBounds(20,100, frameW, frameH); // 패널의 위치를 설정
+        add(printMenuPanel); // 메인 프레임에 패널 붙힘
+
+        JScrollPane scrollPane = new JScrollPane(printMenuPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); // 스크롤
+        scrollPane.setBounds(20,100,frameW-60,frameH-100); // 스크롤 패널 위치 설정
+
+        GridLayout layout = new GridLayout(7,4,0,0); // 그리드 레이아웃 음료를 한 행에 4개씩 총 7행
+        layout.setVgap(10); // 격자 사이 수직 간격
+        layout.setHgap(10); // 격자 사이 수평 간격
+
+        printMenuPanel.setLayout(layout); // 패널의 레이아웃을 그리드 레이아웃으로 설정
+
+        add(scrollPane); // 메인 프레임에 스크롤 패널 붙힘
         setTitle("메뉴 선택");
-        setLayout(new BorderLayout());
-        setLocationRelativeTo(null);
+
         setVisible(false);
-        setSize(650, 700);
+        setSize(600, 750);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        // 음료 코드 텍스트 필드 위치 설정
+        enterDrinkCodeTF.setBounds(45, scrollPane.getY() + scrollPane.getHeight() + 10, 425, 50);
+
+        // 음료 코드 라벨 위치 설정
+        enterDrinkCodeLbl.setBounds(18, scrollPane.getY()+scrollPane.getHeight()+10, 30, 50);
+
+        // 음료 개수 필드 위치 설정
+        enterDrinkNumTF.setBounds(45, scrollPane.getY()+scrollPane.getHeight()+20+40, 425, 50);
+
+        // 음료 개수 라벨 위치 설정
+        enterDrinkNumLbl.setBounds(18, scrollPane.getY()+scrollPane.getHeight()+20+40, 30, 50);
+
+        createButtonAndText();
     }
 
-    public JButton[] getDrinkBtns() {
-        return drinkBtns;
+    public JLabel[] getDrinkBtns() {
+        return this.item;
     }
 
-    public void setDrinkBtns(JButton[] drinkBtns) {
-        this.drinkBtns = drinkBtns;
+    public void setDrinkBtns(JLabel[] drinkBtns) {
+        this.item = drinkBtns;
     }
 
-    public JTextArea getDrinkNumText() {
-        return drinkNumText;
+    public JTextField getDrinkNumText() {
+        return enterDrinkNumTF;
     }
 
-    public void setDrinkNumText(JTextArea drinkNumText) {
-        this.drinkNumText = drinkNumText;
+    public void setDrinkNumText(JTextField drinkNumText) {
+        this.enterDrinkNumTF = drinkNumText;
     }
 
-    public JTextArea getDrinkCodeText() {
-        return drinkCodeText;
+    public JTextField getDrinkCodeText() {
+        return enterDrinkCodeTF;
     }
 
-    public void setDrinkCodeText(JTextArea drinkCodeText) {
-        this.drinkCodeText = drinkCodeText;
+    public void setDrinkCodeText(JTextField drinkCodeText) {
+        this.enterDrinkCodeTF= drinkCodeText;
     }
 
     public JButton getConfirmBtn() {
@@ -90,48 +135,55 @@ public class DialogPrintMenu extends JDialog {
     }
 
     public void createButtonAndText(){ // 음료 버튼, 텍스트필드 생성
-        for (int i = 0; i < this.drinkListlength; i++){
-            this.drinkBtns[i] = new JButton(dvm.getDrinkList()[i].getDrinkCode() + "." + dvm.getDrinkList()[i].getName());
-        }
+        counter = 1;
+        for(int i = 0; i < item.length; i++) {
+                item[i] = new JLabel("<html>음료코드: "+Integer.toString(counter)+"<br/>"+
+                        dvm.getDrinkList()[counter-1].getPrice()+"원</html>", SwingConstants.CENTER); // 아이템 - "음료코드 : #, #원"
+                item[i].setHorizontalAlignment(SwingConstants.CENTER); // 음료 정렬
+                TitledBorder border = BorderFactory.createTitledBorder(dvm.getDrinkList()[counter-1].getName()); // 제목 보더
+                item[i].setName(Integer.toString(counter)); // 아이템 이름 설정
+                item[i].setHorizontalTextPosition(SwingConstants.CENTER); // 아이템의 텍스트 위치 수평정렬
+                item[i].setVerticalTextPosition(SwingConstants.BOTTOM); // 아이템의 텍스트 위치 수직정렬
+                item[i].setPreferredSize(new Dimension(100,100)); // 아이템의 크기
+
+                clickListener(i);
+
+                counter++;
+                item[i].setFont(new Font("Serif", Font.PLAIN, 12)); // 아이템 폰트 설정
+                item[i].setPreferredSize(new Dimension(90,130)); // 아이템 크기
+                item[i].setForeground(Color.black); // 아이템의 글자색
+                item[i].setBorder(border); // 아이템의 보더
+                printMenuPanel.add(item[i]); // 패널에 아이템 추가
+            }
     }
 
     public void attachBtnAndText(){
-        for (int i=0; i<this.drinkListlength; i++)
-            this.printMenuPanel.add(drinkBtns[i]);
-
-        this.printMenuPanel.add(drinkCodeText);
-        this.printMenuPanel.add(drinkNumText);
+        this.printMenuPanel.add(enterDrinkCodeLbl);
+        this.printMenuPanel.add(enterDrinkNumLbl);
+        this.printMenuPanel.add(enterDrinkCodeTF);
+        this.printMenuPanel.add(enterDrinkNumTF);
         this.printMenuPanel.add(confirmBtn);
-
-        add(printMenuPanel);
-        setVisible(false);
-        setSize(300, 400);
     }
 
     public void refresh(){
-        drinkCodeText.setText("음료 코드: "+ choiceDrinkCode);
-        drinkNumText.setText("음료 개수: "+ choiceDrinkNum);
+        enterDrinkCodeTF.setText(choiceDrinkCode);
+        enterDrinkNumTF.setText(String.valueOf(choiceDrinkNum));
     }
 
-    public void clickListener() {
-        for (int i = 0; i < drinkBtns.length; i++) {
-            int finalI = i;
-
-            drinkBtns[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String dCode = dvm.getDrinkList()[finalI].getDrinkCode(); // 음료코드
-                    if (choiceDrinkCode.equals(dCode)) {
-                        choiceDrinkNum++;
-                    } else {
-                        choiceDrinkCode = dCode;
-                        choiceDrinkNum = 1;
-                    }
-                    refresh();
+    public void clickListener(int i) {
+        item[i].addMouseListener(new MouseAdapter()
+        {
+            public void mouseClicked(MouseEvent e) {
+                enterDrinkCodeTF.setText(item[i].getName()); // 음료 코드 텍스트 필드에 음료 코드 설정
+                String dCode = dvm.getDrinkList()[i].getDrinkCode();
+                if (choiceDrinkCode.equals(dCode)) {
+                    choiceDrinkNum++;
+                } else {
+                    choiceDrinkCode = dCode;
+                    choiceDrinkNum = 1;
                 }
-            });
-        }
-
+                refresh();
+            }
+        });
     }
-
 }

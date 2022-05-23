@@ -28,7 +28,6 @@ public class Controller extends JDialog {
 	private DialogProvideDrink dialogProvideDrink;
 	private DialogConfirmPayment dialogConfirmPayment;
 
-
 	public Controller(DVM dvm) {
 		this.dvm = dvm;
 		this.dialogPrintOption = new DialogOption();
@@ -43,6 +42,7 @@ public class Controller extends JDialog {
 	public void printMenu() {
 		dialogPrintMenu.setVisible(true);
 		JButton printMenuConfirmBtn = dialogPrintMenu.getConfirmBtn();
+
 		printMenuConfirmBtn.addActionListener(new ActionListener() { // 확인버튼
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -107,7 +107,7 @@ public class Controller extends JDialog {
 
 	public void printClosestDVMInfo() {
 		if(dvm.getCalcDVMInfo()[0].equals("")) {
-			JOptionPane.showMessageDialog(dialogClosetDVM, "음료가 있는 DVM이 존재하지 않습니다.", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(dialogPrintMenu, "음료가 있는 DVM이 존재하지 않습니다.", "Error", JOptionPane.INFORMATION_MESSAGE);
 		} else {
 			dialogClosetDVM.setVisible(true);
 			JButton printClosetDVMInfoConfirmBtn = dialogClosetDVM.getDialogClosetDVMConfirmBtn();

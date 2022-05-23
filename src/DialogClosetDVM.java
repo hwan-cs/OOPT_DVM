@@ -1,14 +1,21 @@
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.util.Formatter;
 
 public class DialogClosetDVM extends JDialog { // 최단거리 DVM 알려주는 다이얼로그
-    DVM dvm;
-    JTextArea DVMidTextArea;
-    JTextArea DVMxLocTextArea;
-    JTextArea DVMyLocTextArea;
-    JPanel dialogClosetDVMPanel;
-    JButton dialogClosetDVMConfirmBtn;
-    String[] calculatedDVMInfo;
+
+    private DVM dvm;
+
+    private JPanel dialogClosetDVMPanel;
+    private JButton dialogClosetDVMConfirmBtn;
+    private String[] calculatedDVMInfo;
+    private JButton closestDVMBtn;
+    private Formatter formatter;
+    private Border border = BorderFactory.createLineBorder(Color.GRAY, 1); // 보더 생성
+
+
 
     public JButton getDialogClosetDVMConfirmBtn() {
         return dialogClosetDVMConfirmBtn;
@@ -21,28 +28,28 @@ public class DialogClosetDVM extends JDialog { // 최단거리 DVM 알려주는 
     public DialogClosetDVM(DVM dvm){
         this.dvm = dvm;
         this.calculatedDVMInfo = dvm.getCalcDVMInfo();
-        this.DVMidTextArea = new JTextArea("DVM id:" + this.calculatedDVMInfo[0]);
-        this.DVMxLocTextArea = new JTextArea("DVM x:" + this.calculatedDVMInfo[1]);
-        this.DVMyLocTextArea = new JTextArea("DVM y:" + this.calculatedDVMInfo[2]);
-        this.dialogClosetDVMPanel = new JPanel();
-        this.dialogClosetDVMConfirmBtn = new JButton("계속");
 
+        this.dialogClosetDVMPanel = new JPanel();
+        formatter = new Formatter();
+        formatter.format("%s", this.calculatedDVMInfo[1] + this.calculatedDVMInfo[2]);
+        this.dialogClosetDVMConfirmBtn = new JButton("<html>" + this.calculatedDVMInfo[0] + "<br/><br/>X:" + formatter.toString() + "</html>");
+        dialogClosetDVMConfirmBtn.setBounds(40, 150, getWidth()-80, 170); // 버튼의 크기, 위치 설정
+        dialogClosetDVMConfirmBtn.setFont(new Font("Serif", Font.PLAIN, 24)); // 버튼의 폰트 설정
         attach();
     }
     private void attach(){
-        setSize(300, 400);
-        this.dialogClosetDVMPanel.add(this.DVMidTextArea);
-        this.dialogClosetDVMPanel.add(this.DVMxLocTextArea);
-        this.dialogClosetDVMPanel.add(this.DVMyLocTextArea);
-        this.dialogClosetDVMPanel.add(this.dialogClosetDVMConfirmBtn);
+        setSize(600, 750);
+        this.dialogClosetDVMPanel.add(dialogClosetDVMConfirmBtn);
         add(this.dialogClosetDVMPanel);
     }
 
     public void refresh() {
+        formatter = new Formatter();
+        formatter.format("%s", this.calculatedDVMInfo[1] + this.calculatedDVMInfo[2]);
         this.calculatedDVMInfo = dvm.getCalcDVMInfo();
-        this.DVMidTextArea.setText("DVM id:" + this.calculatedDVMInfo[0]);
-        this.DVMxLocTextArea.setText("DVM x:" + this.calculatedDVMInfo[1]);
-        this.DVMyLocTextArea.setText("DVM y:" + this.calculatedDVMInfo[2]);
+        this.dialogClosetDVMConfirmBtn.setText("<html>" + "DVM" + this.calculatedDVMInfo[0] + "<br/><br/>X:" + String.valueOf(this.calculatedDVMInfo[1]) + ", Y:" + String.valueOf(this.calculatedDVMInfo[1]) + "</html>");
+        dialogClosetDVMConfirmBtn.setBounds(40, 150, getWidth()-80, 170); // 버튼의 크기, 위치 설정
+        dialogClosetDVMConfirmBtn.setFont(new Font("Serif", Font.PLAIN, 24)); // 버튼의 폰트 설정
     }
 
 }

@@ -49,7 +49,7 @@ public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신�
 		tempDrink.setStock(tempDrink.getStock() - drinkNum);
 		dvm.getCurrentSellDrink().put(drinkCode, tempDrink); // 작동 완료 확인
 		/**/
-		// 인증코듬 포함된 메세지 넣음
+		// 인증코드 포함된 메세지 넣음
 		String keyCode = msg.getMsgDescription().getAuthCode();
 		dvm.getODRCHashMap().put(keyCode, msg);
 	}
