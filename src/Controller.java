@@ -77,7 +77,7 @@ public class Controller extends JDialog {
 						}
 						dvm.calcClosestDVMLoc(); // 계산헀음
 						dialogClosetDVM.refresh(); // 리프레쉬
-
+						dialogPrintMenu.dispose();
 						printClosestDVMInfo();
 					} catch (Exception ex) {
 						ex.printStackTrace();
@@ -119,17 +119,18 @@ public class Controller extends JDialog {
 			this.dialogPrintMenu.setVisible(false);
 			this.dialogClosetDVM.setVisible(true);
 
-			int totalPrice = dvm.getCurrentSellDrink().get(this.choiceDrinkCode).getPrice()*this.choiceDrinkNum;
+			int totalPrice = dvm.getCurrentSellDrink().get(this.choiceDrinkCode).getPrice() * this.choiceDrinkNum;
 			this.printClosetDVMInfoConfirmBtn = dialogClosetDVM.getDialogClosetDVMConfirmBtn();
 			this.printClosetDVMInfoConfirmBtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					int input = JOptionPane.showConfirmDialog(null,choiceDrinkCode+" " +choiceDrinkNum+"개를 "+totalPrice+"원을 지불하고 구매 합니다.");
-					if(input == JOptionPane.OK_OPTION) { // ok 버튼 누르면 다음 플로우로 진행 -> 결제 의사 묻기
+//					int input = JOptionPane.showConfirmDialog(null,choiceDrinkCode+" " +choiceDrinkNum+"개를 "+totalPrice+"원을 지불하고 구매 합니다.");
+//					if(input == JOptionPane.OK_OPTION) { // ok 버튼 누르면 다음 플로우로 진행 -> 결제 의사 묻기
+						dialogClosetDVM.dispose();
 						confirmPayment(choiceDrinkCode, choiceDrinkNum, totalPrice);
-					} else if(input == JOptionPane.NO_OPTION) { // no 버튼 누르면
+//					} else if(input == JOptionPane.NO_OPTION) { // no 버튼 누르면
 						dialogClosetDVM.setVisible(false); // 최단거리 dvm 보여주는 창 안보이게 설정
-					}
+//					}
 				}
 			});
 //		}
@@ -159,9 +160,10 @@ public class Controller extends JDialog {
 		yesBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialogConfirmPayment.dispose();
 				if (dvm.getCalcDVMInfo()[0].equals("03")){
 					//우리 시스템일 때 내부 계산 후
-					dialogConfirmPayment.setVisible(false);
+//					dialogConfirmPayment.setVisible(false);
 					provideDrink();
 				}
 				else{
@@ -181,6 +183,7 @@ public class Controller extends JDialog {
 				dvm.setChoiceDrinkCode(choiceDrinkCode);
 				dvm.setChoiceDrinkNum(choiceDrinkNum);
 				dialogPrintMenu.refresh();
+				dialogConfirmPayment.dispose();
 			}
 		});
 	}
