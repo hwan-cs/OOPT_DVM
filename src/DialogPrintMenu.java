@@ -16,12 +16,10 @@ public class DialogPrintMenu extends JDialog {
     private JPanel printMenuPanel;
 //    private JButton[] drinkBtns;
     private JButton confirmBtn;
-    JTextField enterDrinkCodeTF;
-    JLabel enterDrinkCodeLbl;
-    JTextField enterDrinkNumTF;
-    JLabel enterDrinkNumLbl;
-    //    private JTextArea drinkNumText;
-    //    private JTextArea drinkCodeText;
+    private JTextField enterDrinkCodeTF;
+    private JLabel enterDrinkCodeLbl;
+    private JTextField enterDrinkNumTF;
+    private JLabel enterDrinkNumLbl;
     private int counter;
     private JScrollPane scrollPane;
     private JLabel item[];
@@ -30,29 +28,25 @@ public class DialogPrintMenu extends JDialog {
 
     public DialogPrintMenu(DVM dvm){
         this.dvm = dvm;
-//        this.item = new JLabel[20];
         this.drinkListlength = dvm.getDrinkList().length;
         this.printMenuPanel = new JPanel();
         this.item = new JLabel[20];
 //        this.drinkBtns = new JButton[this.drinkListlength];
         this.confirmBtn = new JButton("확인");
-//        this.bottomPanel = new JPanel(new FlowLayout());
-//        this.drinkCodeText = new JTextArea("음료 코드: ");
-//        this.drinkNumText = new JTextArea("음료 개수: ");
         this.enterDrinkCodeTF = new JTextField();
         this.enterDrinkNumTF = new JTextField("0");
         this.enterDrinkCodeLbl = new JLabel("번호: ");
         this.enterDrinkNumLbl = new JLabel("개수:");
         this.scrollPane = new JScrollPane();
         init();
-//        createButtonAndText();
+        createButtonAndText();
         attachBtnAndText();
 //        clickListener();
     }
 
     public void init() {
         printMenuPanel.setBounds(20,100, frameW, frameH); // 패널의 위치를 설정
-        add(printMenuPanel); // 메인 프레임에 패널 붙힘
+        add(printMenuPanel, BorderLayout.NORTH); // 메인 프레임에 패널 붙힘
 
         JScrollPane scrollPane = new JScrollPane(printMenuPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); // 스크롤
@@ -67,6 +61,7 @@ public class DialogPrintMenu extends JDialog {
         add(scrollPane); // 메인 프레임에 스크롤 패널 붙힘
         setTitle("메뉴 선택");
 
+        setLayout(new BorderLayout());
         setVisible(false);
         setSize(600, 750);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -82,8 +77,6 @@ public class DialogPrintMenu extends JDialog {
 
         // 음료 개수 라벨 위치 설정
         enterDrinkNumLbl.setBounds(18, scrollPane.getY()+scrollPane.getHeight()+20+40, 30, 50);
-
-        createButtonAndText();
     }
 
     public JLabel[] getDrinkBtns() {
