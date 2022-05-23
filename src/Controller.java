@@ -44,11 +44,6 @@ public class Controller extends JDialog {
 		JButton printMenuConfirmBtn = dialogPrintMenu.getConfirmBtn();
 
 		printMenuConfirmBtn.addActionListener(new ActionListener() { // 확인버튼
-			int input = JOptionPane.showConfirmDialog(null,choiceDrinkCode+" " +choiceDrinkNum+"개를 "+dvm.getCurrentSellDrink().get(choiceDrinkCode).getPrice()*choiceDrinkNum+"원을 지불하고 구매 합니다.");
-
-			if(input == JOptionPane.OK_OPTION) {
-
-			}
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				choiceDrinkNum = dialogPrintMenu.getChoiceDrinkNum();
@@ -56,34 +51,39 @@ public class Controller extends JDialog {
 				dvm.setChoiceDrinkCode(choiceDrinkCode);
 				dvm.setChoiceDrinkNum(choiceDrinkNum);
 				dvm.createNetwork();
+
 				synchronized (this) {
 					try {
 						dvm.getNetwork().checkOtherDVMDrinkExists();
-						this.wait(1000);
+						this.wait(500);
 						if(dvm.getConfirmedDVMList() != null) {
 							ArrayList<Message> tempList = (ArrayList<Message>) (dvm.getConfirmedDVMList().clone());
 
 							dvm.getConfirmedDVMList().clear();
 
 							dvm.getNetwork().checkOtherDVMStock(tempList);
-							this.wait(1000);
-							dvm.calcClosestDVMLoc(); // 계산헀음
-							dialogClosetDVM.refresh(); // 리프레쉬
-							printClosestDVMInfo();
+							this.wait(500);
+//							dvm.calcClosestDVMLoc(); // 계산헀음
+//							dialogClosetDVM.refresh(); // 리프레쉬
+//
+//							printClosestDVMInfo();
 						} else { // null
-							dvm.calcClosestDVMLoc(); // 계산헀음
-							dialogClosetDVM.refresh(); // 리프레쉬
-							printClosestDVMInfo();
+//							dvm.calcClosestDVMLoc(); // 계산헀음
+//							dialogClosetDVM.refresh(); // 리프레쉬
+//
+//							printClosestDVMInfo();
 						}
+						dvm.calcClosestDVMLoc(); // 계산헀음
+						dialogClosetDVM.refresh(); // 리프레쉬
+
+						printClosestDVMInfo();
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						System.out.println("error!!!");
 					}
 				}
-					dialogPrintMenu.setVisible(false);
-//				}
+//					dialogPrintMenu.setVisible(false);
 			}
-
 		});
 	}
 
@@ -112,15 +112,20 @@ public class Controller extends JDialog {
 
 	public void printClosestDVMInfo() {
 		if(dvm.getCalcDVMInfo()[0].equals("")) {
-			JOptionPane.showMessageDialog(dialogPrintMenu, "음료가 있는 DVM이 존재하지 않습니다.", "Error", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "음료가 있는 DVM이 존재하지 않습니다.");
 		} else {
+			dialogPrintMenu.setVisible(false);
 			dialogClosetDVM.setVisible(true);
+
 			JButton printClosetDVMInfoConfirmBtn = dialogClosetDVM.getDialogClosetDVMConfirmBtn();
 			printClosetDVMInfoConfirmBtn.addActionListener(new ActionListener() {
+				int input = JOptionPane.showConfirmDialog(null,choiceDrinkCode+" " +choiceDrinkNum+"개를 "+dvm.getCurrentSellDrink().get(choiceDrinkCode).getPrice()*choiceDrinkNum+"원을 지불하고 구매 합니다.");
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					dialogClosetDVM.setVisible(false);
-					confirmPayment();
+					if(input == JOptionPane.OK_OPTION) {
+						dialogClosetDVM.setVisible(false);
+						confirmPayment();
+					}
 				}
 			});
 		}
