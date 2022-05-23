@@ -2,7 +2,7 @@ package dvmProject;
 
 import java.util.*;
 
-public class Admin extends JDialog 
+public class Admin  
 {
 	private Boolean networkConnected;
 	private DVM dvm;
@@ -11,7 +11,8 @@ public class Admin extends JDialog
 	{
 		this.networkConnected = networkStatus;
 		this.dvm = dvm;
-		if (this.networkConnected){
+		if (this.networkConnected)
+		{
 			systemStart();
 		}
 	}

@@ -1,32 +1,44 @@
 package dvmProject;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+import GsonConverter.Deserializer;
+import GsonConverter.Serializer;
+import Model.Message;
 
-import javax.swing.*;
-import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class dvm_Main 
 {
+    public static void main(String[] args) 
+    {
+        ServerThreadTest serverThreadTest = new ServerThreadTest();
+//        ClientThreadTest clientThreadTest = new ClientThreadTest();
+        serverThreadTest.start();
 
-	public static void main(String[] args) 
-	{
-		
-	}
+        DVM dvm = new DVM();
+        Receiver receiver = new Receiver(dvm); //객체 생성
+        Boolean networkConnect = true;  //임시로 일단 true라고 설정했습니다.
+//        if (networkConnect) 
+//        {
+//            receiver.start();   //네트워크 확인 되면 시작
+//        }
+        Admin admin = new Admin(networkConnect, dvm);    //admin에서 system start()
 
-	
+        Message msg = new Message();
+        Message.MessageDescription msgDesc = new Message.MessageDescription();
+        msgDesc.setItemCode("This is ItemCode");
+        msgDesc.setItemNum(208051);
+        msgDesc.setDvmXCoord(139);
+        msgDesc.setDvmYCoord(202);
+        msgDesc.setAuthCode("This is AuthCode");
+
+        msg.setSrcId("dvm3");
+        msg.setDstID("hwisik");
+        msg.setMsgType("Check, Is it working?");
+        msg.setMsgDescription(msgDesc);
+
+//        clientThreadTest.start();
+
+    }
 }

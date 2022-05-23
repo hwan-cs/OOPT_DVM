@@ -1,7 +1,10 @@
 package dvmProject;
 
 import java.util.*;
-public class Drink {
+
+//Unit Test done
+public class Drink 
+{
 
 	public String name;
 	public int price;
