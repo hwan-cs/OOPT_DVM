@@ -27,6 +27,7 @@ public class Controller extends JDialog {
 	private DialogPrintMenu dialogPrintMenu;
 	private DialogProvideDrink dialogProvideDrink;
 	private DialogConfirmPayment dialogConfirmPayment;
+	private JButton printClosetDVMInfoConfirmBtn;
 
 	public Controller(DVM dvm) {
 		this.dvm = dvm;
@@ -36,6 +37,7 @@ public class Controller extends JDialog {
 		this.dialogVerificationCode = new DialogVerficationCode(this.dvm);
 		this.dialogConfirmPayment = new DialogConfirmPayment(this.dvm);
 		this.dialogProvideDrink = new DialogProvideDrink(this.dvm);
+		this.printClosetDVMInfoConfirmBtn = new JButton();
 		printOption();
 	}
 
@@ -111,24 +113,26 @@ public class Controller extends JDialog {
 	}
 
 	public void printClosestDVMInfo() {
-		if(dvm.getCalcDVMInfo()[0].equals("")) {
-			JOptionPane.showMessageDialog(null, "음료가 있는 DVM이 존재하지 않습니다.");
-		} else {
-			dialogPrintMenu.setVisible(false);
-			dialogClosetDVM.setVisible(true);
+//		if(dvm.getCalcDVMInfo()[0].equals("")) {
+//			JOptionPane.showMessageDialog(null, "음료가 있는 DVM이 존재하지 않습니다.");
+//		} else {
+			this.dialogPrintMenu.setVisible(false);
+			this.dialogClosetDVM.setVisible(true);
 
-			JButton printClosetDVMInfoConfirmBtn = dialogClosetDVM.getDialogClosetDVMConfirmBtn();
-			printClosetDVMInfoConfirmBtn.addActionListener(new ActionListener() {
-				int input = JOptionPane.showConfirmDialog(null,choiceDrinkCode+" " +choiceDrinkNum+"개를 "+dvm.getCurrentSellDrink().get(choiceDrinkCode).getPrice()*choiceDrinkNum+"원을 지불하고 구매 합니다.");
+			int totalPrice = dvm.getCurrentSellDrink().get(this.choiceDrinkCode).getPrice()*this.choiceDrinkNum;
+			this.printClosetDVMInfoConfirmBtn = dialogClosetDVM.getDialogClosetDVMConfirmBtn();
+			this.printClosetDVMInfoConfirmBtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(input == JOptionPane.OK_OPTION) {
-						dialogClosetDVM.setVisible(false);
-						confirmPayment();
+					int input = JOptionPane.showConfirmDialog(null,choiceDrinkCode+" " +choiceDrinkNum+"개를 "+totalPrice+"원을 지불하고 구매 합니다.");
+					if(input == JOptionPane.OK_OPTION) { // ok 버튼 누르면 다음 플로우로 진행 -> 결제 의사 묻기
+						confirmPayment(choiceDrinkCode, choiceDrinkNum, totalPrice);
+					} else if(input == JOptionPane.NO_OPTION) { // no 버튼 누르면
+						dialogClosetDVM.setVisible(false); // 최단거리 dvm 보여주는 창 안보이게 설정
 					}
 				}
 			});
-		}
+//		}
 	}
 
 	public void provideDrink() { // 음료 제공, 음료 제공시 해당 음료를 구매한 개수만큼 기존 재고에서 차감
@@ -143,11 +147,13 @@ public class Controller extends JDialog {
 		});
 	}
 
-	public void confirmPayment() {
+	public void confirmPayment(String drinkCode, int drinkNum, int totalPrice) {
 		JButton yesBtn = dialogConfirmPayment.getYesBtn();
 		JButton noBtn = dialogConfirmPayment.getNoBtn();
 
-		dialogConfirmPayment.settingTextArea(choiceDrinkNum, dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode)-1].getName());
+		String choiceDrinkName = dvm.getDrinkList()[Integer.parseInt(drinkCode)-1].getName();
+
+		dialogConfirmPayment.settingTextArea(choiceDrinkName, drinkNum, totalPrice);
 		dialogConfirmPayment.setVisible(true);
 
 		yesBtn.addActionListener(new ActionListener() {
