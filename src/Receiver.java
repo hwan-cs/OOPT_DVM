@@ -6,7 +6,7 @@ import Model.Message;
 import java.sql.SQLOutput;
 import java.util.*;
 
-public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신하는 파트
+public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신하는 파트
 
 	private String receiverID;
 	private DVMServer server;
@@ -14,10 +14,28 @@ public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신�
 	private Message msg;
 	private Serializer serializer;
 
+	private static HashMap<String, String> ipMap = new HashMap<>();
+
+	private static final String hyungkyuIP = "192.168.0.3"; // 임시
+
+	private static final String team1_IP = "";
+	private static final String team2_IP = "";
+	private static final String team4_IP = "";
+	private static final String team5_IP = "";
+	private static final String team6_IP = "";
+
 	public Receiver(DVM dvm) {
 		this.dvm = dvm;
 		this.server = new DVMServer();
 		this.serializer = new Serializer();
+	}
+
+	public void initIP() {
+		ipMap.put("Team1", team1_IP);
+		ipMap.put("Team2", team2_IP);
+		ipMap.put("Team4", team4_IP);
+		ipMap.put("Team5", team5_IP);
+		ipMap.put("Team6", team6_IP);
 	}
 
 	public String getReceiverID() {
@@ -77,15 +95,17 @@ public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신�
 			// 메세지를 json 타입으로 변환
 			String msgToJson = serializer.message2Json(sendToMsg);
 
-			DVMClient client = new DVMClient("localhost", msgToJson); // 메세지 보내기위해 클라이언트 선언
+//			DVMClient client = new DVMClient("localhost", msgToJson); // 메세지 보내기위해 클라이언트 선언
 
-			// 클라이언트에 메세지 실어서 보낸다.
-			try {
-				client.run();
-			}catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Message send Failed..");
-			}
+//			DVMClient client = new DVMClient(hyungkyuIP, msgToJson); // 메세지 보내기위해 클라이언트 선언
+//
+//			// 클라이언트에 메세지 실어서 보낸다.
+//			try {
+//				client.run();
+//			}catch (Exception e) {
+//				e.printStackTrace();
+//				System.out.println("Message send Failed..");
+//			}
 		}
 	}
 	public void handleSaleCheckRequestAndSend(Message msg) { // 판매 확인 메세지
@@ -109,15 +129,17 @@ public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신�
 			// 메세지를 json 타입으로 변환
 			String msgToJson = serializer.message2Json(sendToMsg);
 
-			DVMClient client = new DVMClient("localhost", msgToJson); // 메세지 보내기위해 클라이언트 선언
+//			DVMClient client = new DVMClient("localhost", msgToJson); // 메세지 보내기위해 클라이언트 선언
 
-			// 클라이언트에 메세지 실어서 보낸다.
-			try {
-				client.run();
-			}catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Message send Failed..");
-			}
+//			DVMClient client = new DVMClient(hyungkyuIP, msgToJson); // 메세지 보내기위해 클라이언트 선언
+//
+//			// 클라이언트에 메세지 실어서 보낸다.
+//			try {
+//				client.run();
+//			}catch (Exception e) {
+//				e.printStackTrace();
+//				System.out.println("Message send Failed..");
+//			}
 		}
 	}
 
@@ -132,7 +154,7 @@ public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신�
 	public void run() {
 		super.run();
 		try {
-			while(true) {
+			while(true){
 				getMSG();
 			}
 		} catch (Exception e) {
@@ -142,9 +164,12 @@ public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신�
 
 	public void getMSG() {
 		/* 여기서 제한시간 걸기 ? 약 1.5초 */
-		if (server.msgList.size() > 0) {
-			Message msg = server.msgList.get(server.msgList.size() - 1);
-			switch (msg.getMsgType()){
+		if (!server.msgList.isEmpty()) {
+			Message msg = server.msgList.get(this.server.msgList.size() - 1);
+			System.out.println(server.msgList.get(0).getMsgType());
+			String msgType = msg.getMsgType();
+
+			switch (msgType){
 				case "StockCheckRequest" : // 우리 DVM에서 응답 필수
 					/* 상대 DVM 에서 보낸 메세지 수신하는 파트 */
 					System.out.println("RECEIVED");
@@ -174,6 +199,7 @@ public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신�
 					break;
 			}
 			server.msgList.remove(server.msgList.size() - 1); // add한 메세지 제거
+			System.out.println("hihihihihi");
 		}
 	}
 }

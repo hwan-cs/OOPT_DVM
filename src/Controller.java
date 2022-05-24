@@ -63,17 +63,9 @@ public class Controller extends JDialog {
 
 							dvm.getConfirmedDVMList().clear();
 
-							dvm.getNetwork().checkOtherDVMStock(tempList);
+							dvm.getNetwork().checkOtherDVMStock(tempList); // 재고 존재하는지 다른 DVM에 메세지 보냄
 							this.wait(500);
-//							dvm.calcClosestDVMLoc(); // 계산헀음
-//							dialogClosetDVM.refresh(); // 리프레쉬
-//
-//							printClosestDVMInfo();
 						} else { // null
-//							dvm.calcClosestDVMLoc(); // 계산헀음
-//							dialogClosetDVM.refresh(); // 리프레쉬
-//
-//							printClosestDVMInfo();
 						}
 						dvm.calcClosestDVMLoc(); // 계산헀음
 						dialogClosetDVM.refresh(); // 리프레쉬
@@ -119,7 +111,15 @@ public class Controller extends JDialog {
 			this.dialogPrintMenu.setVisible(false);
 			this.dialogClosetDVM.setVisible(true);
 
-			int totalPrice = dvm.getCurrentSellDrink().get(this.choiceDrinkCode).getPrice() * this.choiceDrinkNum;
+			int totalPrice = 0;
+
+			if(dvm.getCalcDVMInfo()[0].equals("Team3")) {
+				totalPrice = dvm.getCurrentSellDrink().get(this.choiceDrinkCode).getPrice() * this.choiceDrinkNum;
+			} else {
+				totalPrice = dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode) - 1].getPrice() * this.choiceDrinkNum;
+			}
+
+			int t = totalPrice;
 			JButton printClosetDVMInfoConfirmBtn = dialogClosetDVM.getDialogClosetDVMConfirmBtn();
 			printClosetDVMInfoConfirmBtn.addActionListener(new ActionListener() {
 				@Override
@@ -127,7 +127,7 @@ public class Controller extends JDialog {
 //					int input = JOptionPane.showConfirmDialog(null,choiceDrinkCode+" " +choiceDrinkNum+"개를 "+totalPrice+"원을 지불하고 구매 합니다.");
 //					if(input == JOptionPane.OK_OPTION) { // ok 버튼 누르면 다음 플로우로 진행 -> 결제 의사 묻기
 						dialogClosetDVM.dispose();
-						confirmPayment(choiceDrinkCode, choiceDrinkNum, totalPrice);
+						confirmPayment(choiceDrinkCode, choiceDrinkNum, t);
 //					} else if(input == JOptionPane.NO_OPTION) { // no 버튼 누르면
 						dialogClosetDVM.setVisible(false); // 최단거리 dvm 보여주는 창 안보이게 설정
 						dialogPaymentConfirmation.setVisible(true);
@@ -167,17 +167,28 @@ public class Controller extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 //				dialogConfirmPayment.dispose();
-				if (dvm.getCalcDVMInfo()[0].equals("Team3")){
-//					우리 시스템일 때 내부 계산 후
+				if (dvm.getCalcDVMInfo()[0].equals("Team3")){ //우리 시스템일 때 내부 계산 후
 					dialogPaymentConfirmation.dispose();
 //					dialogConfirmPayment.setVisible(false);
 
 					provideDrink();
 					dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
 					dialogPaymentConfirmation.getBalanceLabel().setText("현재 잔액: " + String.valueOf(dvm.getCard().getBalance()));
-				}
-				else{
-					//외부 시스템일때 recheckStock
+				} else {
+					// 외부 시스템일때 recheckStock
+					ArrayList<Message> infoList = new ArrayList<>();
+					Message msg = new Message();
+					Message.MessageDescription msgDesc = new Message.MessageDescription();
+
+					msg.setSrcId("Team3");
+					msg.setDstID(dvm.getCalcDVMInfo()[0]);
+					msgDesc.setItemCode(drinkCode);
+					msgDesc.setItemNum(drinkNum);
+
+					msg.setMsgDescription(msgDesc);
+					infoList.add(msg);
+					dvm.getNetwork().checkOtherDVMStock(infoList);
+
 					dialogPaymentConfirmation.dispose();
 				}
 			}

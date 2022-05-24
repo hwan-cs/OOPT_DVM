@@ -4,14 +4,14 @@ import java.lang.reflect.Array;
 import java.util.*;
 
 public class DVM {
-	private int dvm3X = 12, dvm3Y = 47;
 
+	private int dvm3X = 12, dvm3Y = 47;
 	private Card user1Card = new Card(100000); // 임시로 생성한 Card 객체
 	private String id;
 	private int state;
 	private String address; // address가 String 타입? int[] 타입이어야 하는거 아닌가?
 	private Drink[] drinkList = new Drink[20];	//전체 판매 리스트
-	private HashMap<String, Drink> currentSellDrink = new HashMap<String, Drink>(7);
+	private HashMap<String, Drink> currentSellDrink;
 	private OtherDVMReceiveCode otherDVMReceiveCode;	// 외부 DVM으로 부터 온 verification code 하나씩 확인 한후 및 해시맵에 풋한다.
 	private HashMap<String, Message> ODRCHashMap;	//외부 DVM으로 부터 온 verification code 확인 작업
 	private Network network;
@@ -81,6 +81,8 @@ public class DVM {
 	public DVM() {
 		this.id = "Team3"; //임의로 설정
 		this.address = "DVM3";  //임의로 설정
+		this.confirmedDVMList = new ArrayList<>();
+		this.currentSellDrink = new HashMap<String, Drink>(7);
 		basicSetting();
 	}
 
@@ -240,13 +242,13 @@ public class DVM {
 		this.drinkList[19] = new Drink("카페라떼", 5000, 0, "20");
 
 		//현재 판매 목록
-		currentSellDrink.put("01", this.drinkList[0]);
-		currentSellDrink.put("02", this.drinkList[1]);
-		currentSellDrink.put("03", this.drinkList[2]);
-		currentSellDrink.put("04", this.drinkList[3]);
-		currentSellDrink.put("05", this.drinkList[4]);
-		currentSellDrink.put("06", this.drinkList[5]);
-		currentSellDrink.put("07", this.drinkList[6]);
+		this.currentSellDrink.put("01", this.drinkList[0]);
+		this.currentSellDrink.put("02", this.drinkList[1]);
+		this.currentSellDrink.put("03", this.drinkList[2]);
+		this.currentSellDrink.put("04", this.drinkList[3]);
+		this.currentSellDrink.put("05", this.drinkList[4]);
+		this.currentSellDrink.put("06", this.drinkList[5]);
+		this.currentSellDrink.put("07", this.drinkList[6]);
 	}
 
 	public HashMap<String, Drink> getCurrentSellDrink() {
