@@ -48,7 +48,16 @@ public class DialogPaymentConfirmation extends JDialog
         this.payPanel.add(noBtn);
     }
 
+    public JLabel getBalanceLabel() 
+    {
+        return this.balanceLabel;
+    }
 
+    public void setBalanceLabel(JLabel balanceLabel) 
+    {
+        this.balanceLabel = balanceLabel;
+    }
+    
     public JPanel getPayPanel() 
     {
         return this.payPanel;

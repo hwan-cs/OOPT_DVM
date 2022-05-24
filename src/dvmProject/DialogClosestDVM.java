@@ -30,7 +30,7 @@ public class DialogClosestDVM extends JDialog
     {
         this.dvm = dvm;
         this.calculatedDVMInfo = dvm.getCalcDVMInfo();
-        
+        setSize(500, 500);
         this.dialogClosetDVMPanel = new JPanel();
         formatter = new Formatter();
         formatter.format("%s", this.calculatedDVMInfo[1] + this.calculatedDVMInfo[2]);
@@ -45,7 +45,6 @@ public class DialogClosestDVM extends JDialog
     
     private void attach()
     {
-        setSize(500, 500);
         getContentPane().add(dialogClosetDVMConfirmBtn);
 //        this.dialogClosetDVMPanel.add(dialogClosetDVMConfirmBtn);
         //add(this.dialogClosetDVMPanel);

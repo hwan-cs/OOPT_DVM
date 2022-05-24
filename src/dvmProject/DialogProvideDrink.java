@@ -22,7 +22,8 @@ public class DialogProvideDrink extends JDialog
         String drinkNumStr = "<html>";
         for (int i=0; i<choiceDrinkNum; i++)
             drinkNumStr += drinkName + " 뿅!<br/>";
-            
+           
+        setSize(300, 400);
     	this.noticeLbl.setBounds(20,20, getWidth()-40, 100+30*choiceDrinkNum);
     	this.returnBtn.setBounds(20, getHeight()-100, getWidth()-40, 50);
         this.noticeLbl.setText(drinkNumStr + "나왔어요 ~~~~ </html>");
@@ -37,7 +38,6 @@ public class DialogProvideDrink extends JDialog
 //        provideDrinkPanel.add(noticeLbl);
 //        provideDrinkPanel.add(returnBtn);
 //        add(provideDrinkPanel);
-        setSize(300, 400);
         setVisible(true);
     }
 }

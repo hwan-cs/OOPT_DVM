@@ -24,7 +24,7 @@ class UnitTests
     {
     	dvm.setCalcDVMInfo(calcDVMInfo);
     	
-//    	dvm.setID(2);
+    	dvm.setID("VM_02");
     	
     	dvm.setAddress(address);
     	//Network 
@@ -56,17 +56,18 @@ class UnitTests
 		currentSellDrink.put("07", dvm.getDrinkList()[6]);
 		
 		dvm.setCurrentSellDrink(currentSellDrink);
+		
+		dvm.setDvm3X(37);
+		dvm.setDvm3Y(73);
     }
     
 	@Test
 	void test() 
 	{
 		Assert.assertArrayEquals(calcDVMInfo, dvm.getCalcDVMInfo());
-		Assert.assertEquals(2, dvm.getID());
+		Assert.assertEquals("VM_02", dvm.getID());
 		Assert.assertArrayEquals(address, dvm.getAddress());
 		//setDrinkList 안함
-		
-//	    Assert.assertArrayEquals(closestDVM, dvm.calcClosestDVMLoc(listOfDVM));
 		
 	    Assert.assertEquals(true, dvm.cardPayment(92800));
 	    Assert.assertEquals(7200, dvm.calcPrice("06", 6));
@@ -77,6 +78,11 @@ class UnitTests
 	    Assert.assertEquals(99, dvm.getDrinkList()[0].getStock());
 	    Assert.assertEquals("99", dvm.getDrinkList()[0].getDrinkCode());
 	    Assert.assertEquals(currentSellDrink, dvm.getCurrentSellDrink());
+	    
+	    Assert.assertEquals(37, dvm.getDvm3X());
+	    Assert.assertEquals(73, dvm.getDvm3Y());
+	    
+	    Assert.assertEquals(true, dvm.checkOurDVMStock("06", 1));
 	}
 
 }

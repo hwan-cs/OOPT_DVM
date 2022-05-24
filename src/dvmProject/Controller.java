@@ -35,23 +35,20 @@ public class Controller extends JDialog
 	public Controller(DVM dvm) 
 	{
 		this.dvm = dvm;
-		this.dialogPrintOption = new DialogOption();
-		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
 		this.DialogClosestDVM = new DialogClosestDVM(this.dvm);
 		this.dialogVerificationCode = new DialogVerificationCode(this.dvm);
-		this.dialogConfirmPayment = new DialogConfirmPayment(this.dvm);
-		this.dialogProvideDrink = new DialogProvideDrink(this.dvm);
+		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
 		printOption();
 	}
 
 	public void printMenu() 
 	{
+		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
 		dialogPrintMenu.setVisible(true);
 		JButton printMenuConfirmBtn = dialogPrintMenu.getConfirmBtn();
 
 		printMenuConfirmBtn.addActionListener(new ActionListener() 
 		{
-			
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
@@ -74,6 +71,7 @@ public class Controller extends JDialog
 
 							dvm.getConfirmedDVMList().clear();
 
+							//여기안
 							dvm.getNetwork().checkOtherDVMStock(tempList);
 							this.wait(500);
 							dvm.calcClosestDVMLoc(); // 계산헀음
@@ -89,9 +87,9 @@ public class Controller extends JDialog
 							printClosestDVMInfo();
 						}
 						dvm.calcClosestDVMLoc(); // 계산헀음
-						DialogClosestDVM.refresh(); // 리프레쉬
+						//DialogClosestDVM.refresh(); // 리프레쉬
 						dialogPrintMenu.dispose();
-						printClosestDVMInfo();
+						//printClosestDVMInfo();
 					} 
 					catch (Exception ex) 
 					{
@@ -101,7 +99,6 @@ public class Controller extends JDialog
 				}
 				dialogPrintMenu.setVisible(false);
 			}
-
 		});
 	}
 
@@ -136,12 +133,14 @@ public class Controller extends JDialog
 
 	public void printClosestDVMInfo() 
 	{
+		this.DialogClosestDVM = new DialogClosestDVM(this.dvm);
 		if(dvm.getCalcDVMInfo()[0].equals("")) 
 		{
 			JOptionPane.showMessageDialog(dialogPrintMenu, "음료가 있는 DVM이 존재하지 않습니다.", "Error", JOptionPane.INFORMATION_MESSAGE);
 		} 
 		else 
 		{
+			int totalPrice = dvm.getCurrentSellDrink().get(this.choiceDrinkCode).getPrice() * this.choiceDrinkNum;
 			DialogClosestDVM.setVisible(true);
 			JButton printClosetDVMInfoConfirmBtn = DialogClosestDVM.getDialogClosestDVMConfirmBtn();
 			printClosetDVMInfoConfirmBtn.addActionListener(new ActionListener() 
@@ -149,8 +148,8 @@ public class Controller extends JDialog
 				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
-					DialogClosestDVM.setVisible(false);
-					confirmPayment();
+					DialogClosestDVM.dispose();
+					confirmPayment(choiceDrinkCode, choiceDrinkNum, totalPrice);
 				}
 			});
 		}
@@ -158,43 +157,56 @@ public class Controller extends JDialog
 
 	public void provideDrink() 
 	{ // 음료 제공, 음료 제공시 해당 음료를 구매한 개수만큼 기존 재고에서 차감
+		this.dialogProvideDrink = new DialogProvideDrink(this.dvm);
 		JButton returnBtn = this.dialogProvideDrink.returnBtn;
+		System.out.println(this.dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode)-1].getName());
 		dialogProvideDrink.settingLbl(this.choiceDrinkNum, this.dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode)-1].getName());
 		dialogProvideDrink.setVisible(true);
-		returnBtn.addActionListener(new ActionListener() {
+		returnBtn.addActionListener(new ActionListener() 
+		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) 
+			{
 				dialogProvideDrink.setVisible(false);
 			}
 		});
 	}
 
-	public void confirmPayment() 
+	public void confirmPayment(String drinkCode, int drinkNum, int totalPrice) 
 	{
-		JButton yesBtn = dialogConfirmPayment.getYesBtn();
-		JButton noBtn = dialogConfirmPayment.getNoBtn();
-
-		dialogConfirmPayment.settingTextArea(choiceDrinkNum, dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode)-1].getName());
+		this.dialogConfirmPayment = new DialogConfirmPayment(this.dvm);
+		dialogConfirmPayment.settingTextArea(choiceDrinkNum, dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode)-1].getName(), 
+				totalPrice);
 		dialogConfirmPayment.setVisible(true);
 
-		yesBtn.addActionListener(new ActionListener() {
+		JButton yesBtn = dialogConfirmPayment.getYesBtn();
+		JButton noBtn = dialogConfirmPayment.getNoBtn();
+		
+		yesBtn.addActionListener(new ActionListener() 
+		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (dvm.getCalcDVMInfo()[0].equals("03")){
+			public void actionPerformed(ActionEvent e) 
+			{
+				if (dvm.getCalcDVMInfo()[0].equals("03"))
+				{
 					//우리 시스템일 때 내부 계산 후
-					dialogConfirmPayment.setVisible(false);
+					dialogConfirmPayment.dispose();
+					dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
 					provideDrink();
 				}
-				else{
+				else
+				{
 					//외부 시스템일때 recheckStock
 				}
 			}
 		});
 
-		noBtn.addActionListener(new ActionListener() {
+		noBtn.addActionListener(new ActionListener() 
+		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				dialogConfirmPayment.setVisible(false);
+			public void actionPerformed(ActionEvent e) 
+			{
+				dialogConfirmPayment.dispose();
 				dialogPrintMenu.setChoiceDrinkNum(0);
 				dialogPrintMenu.setChoiceDrinkCode("00");
 				choiceDrinkCode = "00";
@@ -204,6 +216,8 @@ public class Controller extends JDialog
 				dialogPrintMenu.refresh();
 			}
 		});
+		
+		dialogConfirmPayment.attach();
 	}
 
 	public void selectDrink() {
@@ -220,6 +234,7 @@ public class Controller extends JDialog
 
 	public void printOption() 
 	{
+		this.dialogPrintOption = new DialogOption();
 		dialogPrintOption.setVisible(true);
 		JButton printMenuBtn = this.dialogPrintOption.getPrintMenuBtn();
 		JButton verificationCodeInpBtn = this.dialogPrintOption.getVerificationCodeInpBtn();
@@ -227,14 +242,17 @@ public class Controller extends JDialog
 		printMenuBtn.addActionListener(new ActionListener() 
 		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) 
+			{
 				printMenu();
 			}
 		});
 
-		verificationCodeInpBtn.addActionListener(new ActionListener() {
+		verificationCodeInpBtn.addActionListener(new ActionListener() 
+		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) 
+			{
 				inpVerificationCode();
 			}
 		});
