@@ -34,7 +34,7 @@ public class DialogProvideDrink extends JDialog
 	        for (int i=0; i<choiceDrinkNum; i++)
 	            drinkNumStr += drinkName + " 뿅!<br/>";
 	           
-	    	this.noticeLbl.setBounds(20,20, getWidth()-40, 100+30*choiceDrinkNum);
+	    	this.noticeLbl.setBounds(20,20, getWidth()-40, 280);
 	        this.noticeLbl.setText(drinkNumStr + "나왔어요 ~~~~ </html>");
     	}
     	else	

@@ -142,7 +142,7 @@ public class DialogPrintMenu extends JDialog
     		else
     			JOptionPane.showMessageDialog(null, "음료 코드는 1부터 20까지 입력해주세요");
     	}
-    	else
+    	else 
     		JOptionPane.showMessageDialog(null, "음료 코드는 숫자를 입력하세요");
     	return "";
     }
@@ -194,8 +194,6 @@ public class DialogPrintMenu extends JDialog
             
             clickListener(i);
 
-            counter++;
-            
             item[i].setFont(new Font("Serif", Font.PLAIN, 12)); // 아이템 폰트 설정
             item[i].setPreferredSize(new Dimension(90,130)); // 아이템 크기
             item[i].setForeground(Color.black); // 아이템의 글자색
@@ -213,7 +211,7 @@ public class DialogPrintMenu extends JDialog
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-    		
+            counter++;
             printMenuPanel.add(item[i]); // 패널에 아이템 추가
         }
     }

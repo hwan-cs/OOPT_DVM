@@ -24,18 +24,17 @@ public class Admin
 		{
 			if(dvm.getCurrentSellDrink().get(editDrinkCode) != null)
 			{
-				dvm.getCurrentSellDrink().get(editDrinkCode).setStock(100);
-				System.out.println(dvm.getCurrentSellDrink().get(editDrinkCode).getName()+"의 재고는 이제 100개 입니다!");
+				dvm.getCurrentSellDrink().get(editDrinkCode).setStock(dvm.getCurrentSellDrink().get(editDrinkCode).getStock()+10);
+				System.out.println(dvm.getCurrentSellDrink().get(editDrinkCode).getName()+"의 재고는 이제 "+dvm.getCurrentSellDrink().get(editDrinkCode).getStock()+"개 입니다!");
 				editDrinkCode = "0"+Integer.toString(Integer.parseInt(editDrinkCode)+1);
 			}
-				
 		}
 	}
 
 	public void systemStart() 
 	{
 		System.out.println("flag_systemstart()");
-		Controller controller = new Controller(dvm);
+		Controller controller = new Controller(dvm, this);
 	}
 
 }

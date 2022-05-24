@@ -5,6 +5,8 @@ import Model.Message;
 import java.lang.reflect.Array;
 import java.util.*;
 
+import javax.swing.JOptionPane;
+
 public class DVM 
 {
 	private int dvm3X = 12, dvm3Y = 47;
@@ -316,6 +318,18 @@ public class DVM
 	public void setCurrentSellDrink(HashMap<String, Drink> currentSellDrink) 
 	{
 		this.currentSellDrink = currentSellDrink;
+	}
+	
+	public boolean purchaseDrink(String drinkCode, int numDrink)
+	{
+		if (currentSellDrink.get(drinkCode).getStock() >= numDrink)
+		{
+			currentSellDrink.get(drinkCode).setStock(currentSellDrink.get(drinkCode).getStock()-numDrink);
+			return true;
+		}
+		else 
+			JOptionPane.showMessageDialog(null, "재고가 부족합니다!");
+		return false;
 	}
 
 }

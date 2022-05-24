@@ -26,21 +26,21 @@ public class Controller extends JDialog
 	private int haveToPay;
 	private String[] calcedDVM; //계산된 최단거리.
 
-//	private DialogPaymentConfirmation dialogConfirmPayment;
 	private DialogVerificationCode dialogVerificationCode;
 	private DialogOption dialogPrintOption;
 	private DialogClosestDVM DialogClosestDVM;
 	private DialogPrintMenu dialogPrintMenu;
 	private DialogProvideDrink dialogProvideDrink;
 	private DialogConfirmPayment dialogConfirmPayment;
+	private Admin admin;
+	private int clickCounter = 0;
 	
-
-	public Controller(DVM dvm) 
+	public Controller(DVM dvm, Admin admin) 
 	{
 		this.dvm = dvm;
 		//임시로 일단 dvm
 		this.DialogClosestDVM = new DialogClosestDVM(this.dvm);
-		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
+		this.admin = admin;
 		printOption();
 	}
 
@@ -50,6 +50,21 @@ public class Controller extends JDialog
 		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
 		dialogPrintMenu.setLocationRelativeTo(null);
 		dialogPrintMenu.setVisible(true);
+		
+		dialogPrintMenu.addMouseListener(new MouseAdapter() 
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				clickCounter++;
+				if(clickCounter == 10)
+				{
+					System.out.println("Clicked 10 times!");
+					admin.refillDrink();
+					clickCounter = 0;
+				}
+			}
+		});
+		
 		JButton printMenuConfirmBtn = dialogPrintMenu.getConfirmBtn();
 
 		printMenuConfirmBtn.addActionListener(new ActionListener() 
@@ -58,7 +73,6 @@ public class Controller extends JDialog
 			public void actionPerformed(ActionEvent e) 
 			{
 				// TODO Auto-generated method stub
-				
 				choiceDrinkNum = dialogPrintMenu.getChoiceDrinkNum();
 				choiceDrinkCode = dialogPrintMenu.getChoiceDrinkCode();
 				dvm.setChoiceDrinkCode(choiceDrinkCode);
@@ -74,7 +88,7 @@ public class Controller extends JDialog
 						if(dvm.getConfirmedDVMList() != null) 
 						{
 							ArrayList<Message> tempList = (ArrayList<Message>) (dvm.getConfirmedDVMList().clone());
-
+							
 							dvm.getConfirmedDVMList().clear();
 							//여기안
 							dvm.getNetwork().checkOtherDVMStock(tempList);
@@ -89,23 +103,26 @@ public class Controller extends JDialog
 							//선택한 음료가 현재 자판기에서 팔지 않을 경우 임의로 08번 음료 1개를 팔게 한다
 							if (dvm.getCurrentSellDrink().get(choiceDrinkCode) == null)
 							{
-								dvm.setChoiceDrinkCode("08");
-								dvm.setChoiceDrinkNum(1);
+								dvm.setChoiceDrinkCode(dialogPrintMenu.getChoiceDrinkCode());
+								dvm.setChoiceDrinkNum(dialogPrintMenu.getChoiceDrinkNum());
 								choiceDrinkNum = dvm.getChoiceDrinkNum();
 								choiceDrinkCode = dvm.getChoiceDrinkCode();
 							}
 							if(dialogPrintMenu.isValidInput())
 							{
-								dvm.calcClosestDVMLoc(); // 계산헀음
-								DialogClosestDVM.refresh(); // 리프레쉬
+								if(dvm.checkOurDVMStock(choiceDrinkCode, choiceDrinkNum))
+								{
+									dvm.calcClosestDVMLoc(); // 계산헀음
+									DialogClosestDVM.refresh(); // 리프레쉬
 
-								dialogPrintMenu.dispose();
-								printClosestDVMInfo();
+									dialogPrintMenu.dispose();
+									printClosestDVMInfo();
+								}
+								else
+									JOptionPane.showMessageDialog(null, "재고가 부족합니다!");
 							}
 						}
 						dvm.calcClosestDVMLoc(); // 계산헀음
-						//DialogClosestDVM.refresh(); // 리프레쉬
-						//printClosestDVMInfo();
 					} 
 					catch (Exception ex) 
 					{
@@ -131,7 +148,6 @@ public class Controller extends JDialog
 			public void actionPerformed(ActionEvent e) 
 			{
 				verifyCode[0] = dialogVerificationCode.getVerifyCodeField();
-//				String verifyCode = jtf.getText();
 				boolean flag = dvm.checkVerificationCode(verifyCode[0]);
 				System.out.println("입력한 인증코드 : " + verifyCode[0]);
 				if(!flag) 
@@ -217,7 +233,8 @@ public class Controller extends JDialog
 					dialogConfirmPayment.dispose();
 					dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
 					dialogPrintOption.setVisible(true);
-					provideDrink(true);
+					if(dvm.purchaseDrink(drinkCode, drinkNum))
+						provideDrink(true);
 				}
 				else
 				{
@@ -250,15 +267,18 @@ public class Controller extends JDialog
 		dialogConfirmPayment.attach();
 	}
 
-	public void selectDrink() {
+	public void selectDrink() 
+	{
 		// TODO implement here
 	}
 
-	public void selectOption() {
+	public void selectOption() 
+	{
 		//굳이 필요 할까요 ...?
 	}
 
-	public void printSendInfo() {
+	public void printSendInfo() 
+	{
 		// TODO implement here
 	}
 
@@ -288,21 +308,27 @@ public class Controller extends JDialog
 		});
 	}
 
-	public String getDrinkCode() {
+	public String getDrinkCode() 
+	{
 		return this.choiceDrinkCode;
 	}
 
-	public int getDrinkNum() {
+	public int getDrinkNum() 
+	{
 		// TODO implement here
 		return this.choiceDrinkNum;
 	}
 
-	public void setHaveToPay() {
+	public void setHaveToPay() 
+	{
 		// TODO implement here
+		// 필요...?
 	}
 
-	public int getHaveToPay() {
+	public int getHaveToPay() 
+	{
 		// TODO implement here
+		// 필요...?
 		return 0;
 	}
 }
