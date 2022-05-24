@@ -189,7 +189,6 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 					/* 상대 DVM 에서 보낸 메세지 수신하는 파트 */
 					System.out.println("RECEIVED");
 					handleSaleCheckRequestAndSend(msg);
-
 					break;
 				case "SalesCheckResponse" :
 					responseSalesConfirmMsg(msg);
