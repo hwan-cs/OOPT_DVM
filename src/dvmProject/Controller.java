@@ -34,8 +34,6 @@ public class Controller extends JDialog
 	private DialogProvideDrink dialogProvideDrink;
 	private DialogConfirmPayment dialogConfirmPayment;
 	
-	//refillDrink을 실행하기 위해 10번 클릭해야함
-	private int refillDrink = 0;
 
 	public Controller(DVM dvm) 
 	{
@@ -52,22 +50,13 @@ public class Controller extends JDialog
 		dialogPrintMenu.setVisible(true);
 		JButton printMenuConfirmBtn = dialogPrintMenu.getConfirmBtn();
 
-		dialogPrintMenu.addMouseListener(new MouseAdapter() 
-		{
-			public void mouseClicked(MouseEvent e)
-			{
-//				refillDrink++;
-//				System.out.println(refillDrink);
-//				if (refillDrink == 10)
-//					admin.refillDrink();
-			}
-		});
 		printMenuConfirmBtn.addActionListener(new ActionListener() 
 		{
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
 				// TODO Auto-generated method stub
+				
 				choiceDrinkNum = dialogPrintMenu.getChoiceDrinkNum();
 				choiceDrinkCode = dialogPrintMenu.getChoiceDrinkCode();
 				dvm.setChoiceDrinkCode(choiceDrinkCode);
@@ -95,7 +84,7 @@ public class Controller extends JDialog
 						} 
 						else 
 						{ // null
-							
+							//선택한 음료가 현재 자판기에서 팔지 않을 경우 임의로 08번 음료 1개를 팔게 한다
 							if (dvm.getCurrentSellDrink().get(choiceDrinkCode) == null)
 							{
 								dvm.setChoiceDrinkCode("08");
@@ -104,9 +93,9 @@ public class Controller extends JDialog
 								choiceDrinkCode = dvm.getChoiceDrinkCode();
 							}
 							//임의로 코드와 개수 정했습니다
+							//이건 원래 있던 코드
 //							choiceDrinkNum = dialogPrintMenu.getChoiceDrinkNum();
 //							choiceDrinkCode = dialogPrintMenu.getChoiceDrinkCode();
-							
 							dvm.calcClosestDVMLoc(); // 계산헀음
 							DialogClosestDVM.refresh(); // 리프레쉬
 
@@ -168,8 +157,6 @@ public class Controller extends JDialog
 		} 
 		else 
 		{
-			System.out.println(this.choiceDrinkCode);
-			System.out.println(this.choiceDrinkNum);
 			int totalPrice;
 			if (dvm.getCurrentSellDrink().get(this.choiceDrinkCode) == null)
 				totalPrice = dvm.getDrinkList()[Integer.parseInt(this.choiceDrinkCode)-1].getPrice() * this.choiceDrinkNum;

@@ -20,11 +20,16 @@ public class Admin
 	public void refillDrink() 
 	{
 		String editDrinkCode = "01"; //임의의 코드
-		int count = 10;				//임의의 변경할 개수
-		int editDrink = dvm.getCurrentSellDrink().get(editDrinkCode).getStock();
-		dvm.getCurrentSellDrink().get(editDrinkCode).setStock(editDrink+count);
-		System.out.println(dvm.getCurrentSellDrink().get(editDrinkCode).getName()+"의 재고는 이제 "+
-		(editDrink+count)+"개 입니다!");
+		for(int i = 0;i<dvm.getDrinkList().length;i++)
+		{
+			if(dvm.getCurrentSellDrink().get(editDrinkCode) != null)
+			{
+				dvm.getCurrentSellDrink().get(editDrinkCode).setStock(100);
+				System.out.println(dvm.getCurrentSellDrink().get(editDrinkCode).getName()+"의 재고는 이제 100개 입니다!");
+				editDrinkCode = "0"+Integer.toString(Integer.parseInt(editDrinkCode)+1);
+			}
+				
+		}
 	}
 
 	public void systemStart() 
