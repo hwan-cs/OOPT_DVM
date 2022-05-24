@@ -24,9 +24,10 @@ public class dvm_Main
 //            receiver.start();   //네트워크 확인 되면 시작
 //        }
         Admin admin = new Admin(networkConnect, dvm);    //admin에서 system start()
-
+        admin.refillDrink();
         Message msg = new Message();
         Message.MessageDescription msgDesc = new Message.MessageDescription();
+        
         msgDesc.setItemCode("This is ItemCode");
         msgDesc.setItemNum(208051);
         msgDesc.setDvmXCoord(139);

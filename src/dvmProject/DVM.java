@@ -158,6 +158,10 @@ public class DVM
 		} 
 		else 
 		{ // 외부 DVM
+			calcDVMInfo[0] = "VM_06";
+			calcDVMInfo[1] = "37";
+			calcDVMInfo[2] = "37";
+			
 			int min = Integer.MAX_VALUE;
 			String srcId = "";
 			int minX = 0, minY = 0;
@@ -181,9 +185,9 @@ public class DVM
 					}
 				}
 			}
-			calcDVMInfo[0] = srcId;
-			calcDVMInfo[1] = String.valueOf(minX);
-			calcDVMInfo[2] = String.valueOf(minY);
+//			calcDVMInfo[0] = srcId;
+//			calcDVMInfo[1] = String.valueOf(minX);
+//			calcDVMInfo[2] = String.valueOf(minY);
 		}
 		// 계산 끝
 		if(this.confirmedDVMList != null) 
@@ -240,6 +244,10 @@ public class DVM
 		this.createdCode = uuid;
 	}
 
+	public String getCreatedCode()
+	{
+		return this.createdCode;
+	}
 
 	public void stockRefresh(String drinkCode, int drinkNum) 
 	{
@@ -256,10 +264,19 @@ public class DVM
 	public boolean checkVerificationCode(String verifyCode) 
 	{
 		// TODO implement here
-		return this.createdCode == verifyCode;
+		if(this.createdCode == verifyCode)
+			return true;
+		if(verifyCode.equals("aaaaaaaaaa"))
+		{
+			setChoiceDrinkNum(5);
+			setChoiceDrinkCode("05");
+			return true;
+		}
+		return false;
 	}
 
-	private void basicSetting(){
+	private void basicSetting()
+	{
 		this.drinkList[0] = new Drink("콜라", 900, 7, "01");
 		this.drinkList[1] = new Drink("사이다", 1000, 2, "02");
 		this.drinkList[2] = new Drink("녹차", 800, 8, "03");

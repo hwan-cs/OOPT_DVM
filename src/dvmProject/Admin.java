@@ -21,8 +21,10 @@ public class Admin
 	{
 		String editDrinkCode = "01"; //임의의 코드
 		int count = 10;				//임의의 변경할 개수
-		Drink editDrink = dvm.getCurrentSellDrink().get(editDrinkCode);
-		editDrink.setStock(editDrink.getStock() + count);
+		int editDrink = dvm.getCurrentSellDrink().get(editDrinkCode).getStock();
+		dvm.getCurrentSellDrink().get(editDrinkCode).setStock(editDrink+count);
+		System.out.println(dvm.getCurrentSellDrink().get(editDrinkCode).getName()+"의 재고는 이제 "+
+		(editDrink+count)+"개 입니다!");
 	}
 
 	public void systemStart() 
