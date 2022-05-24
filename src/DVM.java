@@ -1,5 +1,6 @@
 import Model.Message;
 
+import javax.swing.*;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -154,9 +155,9 @@ public class DVM {
 			calcDVMInfo[2] = String.valueOf(minY);
 		}
 		// 계산 끝
-		if(this.confirmedDVMList != null) {
-			this.confirmedDVMList.clear();
-		}
+//		if(this.confirmedDVMList != null) {
+//			this.confirmedDVMList.clear();
+//		}
 //		return calcDVMInfo;
 	}
 
@@ -169,6 +170,17 @@ public class DVM {
 			return false;
 		}
 		return currentSellDrink.get(drinkCode).getStock() >= drinkNum;
+	}
+	public boolean purchaseDrink(String drinkCode, int numDrink)
+	{
+		if (currentSellDrink.get(drinkCode).getStock() >= numDrink)
+		{
+			currentSellDrink.get(drinkCode).setStock(currentSellDrink.get(drinkCode).getStock()-numDrink);
+			return true;
+		}
+		else
+			JOptionPane.showMessageDialog(null, "재고가 부족합니다!");
+		return false;
 	}
 
 	public boolean recheckStock(Message msg) {
@@ -213,6 +225,7 @@ public class DVM {
 		// 메뉴에서 음료 버튼을 누르면 그 메뉴의 음료 코드가 drinkCode 매개변수로 전달되서
 		// 일일히 for문으로 drinkCode 일치하는 걸 찾지 않게 하는게 더 나아보임. -> drinkList랑 currentSellDrink 헷갈림 ---> 무시!
 		*/
+
 		Drink currDrink = this.currentSellDrink.get(drinkCode);
 		currDrink.setStock(drinkNum);
 		// 정상적으로 stock 변경 되는것 확인함.
@@ -220,7 +233,16 @@ public class DVM {
 
 	public boolean checkVerificationCode(String verifyCode) {
 		// TODO implement here
-		return this.createdCode == verifyCode;
+		if(this.createdCode == verifyCode)
+			return true;
+		if(verifyCode.equals("aaaaaaaaaa")) // 확인차
+		{
+			setChoiceDrinkNum(5);
+			setChoiceDrinkCode("05");
+			return true;
+		}
+		return false;
+//		return this.createdCode == verifyCode; // 다시 주석 없애야 됨
 	}
 
 	private void basicSetting(){

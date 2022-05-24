@@ -17,6 +17,7 @@ public class DialogOption extends JFrame { // 맨 처음 화면 보여주는 다
     }
 
     public void initLayout() {
+        setLocationRelativeTo(null);
         setVisible(false);
         setSize(600, 750); // 메인 프레임 크기 설정
         screenSizeLocation(); // 모니터, 메인 프레임 크기 설정
@@ -26,10 +27,13 @@ public class DialogOption extends JFrame { // 맨 처음 화면 보여주는 다
         setResizable(false); // 메인 프레임 사이즈 조절 불가능
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // X 버튼 누르면 종료
 //        getContentPane().setLayout(null); // 메인 프레임의 레이아웃 설정
-        optionPanel.add(printMenuBtn);
-        optionPanel.add(verificationCodeInpBtn);
-        add(optionPanel);
+        getContentPane().setLayout(null);
+        verificationCodeInpBtn.setBounds(getWidth()/2-150, getHeight()/2-150, 300, 100);
+        printMenuBtn.setBounds(getWidth()/2-150,getHeight()/2-50, 300, 100);
+        getContentPane().add(printMenuBtn);
+        getContentPane().add(verificationCodeInpBtn);
     }
+
     private void screenSizeLocation() { // 매인 프레임의 위치 (x, y) 값을 구함
         mainFrameSize = getSize(); // 프레임의 크기
         screenSize = Toolkit.getDefaultToolkit().getScreenSize(); // 모니터 화면의 크기 구하기
@@ -37,6 +41,7 @@ public class DialogOption extends JFrame { // 맨 처음 화면 보여주는 다
         xLoc = (screenSize.width - getWidth()) / 2;
         yLoc = (screenSize.height - getHeight()) / 2;
     }
+
     public JButton getPrintMenuBtn() {
         return this.printMenuBtn;
     }

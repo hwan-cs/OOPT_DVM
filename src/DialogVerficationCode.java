@@ -33,6 +33,7 @@ public class DialogVerficationCode extends JDialog {
 
         add(verifyPanel, BorderLayout.CENTER);
         add(okButton, BorderLayout.SOUTH);
+        okButton.setPreferredSize(new Dimension(50, 50));
         setSize(300, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);

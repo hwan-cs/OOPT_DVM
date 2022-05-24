@@ -107,7 +107,7 @@ public class Network {
 		msgDesc.setAuthCode(verificationCode);
 		msgSetting(sendToOtherMsg, src_id, dst_id, "PrepaymentCheck", msgDesc);
 
-		sendBroadcastMsg(ipMap.get(dst_id), sendToOtherMsg); //
+		sendBroadcastMsg(hyungkyuIP, sendToOtherMsg); //
 	}
 //	{"srcId":"Team3","dstID":"0","msgType":"StockCheckRequest","msgDescription":{"itemCode":"08","itemNum":3}}
 
