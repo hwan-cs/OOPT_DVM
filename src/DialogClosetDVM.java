@@ -25,7 +25,6 @@ public class DialogClosetDVM extends JDialog { // 최단거리 DVM 알려주는 
     public DialogClosetDVM(DVM dvm){
         this.dvm = dvm;
         this.calculatedDVMInfo = dvm.getCalcDVMInfo();
-
         this.dialogClosetDVMPanel = new JPanel();
         formatter = new Formatter();
         formatter.format("%s", this.calculatedDVMInfo[1] + this.calculatedDVMInfo[2]);

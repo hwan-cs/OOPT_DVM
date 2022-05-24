@@ -29,12 +29,12 @@ public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신�
 		// TODO implement here
 	}
 
-	public int responseStockConfirmMsg(Message msg) {
+	public int responseStockConfirmMsg(Message msg) { // 재고 응답
 		dvm.getConfirmedDVMList().add(msg);
 		return 0;
 	}
 
-	public int responseSalesConfirmMsg(Message msg) {
+	public int responseSalesConfirmMsg(Message msg) { // 판매 응답
 		// 상대 DVM 에서 음료 판매한다는 메세지를 받음 -> List에 받은 메세지 추가
 		dvm.getConfirmedDVMList().add(msg);
 		return 0;
@@ -54,7 +54,7 @@ public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신�
 		dvm.getODRCHashMap().put(keyCode, msg);
 	}
 
-	public void handleStockCheckRequestAndSend(Message msg) {
+	public void handleStockCheckRequestAndSend(Message msg) { // 재고 확인 메세지
 		String src_id = msg.getSrcId(); // 상대 DVM
 		String dst_id = msg.getDstID(); // 우리 DVM
 		int myX = dvm.getDvm3X();
@@ -64,6 +64,7 @@ public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신�
 		boolean flag = dvm.checkOurDVMStock(drinkCode, drinkNum);
 		Message sendToMsg = new Message();
 		Message.MessageDescription sendToMsgDesc = new Message.MessageDescription();
+
 		if(flag) { // 재고 있을 때만 보냄
 			sendToMsgDesc.setItemCode(drinkCode);
 			sendToMsgDesc.setItemNum(drinkNum);
@@ -87,7 +88,7 @@ public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신�
 			}
 		}
 	}
-	public void handleSaleCheckRequestAndSend(Message msg) {
+	public void handleSaleCheckRequestAndSend(Message msg) { // 판매 확인 메세지
 		String src_id = msg.getSrcId(); // 상대 DVM
 		String dst_id = msg.getDstID(); // 우리 DVM
 		int myX = dvm.getDvm3X();
@@ -162,6 +163,7 @@ public class Receiver extends Thread{ // 상대 DVM에서 발신한 MSG 수신�
 				case "SalesCheckRequest": // 우리 DVM에서 응답 필수
 					/* 상대 DVM 에서 보낸 메세지 수신하는 파트 */
 					System.out.println("RECEIVED");
+					handleSaleCheckRequestAndSend(msg);
 
 					break;
 				case "SalesCheckResponse" :

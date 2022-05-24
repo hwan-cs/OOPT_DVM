@@ -79,7 +79,7 @@ public class DVM {
 	}
 
 	public DVM() {
-		this.id = "03"; //임의로 설정
+		this.id = "Team3"; //임의로 설정
 		this.address = "DVM3";  //임의로 설정
 		basicSetting();
 	}

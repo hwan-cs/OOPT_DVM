@@ -28,7 +28,7 @@ public class DialogPaymentConfirmation extends JDialog { // 결제 의사 확인
         this.setSize(250, 250);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
-        this.setVisible(true);
+        this.setVisible(false);
         add(this.titleLabel, BorderLayout.NORTH);
         add(this.balanceLabel, BorderLayout.CENTER); // 잔액 보려고 넣은 임시 코드
         add(this.payPanel, BorderLayout.SOUTH);

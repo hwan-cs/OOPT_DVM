@@ -30,28 +30,26 @@ public class Network {
 	}
 
 	public void checkOtherDVMDrinkExists(){	// 모두에 전송
-		Message msg1 = new Message();
-		Message msg2 = new Message();
-		Message msg4 = new Message();
-		Message msg5 = new Message();
-		Message msg6 = new Message();
-		Message.MessageDescription msgDesc = new Message.MessageDescription();
-		msgDesc.setItemCode(this.choiceDrinkCode);
-		msgDesc.setItemNum(this.choiceDrinkNum);
-		msgSetting(msg1, "Team3", "Team1", "SalesCheckRequest", msgDesc);
-		msgSetting(msg2, "Team3", "Team2", "SalesCheckRequest", msgDesc);
-		msgSetting(msg4, "Team3", "Team4", "SalesCheckRequest", msgDesc);
-		msgSetting(msg5, "Team3", "Team5", "SalesCheckRequest", msgDesc);
-		msgSetting(msg6, "Team3", "Team6", "SalesCheckRequest", msgDesc);
-
-		sendBroadcastMsg(msg1);
-		sendBroadcastMsg(msg2);
-		sendBroadcastMsg(msg4);
-		sendBroadcastMsg(msg5);
-		sendBroadcastMsg(msg6);
+//		Message msg1 = new Message();
+//		Message msg2 = new Message();
+//		Message msg4 = new Message();
+//		Message msg5 = new Message();
+//		Message msg6 = new Message();
+//		Message.MessageDescription msgDesc = new Message.MessageDescription();
+//		msgDesc.setItemCode(this.choiceDrinkCode);
+//		msgDesc.setItemNum(this.choiceDrinkNum);
+//		msgSetting(msg1, "Team3", "Team1", "SalesCheckRequest", msgDesc);
+//		msgSetting(msg2, "Team3", "Team2", "SalesCheckRequest", msgDesc);
+//		msgSetting(msg4, "Team3", "Team4", "SalesCheckRequest", msgDesc);
+//		msgSetting(msg5, "Team3", "Team5", "SalesCheckRequest", msgDesc);
+//		msgSetting(msg6, "Team3", "Team6", "SalesCheckRequest", msgDesc);
+//
+//		sendBroadcastMsg(msg1);
+//		sendBroadcastMsg(msg2);
+//		sendBroadcastMsg(msg4);
+//		sendBroadcastMsg(msg5);
+//		sendBroadcastMsg(msg6);
 	}
-
-
 
 	private void msgSetting(Message sendToOtherMsg, String srcID, String dstID, String msgType, Message.MessageDescription msgDesc){
 		sendToOtherMsg.setSrcId(srcID);
@@ -84,5 +82,6 @@ public class Network {
 	public void sendSoldDrinkInfo() {
 		// TODO implement here
 	}
-	
+//	{"srcId":"Team3","dstID":"0","msgType":"StockCheckRequest","msgDescription":{"itemCode":"08","itemNum":3}}
+
 }
