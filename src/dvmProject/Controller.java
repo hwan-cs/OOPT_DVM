@@ -46,7 +46,9 @@ public class Controller extends JDialog
 
 	public void printMenu() 
 	{
+		this.dialogPrintOption.setVisible(false);
 		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
+		dialogPrintMenu.setLocationRelativeTo(null);
 		dialogPrintMenu.setVisible(true);
 		JButton printMenuConfirmBtn = dialogPrintMenu.getConfirmBtn();
 
@@ -79,7 +81,7 @@ public class Controller extends JDialog
 							this.wait(500);
 							dvm.calcClosestDVMLoc(); // 계산헀음
 							DialogClosestDVM.refresh(); // 리프레쉬
-
+							dialogPrintMenu.dispose();
 							printClosestDVMInfo();
 						} 
 						else 
@@ -92,18 +94,17 @@ public class Controller extends JDialog
 								choiceDrinkNum = dvm.getChoiceDrinkNum();
 								choiceDrinkCode = dvm.getChoiceDrinkCode();
 							}
-							//임의로 코드와 개수 정했습니다
-							//이건 원래 있던 코드
-//							choiceDrinkNum = dialogPrintMenu.getChoiceDrinkNum();
-//							choiceDrinkCode = dialogPrintMenu.getChoiceDrinkCode();
-							dvm.calcClosestDVMLoc(); // 계산헀음
-							DialogClosestDVM.refresh(); // 리프레쉬
+							if(dialogPrintMenu.isValidInput())
+							{
+								dvm.calcClosestDVMLoc(); // 계산헀음
+								DialogClosestDVM.refresh(); // 리프레쉬
 
-							printClosestDVMInfo();
+								dialogPrintMenu.dispose();
+								printClosestDVMInfo();
+							}
 						}
 						dvm.calcClosestDVMLoc(); // 계산헀음
 						//DialogClosestDVM.refresh(); // 리프레쉬
-						dialogPrintMenu.dispose();
 						//printClosestDVMInfo();
 					} 
 					catch (Exception ex) 
@@ -112,7 +113,6 @@ public class Controller extends JDialog
 						System.out.println("error!!!");
 					}
 				}
-				dialogPrintMenu.setVisible(false);
 			}
 		});
 	}
@@ -142,6 +142,7 @@ public class Controller extends JDialog
 				else 
 				{
 					dialogVerificationCode.dispose();
+					dialogPrintOption.setVisible(true);
 					provideDrink(true);
 				}
 			}
@@ -151,6 +152,7 @@ public class Controller extends JDialog
 	public void printClosestDVMInfo() 
 	{
 		this.DialogClosestDVM = new DialogClosestDVM(this.dvm);
+		this.DialogClosestDVM.setLocationRelativeTo(null);
 		if(dvm.getCalcDVMInfo()[0].equals("")) 
 		{
 			JOptionPane.showMessageDialog(dialogPrintMenu, "음료가 있는 DVM이 존재하지 않습니다.", "Error", JOptionPane.INFORMATION_MESSAGE);
@@ -198,6 +200,7 @@ public class Controller extends JDialog
 		this.dialogConfirmPayment = new DialogConfirmPayment(this.dvm);
 		dialogConfirmPayment.settingTextArea(choiceDrinkNum, dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode)-1].getName(), 
 				totalPrice);
+		dialogConfirmPayment.setLocationRelativeTo(null);
 		dialogConfirmPayment.setVisible(true);
 
 		JButton yesBtn = dialogConfirmPayment.getYesBtn();
@@ -213,6 +216,7 @@ public class Controller extends JDialog
 					//우리 시스템일 때 내부 계산 후
 					dialogConfirmPayment.dispose();
 					dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
+					dialogPrintOption.setVisible(true);
 					provideDrink(true);
 				}
 				else
@@ -220,6 +224,7 @@ public class Controller extends JDialog
 					//외부 시스템일때 recheckStock
 					dialogConfirmPayment.dispose();
 					dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
+					dialogPrintOption.setVisible(true);
 					provideDrink(false);
 				}
 			}
@@ -237,6 +242,7 @@ public class Controller extends JDialog
 				choiceDrinkNum = 0;
 				dvm.setChoiceDrinkCode(choiceDrinkCode);
 				dvm.setChoiceDrinkNum(choiceDrinkNum);
+				dialogPrintOption.setVisible(true);
 				dialogPrintMenu.refresh();
 			}
 		});

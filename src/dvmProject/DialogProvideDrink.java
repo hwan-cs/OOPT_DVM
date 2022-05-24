@@ -49,6 +49,7 @@ public class DialogProvideDrink extends JDialog
 
     private void initLayout()
     {
+    	setLocationRelativeTo(null);
     	getContentPane().setLayout(null);
     	getContentPane().add(noticeLbl);
     	getContentPane().add(returnBtn);

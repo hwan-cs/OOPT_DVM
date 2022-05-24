@@ -22,6 +22,7 @@ public class DialogOption extends JFrame
 
     public void initLayout() 
     {
+    	setLocationRelativeTo(null);
         setVisible(false);
         setSize(600, 750); // 메인 프레임 크기 설정
         screenSizeLocation(); // 모니터, 메인 프레임 크기 설정

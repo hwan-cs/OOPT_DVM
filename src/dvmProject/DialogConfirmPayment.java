@@ -48,6 +48,5 @@ public class DialogConfirmPayment extends JDialog
     	getContentPane().add(NoticeLbl);
     	getContentPane().add(yesBtn);
     	getContentPane().add(noBtn);
-    	System.out.println(getContentPane().isShowing());
     }
 }

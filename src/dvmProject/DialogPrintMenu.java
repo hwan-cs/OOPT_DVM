@@ -162,6 +162,17 @@ public class DialogPrintMenu extends JDialog
     	return 0;
     }
 
+    public boolean isValidInput()
+    {
+    	if(Integer.toString(Integer.parseInt(enterDrinkCodeTF.getText().replaceAll("\\s+",""))).matches("^[1-9]\\d*$") && enterDrinkNumTF.getText().replaceAll("\\s+","").matches("^[1-9]\\d*$"))
+		{
+			if(Integer.parseInt(enterDrinkCodeTF.getText().replaceAll("\\s+","")) < 21 && Integer.parseInt(enterDrinkCodeTF.getText().replaceAll("\\s+","")) > 0)
+			{
+				return true;
+			}
+		}
+    	return false;
+    }
     public void setChoiceDrinkNum(int choiceDrinkNum) 
     {
         this.choiceDrinkNum = choiceDrinkNum;
