@@ -168,7 +168,7 @@ public class Controller extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 //				dialogConfirmPayment.dispose();
-				if (dvm.getCalcDVMInfo()[0].equals("03")){
+				if (dvm.getCalcDVMInfo()[0].equals("Team3")){
 //					우리 시스템일 때 내부 계산 후
 					dialogPaymentConfirmation.dispose();
 //					dialogConfirmPayment.setVisible(false);

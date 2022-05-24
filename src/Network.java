@@ -38,11 +38,11 @@ public class Network {
 		Message.MessageDescription msgDesc = new Message.MessageDescription();
 		msgDesc.setItemCode(this.choiceDrinkCode);
 		msgDesc.setItemNum(this.choiceDrinkNum);
-		msgSetting(msg1, "03", "01", "SalesCheckRequest", msgDesc);
-		msgSetting(msg2, "03", "02", "SalesCheckRequest", msgDesc);
-		msgSetting(msg4, "03", "04", "SalesCheckRequest", msgDesc);
-		msgSetting(msg5, "03", "05", "SalesCheckRequest", msgDesc);
-		msgSetting(msg6, "03", "06", "SalesCheckRequest", msgDesc);
+		msgSetting(msg1, "Team3", "Team1", "SalesCheckRequest", msgDesc);
+		msgSetting(msg2, "Team3", "Team2", "SalesCheckRequest", msgDesc);
+		msgSetting(msg4, "Team3", "Team4", "SalesCheckRequest", msgDesc);
+		msgSetting(msg5, "Team3", "Team5", "SalesCheckRequest", msgDesc);
+		msgSetting(msg6, "Team3", "Team6", "SalesCheckRequest", msgDesc);
 
 		sendBroadcastMsg(msg1);
 		sendBroadcastMsg(msg2);
@@ -84,4 +84,5 @@ public class Network {
 	public void sendSoldDrinkInfo() {
 		// TODO implement here
 	}
+	
 }
