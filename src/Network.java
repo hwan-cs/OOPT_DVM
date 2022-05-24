@@ -94,14 +94,20 @@ public class Network {
 
 			msgSetting(sendToOtherMsg, srcID, dstID, msgType, msgDesc);
 
-
 //			sendBroadcastMsg(ipMap.get(dstID), msg);
 			sendBroadcastMsg(hyungkyuIP, msg); // 임시
 		}
 	}
 
-	public void sendSoldDrinkInfo() {
-		// TODO implement here
+	public void sendSoldDrinkInfo(String src_id, String dst_id, String verificationCode) {
+		Message sendToOtherMsg = new Message();
+		Message.MessageDescription msgDesc = new Message.MessageDescription();
+		msgDesc.setItemCode(this.choiceDrinkCode);
+		msgDesc.setItemNum(this.choiceDrinkNum);
+		msgDesc.setAuthCode(verificationCode);
+		msgSetting(sendToOtherMsg, src_id, dst_id, "PrepaymentCheck", msgDesc);
+
+		sendBroadcastMsg(ipMap.get(dst_id), sendToOtherMsg); //
 	}
 //	{"srcId":"Team3","dstID":"0","msgType":"StockCheckRequest","msgDescription":{"itemCode":"08","itemNum":3}}
 

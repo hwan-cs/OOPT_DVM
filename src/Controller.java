@@ -174,22 +174,29 @@ public class Controller extends JDialog {
 					provideDrink();
 					dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
 					dialogPaymentConfirmation.getBalanceLabel().setText("현재 잔액: " + String.valueOf(dvm.getCard().getBalance()));
-				} else {
+				} else if(dvm.getCalcDVMInfo()[0].equals(dvm.getConfirmedDVMList().get(0).getSrcId())){
 					// 외부 시스템일때 recheckStock
-					ArrayList<Message> infoList = new ArrayList<>();
-					Message msg = new Message();
-					Message.MessageDescription msgDesc = new Message.MessageDescription();
+//					ArrayList<Message> infoList = new ArrayList<>();
+					ArrayList<Message> tempList = (ArrayList<Message>) (dvm.getConfirmedDVMList().clone());
+					dvm.getConfirmedDVMList().clear();
+//					Message msg = new Message();
+					Message msg = tempList.get(0);
 
-					msg.setSrcId("Team3");
-					msg.setDstID(dvm.getCalcDVMInfo()[0]);
-					msgDesc.setItemCode(drinkCode);
-					msgDesc.setItemNum(drinkNum);
+					msg.setSrcId(tempList.get(0).getDstID());
+					msg.setDstID(tempList.get(0).getSrcId());
+					msg.getMsgDescription().setItemCode(drinkCode);
+					msg.getMsgDescription().setItemNum(drinkNum);
 
-					msg.setMsgDescription(msgDesc);
-					infoList.add(msg);
-					dvm.getNetwork().checkOtherDVMStock(infoList);
+//					msg.setMsgDescription(msgDesc);
+					tempList.clear();
+					tempList.add(msg);
+					dvm.getNetwork().checkOtherDVMStock(tempList);
 
 					dialogPaymentConfirmation.dispose();
+
+					// 다이얼로그(인증코드, 좌표 보여주는) 추가해야 됨
+					String vCode = dvm.getVerificationCode();
+					dvm.getNetwork().sendSoldDrinkInfo(msg.getSrcId(), msg.getDstID(), vCode);
 				}
 			}
 		});

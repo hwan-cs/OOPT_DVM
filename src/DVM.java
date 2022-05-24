@@ -202,6 +202,10 @@ public class DVM {
 		this.createdCode = uuid;
 	}
 
+	public String getVerificationCode() {
+		createVerificationCode();
+		return this.createdCode;
+	}
 
 	public void stockRefresh(String drinkCode, int drinkNum) {
 		/* 잘못 생각함
