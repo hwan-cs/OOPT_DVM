@@ -2,6 +2,7 @@ package dvmProject;
 
 import javax.swing.*;
 
+//복붙
 public class DialogConfirmPayment extends JDialog 
 {
     DVM dvm;

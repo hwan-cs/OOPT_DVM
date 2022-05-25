@@ -239,6 +239,7 @@ public class DialogPrintMenu extends JDialog
             {
                 enterDrinkCodeTF.setText(item[i].getName()); // 음료 코드 텍스트 필드에 음료 코드 설정
                 String dCode = dvm.getDrinkList()[i].getDrinkCode();
+                //예외처리 해야됨
                 if (choiceDrinkCode.equals(dCode)) 
                 {
                     choiceDrinkNum++;

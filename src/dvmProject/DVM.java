@@ -245,7 +245,7 @@ public class DVM
 		//uuid 10자리 생성
 		this.createdCode = uuid;
 	}
-
+	
 	public String getCreatedCode()
 	{
 		return this.createdCode;

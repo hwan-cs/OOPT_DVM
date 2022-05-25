@@ -55,6 +55,7 @@ public class DialogClosestDVM extends JDialog
         getContentPane().setLayout(null);
         
         attach();
+        refresh();
     }
     
     private void attach()

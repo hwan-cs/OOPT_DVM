@@ -35,7 +35,7 @@ public class DialogProvideDrink extends JDialog
 	            drinkNumStr += drinkName + " 뿅!<br/>";
 	           
 	    	this.noticeLbl.setBounds(20,20, getWidth()-40, 280);
-	        this.noticeLbl.setText(drinkNumStr + "나왔어요 ~~~~ </html>");
+	        this.noticeLbl.setText(drinkNumStr + "나왔어요 ~~~~<br/>결제 후 잔액은: "+dvm.getCard().getBalance()+"원 입니다 </html>");
     	}
     	else	
     	{
@@ -46,7 +46,7 @@ public class DialogProvideDrink extends JDialog
     	}
         initLayout();
     }
-
+    
     private void initLayout()
     {
     	setLocationRelativeTo(null);
