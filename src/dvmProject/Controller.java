@@ -220,6 +220,17 @@ public class Controller extends JDialog
 	public void provideDrinkWhenPrePaymentToOtherDVM(String vCode, String dstID)
 	{
 		this.dialogMakeVeriCodeAndShowInfo = new DialogMakeVeriCodeAndShowDVMInfo(this.dvm);
+		JButton returnBtn = dialogMakeVeriCodeAndShowInfo.returnBtn;
+		
+		returnBtn.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				dialogMakeVeriCodeAndShowInfo.dispose();
+			}
+		});
+		
 		dialogMakeVeriCodeAndShowInfo.settingLbl(vCode, dstID);
 	}
 	
@@ -241,7 +252,7 @@ public class Controller extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				dialogProvideDrink.setVisible(false);
+				dialogProvideDrink.dispose();
 			}
 		});
 
