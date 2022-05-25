@@ -10,7 +10,7 @@ public class Network {
 	private String choiceDrinkCode;
 	private int choiceDrinkNum;
 	private Serializer serializer;
-	private static final String hyungkyuIP = "localhost";
+	private static final String team3IP = "localhost";
 	/* IP 수정 필요 */
 	private static final String team1_IP = "";
 	private static final String team2_IP = "";
@@ -60,7 +60,7 @@ public class Network {
 		msgSetting(msg5, "Team3", "Team5", "SalesCheckRequest", msgDesc);
 		msgSetting(msg6, "Team3", "Team6", "SalesCheckRequest", msgDesc);
 
-		sendBroadcastMsg(hyungkyuIP, msg1);
+		sendBroadcastMsg(team3IP, msg1);
 
 		// IP 인자 수정 필요!
 //		sendBroadcastMsg(ipMap.get(msg1.getDstID()), msg1); // Team1
@@ -95,7 +95,7 @@ public class Network {
 			msgSetting(sendToOtherMsg, srcID, dstID, msgType, msgDesc);
 
 //			sendBroadcastMsg(ipMap.get(dstID), msg);
-			sendBroadcastMsg(hyungkyuIP, msg); // 임시
+			sendBroadcastMsg(team3IP, msg); // 임시
 		}
 	}
 
@@ -107,7 +107,7 @@ public class Network {
 		msgDesc.setAuthCode(verificationCode);
 		msgSetting(sendToOtherMsg, src_id, dst_id, "PrepaymentCheck", msgDesc);
 
-		sendBroadcastMsg(hyungkyuIP, sendToOtherMsg); //
+		sendBroadcastMsg(team3IP, sendToOtherMsg); //
 	}
 //	{"srcId":"Team3","dstID":"0","msgType":"StockCheckRequest","msgDescription":{"itemCode":"08","itemNum":3}}
 

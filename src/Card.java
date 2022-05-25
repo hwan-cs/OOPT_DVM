@@ -1,7 +1,6 @@
 public class Card {
 
 	public int balance;
-
 	public Card(int balance) {
 		this.balance = balance;
 	}

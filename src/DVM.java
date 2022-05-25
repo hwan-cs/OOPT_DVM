@@ -14,13 +14,13 @@ public class DVM {
 	private Drink[] drinkList = new Drink[20];	//전체 판매 리스트
 	private HashMap<String, Drink> currentSellDrink;
 	private OtherDVMReceiveCode otherDVMReceiveCode;	// 외부 DVM으로 부터 온 verification code 하나씩 확인 한후 및 해시맵에 풋한다.
-	private HashMap<String, Message> ODRCHashMap;	//외부 DVM으로 부터 온 verification code 확인 작업
+	private HashMap<String, Message> ODRCHashMap;//외부 DVM으로 부터 온 verification code 확인 작업
 	private Network network;
 	private String createdCode;
 	private String[] calcDVMInfo = new String[3];// = new String[]{"03", String.valueOf(dvm3X), String.valueOf(dvm3Y)};	//[id, x좌표, y좌표] -> 확인된 dvm 변수에서 거리를 계산한 후 저장하는 변수
 	private ArrayList<Message> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,] -> 확인된 dvm이 저장되는 변수
-	private int[] finalDVMLoc; // 최종적으로 최단거리에 있는 DVM의 위치를 담고있는 변수
-	private Message[] message;
+//	private int[] finalDVMLoc; // 최종적으로 최단거리에 있는 DVM의 위치를 담고있는 변수
+//	private Message[] message;
 	private int choiceDrinkNum = 0;
 	private String choiceDrinkCode = "00";
 
@@ -84,43 +84,43 @@ public class DVM {
 		this.address = "DVM3";  //임의로 설정
 		this.confirmedDVMList = new ArrayList<>();
 		this.currentSellDrink = new HashMap<String, Drink>(7);
+		this.ODRCHashMap = new HashMap<>();
 		basicSetting();
 	}
 
-	public void setState(int state) {
-		this.state = state;
-	}
+//	public void setState(int state) {
+//		this.state = state;
+//	}
 
-	public String getID() {
-		return id;
-	}
-
-	public void setID(String id) { // id의 타입이 int, String? 둘 중 어떤거?
-		this.id = id;
-	}
-
-	public int[] getAddress() {
-		// TODO implement here
-		return null;
-	}
-
-	public void setAddress(int[] address) {
-		// TODO implement here
-
-	}
-
-	public int[] getLocation() {
-		// TODO implement here
-		return null;
-	}
+//	public String getID() {
+//		return id;
+//	}
+//
+//	public void setID(String id) { // id의 타입이 int, String? 둘 중 어떤거?
+//		this.id = id;
+//	}
+//
+//	public int[] getAddress() {
+//		// TODO implement here
+//		return null;
+//	}
+//
+//	public void setAddress(int[] address) {
+//		// TODO implement here
+//
+//	}
+//	public int[] getLocation() {
+//		// TODO implement here
+//		return null;
+//	}
 
 	public Drink[] getDrinkList() {
 		return this.drinkList;
 	}
 
-	public void setDrinkList(Drink[] drinkList) {
-		this.drinkList = drinkList;
-	}
+//	public void setDrinkList(Drink[] drinkList) {
+//		this.drinkList = drinkList;
+//	}
 
 	public void calcClosestDVMLoc() { // getConfirmedDVMList()로 얻은 return 값을 전달함.
 //		calcDVMInfo = new String[3];
@@ -155,9 +155,9 @@ public class DVM {
 			calcDVMInfo[2] = String.valueOf(minY);
 		}
 		// 계산 끝
-//		if(this.confirmedDVMList != null) {
-//			this.confirmedDVMList.clear();
-//		}
+		if(this.confirmedDVMList != null) {
+			this.confirmedDVMList.clear();
+		}
 //		return calcDVMInfo;
 	}
 
@@ -184,10 +184,10 @@ public class DVM {
 		return false;
 	}
 
-	public boolean recheckStock(Message msg) {
-		// 인자로 전달받은 msg를 해독 -> 음료코드&음료개수 얻을 수 있음 -> 얻은 정보를 바탕으로 drinkList
-		return false;
-	}
+//	public boolean recheckStock(Message msg) {
+//		// 인자로 전달받은 msg를 해독 -> 음료코드&음료개수 얻을 수 있음 -> 얻은 정보를 바탕으로 drinkList
+//		return false;
+//	}
 
 	public void sellDrinkAtOtherDVM(String drinkCode, int drinkNum, String verificationCode) {
 		// TODO implement here
@@ -226,9 +226,25 @@ public class DVM {
 		// 정상적으로 stock 변경 되는것 확인함.
 	}
 
+//	public boolean checkVerificationCode(String verifyCode) { // this.createdCode는 인증코드 동작하는지 보기 위해 선언한 변수.
+//		// 실제로 인증코드 확인작업을 하려면 ODRCHashmap에서 가져온 값을 비교해야 함.
+//		// TODO implement here
+//		if(this.createdCode == verifyCode)
+//			return true;
+//		if(verifyCode.equals("aaaaaaaaaa")) // 확인차
+//		{
+//			setChoiceDrinkNum(5);
+//			setChoiceDrinkCode("05");
+//			return true;
+//		}
+//		return false;
+////		return this.createdCode == verifyCode; // 다시 주석 없애야 됨
+//	}
 	public boolean checkVerificationCode(String verifyCode) {
+		// this.createdCode는 인증코드 동작하는지 보기 위해 선언한 변수.
+		// 실제로 인증코드 확인작업을 하려면 ODRCHashmap에서 가져온 값을 비교해야 함.
 		// TODO implement here
-		if(this.createdCode == verifyCode)
+		if(this.ODRCHashMap.get(verifyCode) != null)
 			return true;
 		if(verifyCode.equals("aaaaaaaaaa")) // 확인차
 		{

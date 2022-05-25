@@ -18,11 +18,10 @@ public class Controller extends JDialog {
 	private DVM dvm;
 	private int choiceDrinkNum = 0;
 	private String choiceDrinkCode = "00";
-	private Card card;
+/*	private Card card;
 	private int haveToPay;
-	private String[] calcedDVM; //계산된 최단거리.
+	private String[] calcedDVM; //계산된 최단거리.*/
 
-//	private dialogConfirmPayment dialogConfirmPayment;
 	private DialogVerficationCode dialogVerificationCode;
 	private DialogOption dialogPrintOption;
 	private DialogClosetDVM dialogClosetDVM;
@@ -31,7 +30,6 @@ public class Controller extends JDialog {
 	private DialogConfirmPayment dialogConfirmPayment;
 	private Admin admin;
 	private int clickCounter = 0;
-//	private dialogConfirmPayment dialogConfirmPayment;
 
 	public Controller(DVM dvm, Admin admin) {
 		this.dvm = dvm;
@@ -156,7 +154,8 @@ public class Controller extends JDialog {
 				} else {
 					dialogVerificationCode.dispose();
 					dialogPrintOption.setVisible(true); // 수정!
-					provideDrink(true);
+//					provideDrink(true);
+					provideDrinkWhenPrepayment(verifyCode[0],true);
 				}
 			}
 		});
@@ -205,6 +204,25 @@ public class Controller extends JDialog {
 		});
 	}
 
+	public void provideDrinkWhenPrepayment(String verifyCode, boolean isMyDVM) { // verifyCode는 사용자가 입력한 인증코드로 ODRCHashMap의 msg를 가져오기 위함.
+		// 이 함수를 호출했다는 것은 인증코드가 일치한다는 전제가 깔려있음.
+		this.dialogProvideDrink = new DialogProvideDrink(this.dvm, isMyDVM);
+		Message msg = dvm.getODRCHashMap().get(verifyCode); // 메세지 가져옴.
+		String drinkCode = msg.getMsgDescription().getItemCode();
+		String drinkName = dvm.getCurrentSellDrink().get(drinkCode).getName();
+		int drinkNum = msg.getMsgDescription().getItemNum();
+		JButton returnBtn = this.dialogProvideDrink.returnBtn;
+		dialogProvideDrink.settingLbl(drinkNum, drinkName);
+		dialogProvideDrink.setVisible(true);
+
+		returnBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogProvideDrink.setVisible(false);
+			}
+		});
+
+	}
 	public void confirmPayment(String drinkCode, int drinkNum, int totalPrice) {
 		this.dialogConfirmPayment = new DialogConfirmPayment(this.dvm);
 		dialogConfirmPayment.settingTextArea(choiceDrinkNum, dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode) - 1].getName(), totalPrice);

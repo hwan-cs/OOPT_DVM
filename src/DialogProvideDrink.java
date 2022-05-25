@@ -27,9 +27,10 @@ public class DialogProvideDrink extends JDialog {
         setSize(300, 400);
         this.returnBtn.setBounds(20, getHeight()-100, getWidth()-40, 50);
 
-        //임의로 만든 이름과 장소
+        /* 임의로 만든 이름과 장소 */
         String closestDVMName = "VM_06";
         double closestDVMDistance = 61.98;
+        /* 임의로 만든 이름과 장소 */
 
         if (this.isMyDVM)
         {

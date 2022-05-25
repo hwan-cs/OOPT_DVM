@@ -16,7 +16,7 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 
 	private static HashMap<String, String> ipMap = new HashMap<>();
 
-	private static final String hyungkyuIP = "localhost"; // 임시
+	private static final String team3IP = "localhost"; // 임시
 
 	private static final String team1_IP = "";
 	private static final String team2_IP = "";
@@ -61,15 +61,15 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 	public void handlePrepaymentMsg(Message msg) { // 선결제 메세지 받아서 핸들
 
 		// 재고 차감
-		String drinkCode = msg.getMsgDescription().getItemCode();
-		int drinkNum = msg.getMsgDescription().getItemNum();
-		Drink tempDrink = dvm.getCurrentSellDrink().get(drinkCode);
-		tempDrink.setStock(tempDrink.getStock() - drinkNum);
+		String drinkCode = msg.getMsgDescription().getItemCode(); // 메세지에 들어있는 음료코드 가져온다.
+		int drinkNum = msg.getMsgDescription().getItemNum(); // 메세지에 들어있느 음료개수 가져온다.
+		Drink tempDrink = dvm.getCurrentSellDrink().get(drinkCode); // 현재 DVM3에서 파는 음료 객체를 가져온다.
+		tempDrink.setStock(tempDrink.getStock() - drinkNum); // 가져온 음료 객체의 재고를 변경한다.(=재고 차감)
 		dvm.getCurrentSellDrink().put(drinkCode, tempDrink); // 작동 완료 확인
 		/**/
 		// 인증코드 포함된 메세지 넣음
 		String keyCode = msg.getMsgDescription().getAuthCode();
-		dvm.getODRCHashMap().put(keyCode, msg);
+		dvm.getODRCHashMap().put(keyCode, msg); // 인증코드를 key값으로해서 msg를 value로 넣는다.
 	}
 
 	public void handleStockCheckRequestAndSend(Message msg) { // 재고 확인 메세지
@@ -97,7 +97,7 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 
 //			DVMClient client = new DVMClient("localhost", msgToJson); // 메세지 보내기위해 클라이언트 선언
 
-//			DVMClient client = new DVMClient(hyungkyuIP, msgToJson); // 메세지 보내기위해 클라이언트 선언
+//			DVMClient client = new DVMClient(team3IP, msgToJson); // 메세지 보내기위해 클라이언트 선언
 //
 //			// 클라이언트에 메세지 실어서 보낸다.
 //			try {
@@ -131,7 +131,7 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 
 //			DVMClient client = new DVMClient("localhost", msgToJson); // 메세지 보내기위해 클라이언트 선언
 
-//			DVMClient client = new DVMClient(hyungkyuIP, msgToJson); // 메세지 보내기위해 클라이언트 선언
+//			DVMClient client = new DVMClient(team3IP, msgToJson); // 메세지 보내기위해 클라이언트 선언
 //
 //			// 클라이언트에 메세지 실어서 보낸다.
 //			try {
