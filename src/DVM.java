@@ -171,6 +171,7 @@ public class DVM {
 		}
 		return currentSellDrink.get(drinkCode).getStock() >= drinkNum;
 	}
+
 	public boolean purchaseDrink(String drinkCode, int numDrink)
 	{
 		if (currentSellDrink.get(drinkCode).getStock() >= numDrink)
@@ -220,12 +221,6 @@ public class DVM {
 	}
 
 	public void stockRefresh(String drinkCode, int drinkNum) {
-		/* 잘못 생각함
-		// for문으로 모든 drink를 돌아서 효율성 떨어짐.
-		// 메뉴에서 음료 버튼을 누르면 그 메뉴의 음료 코드가 drinkCode 매개변수로 전달되서
-		// 일일히 for문으로 drinkCode 일치하는 걸 찾지 않게 하는게 더 나아보임. -> drinkList랑 currentSellDrink 헷갈림 ---> 무시!
-		*/
-
 		Drink currDrink = this.currentSellDrink.get(drinkCode);
 		currDrink.setStock(drinkNum);
 		// 정상적으로 stock 변경 되는것 확인함.

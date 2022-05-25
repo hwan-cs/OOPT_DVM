@@ -6,6 +6,8 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 // DVMClient에서 msg는 json 타입이다. 제공해준 converter로 json으로 변환 후 인자로 전달
@@ -27,13 +29,16 @@ public class Controller extends JDialog {
 	private DialogPrintMenu dialogPrintMenu;
 	private DialogProvideDrink dialogProvideDrink;
 	private DialogConfirmPayment dialogConfirmPayment;
+	private Admin admin;
+	private int clickCounter = 0;
 //	private dialogConfirmPayment dialogConfirmPayment;
 
-	public Controller(DVM dvm) {
+	public Controller(DVM dvm, Admin admin) {
 		this.dvm = dvm;
 //		this.dialogPrintOption = new DialogOption();
 //		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
 		this.dialogClosetDVM = new DialogClosetDVM(this.dvm);
+		this.admin = admin;
 //		this.dialogVerificationCode = new DialogVerficationCode(this.dvm);
 //		this.dialogProvideDrink = new DialogProvideDrink(this.dvm);
 //		this.dialogConfirmPayment = new dialogConfirmPayment(this.dvm);
@@ -41,9 +46,26 @@ public class Controller extends JDialog {
 	}
 
 	public void printMenu() {
+		this.dialogPrintOption.setVisible(false);
 		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
-		dialogPrintMenu.setVisible(true);
 		dialogPrintMenu.setLocationRelativeTo(null);
+		dialogPrintMenu.setVisible(true);
+
+
+		dialogPrintMenu.addMouseListener(new MouseAdapter()
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				clickCounter++;
+				if(clickCounter == 10)
+				{
+					System.out.println("Clicked 10 times!");
+					admin.refillDrink();
+					clickCounter = 0;
+				}
+			}
+		});
+
 		JButton printMenuConfirmBtn = dialogPrintMenu.getConfirmBtn();
 
 		printMenuConfirmBtn.addActionListener(new ActionListener() { // 확인버튼
@@ -75,7 +97,6 @@ public class Controller extends JDialog {
 						}
 						else
 						{ // null
-							//선택한 음료가 현재 자판기에서 팔지 않을 경우 임의로 08번 음료 1개를 팔게 한다
 							if(dialogPrintMenu.isValidInput())
 							{
 								if(dvm.getCurrentSellDrink().get(choiceDrinkCode) != null)
@@ -147,6 +168,7 @@ public class Controller extends JDialog {
 //			dialogClosetDVM.setVisible(true); // 모든 DVM에 음료가 없을 수 있으니까 여기서 호출하면 안됨.
 		if(dvm.getCalcDVMInfo()[0].equals("")) {
 			JOptionPane.showMessageDialog(dialogPrintMenu, "음료가 있는 DVM이 존재하지 않습니다.", "Error", JOptionPane.INFORMATION_MESSAGE);
+			printMenu();
 		} else {
 			int totalPrice = 0;
 
@@ -162,7 +184,7 @@ public class Controller extends JDialog {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					dialogClosetDVM.dispose();
-					System.out.println("---------계산된 금액은 ? ---------" + (dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode) - 1].getPrice() * choiceDrinkNum) + "원");
+					System.out.println("---------계산된 금액은 ?--------" + t + "원");
 					confirmPayment(choiceDrinkCode, choiceDrinkNum, t);
 				}
 			});
@@ -200,8 +222,10 @@ public class Controller extends JDialog {
 //					dialogConfirmPayment.setVisible(false);
 
 					dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
+					System.out.println("---------남은 잔액은 ?----------" + dvm.getCard().getBalance());
 					dialogPrintOption.setVisible(true);
 					if(dvm.purchaseDrink(drinkCode, drinkNum)) {
+						System.out.println(dvm.getCurrentSellDrink().get(choiceDrinkCode).getName() + "의 남은 재고는?" + dvm.getCurrentSellDrink().get(choiceDrinkCode).getStock());
 						provideDrink(true);
 					}
 //					dialogConfirmPayment.getBalanceLabel().setText("현재 잔액: " + String.valueOf(dvm.getCard().getBalance()));
@@ -209,6 +233,7 @@ public class Controller extends JDialog {
 					// 외부 시스템일때 recheckStock
 					dialogConfirmPayment.dispose();
 					dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
+					System.out.println("---------남은 잔액은 ?----------" + dvm.getCard().getBalance());
 					ArrayList<Message> tempList = (ArrayList<Message>) (dvm.getConfirmedDVMList().clone());
 					dvm.getConfirmedDVMList().clear();
 					Message msg = tempList.get(0);

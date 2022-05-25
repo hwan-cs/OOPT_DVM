@@ -13,16 +13,30 @@ public class Admin extends JDialog {
 		}
 	}
 
-	public void refillDrink() {
+	public void refillDrink()
+	{
 		String editDrinkCode = "01"; //임의의 코드
-		int count = 10;				//임의의 변경할 개수
-		Drink editDrink = dvm.getCurrentSellDrink().get(editDrinkCode);
-		editDrink.setStock(editDrink.getStock() + count);
+		for(int i = 0;i<dvm.getDrinkList().length;i++)
+		{
+			if(dvm.getCurrentSellDrink().get(editDrinkCode) != null)
+			{
+				dvm.getCurrentSellDrink().get(editDrinkCode).setStock(dvm.getCurrentSellDrink().get(editDrinkCode).getStock()+10);
+				System.out.println(dvm.getCurrentSellDrink().get(editDrinkCode).getName()+"의 재고는 이제 "+dvm.getCurrentSellDrink().get(editDrinkCode).getStock()+"개 입니다!");
+				editDrinkCode = "0"+Integer.toString(Integer.parseInt(editDrinkCode)+1);
+			}
+		}
 	}
+
+//	public void refillDrink() {
+//		String editDrinkCode = "01"; //임의의 코드
+//		int count = 10;				//임의의 변경할 개수
+//		Drink editDrink = dvm.getCurrentSellDrink().get(editDrinkCode);
+//		editDrink.setStock(editDrink.getStock() + count);
+//	}
 
 	public void systemStart() {
 		System.out.println("flag_systemstart()");
-		Controller controller = new Controller(dvm);
+		Controller controller = new Controller(dvm, this);
 	}
 
 }

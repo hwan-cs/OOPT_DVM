@@ -16,7 +16,7 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 
 	private static HashMap<String, String> ipMap = new HashMap<>();
 
-	private static final String hyungkyuIP = "192.168.0.3"; // 임시
+	private static final String hyungkyuIP = "localhost"; // 임시
 
 	private static final String team1_IP = "";
 	private static final String team2_IP = "";

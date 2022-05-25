@@ -10,7 +10,7 @@ public class Network {
 	private String choiceDrinkCode;
 	private int choiceDrinkNum;
 	private Serializer serializer;
-	private static final String hyungkyuIP = "192.168.0.3";
+	private static final String hyungkyuIP = "localhost";
 	/* IP 수정 필요 */
 	private static final String team1_IP = "";
 	private static final String team2_IP = "";

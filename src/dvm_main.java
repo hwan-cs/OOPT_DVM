@@ -20,18 +20,18 @@ public class dvm_main {
         }
         Admin admin = new Admin(networkConnect, dvm);    //admin에서 system start()
 
-        Message msg = new Message();
-        Message.MessageDescription msgDesc = new Message.MessageDescription();
-        msgDesc.setItemCode("This is ItemCode");
-        msgDesc.setItemNum(208051);
-        msgDesc.setDvmXCoord(139);
-        msgDesc.setDvmYCoord(202);
-        msgDesc.setAuthCode("This is AuthCode");
-
-        msg.setSrcId("dvm3");
-        msg.setDstID("hwisik");
-        msg.setMsgType("Check, Is it working?");
-        msg.setMsgDescription(msgDesc);
+//        Message msg = new Message();
+//        Message.MessageDescription msgDesc = new Message.MessageDescription();
+//        msgDesc.setItemCode("This is ItemCode");
+//        msgDesc.setItemNum(208051);
+//        msgDesc.setDvmXCoord(139);
+//        msgDesc.setDvmYCoord(202);
+//        msgDesc.setAuthCode("This is AuthCode");
+//
+//        msg.setSrcId("dvm3");
+//        msg.setDstID("hwisik");
+//        msg.setMsgType("Check, Is it working?");
+//        msg.setMsgDescription(msgDesc);
 
 //        clientThreadTest.start();
 
