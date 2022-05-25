@@ -51,9 +51,4 @@ public class DialogVerficationCode extends JDialog {
     public JButton getOkButton() {
         return this.okButton;
     }
-
-    public JPanel getVerifyPanel() {
-        return this.verifyPanel;
-    }
-
 }

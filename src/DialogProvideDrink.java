@@ -1,11 +1,6 @@
 import javax.swing.*;
 
 public class DialogProvideDrink extends JDialog {
-//    DVM dvm;
-//    JTextArea noticeTextArea;
-//    JButton returnBtn;
-//    JPanel provideDrinkPanel;
-//    Boolean isMyDVM;
 
     DVM dvm;
     JLabel noticeLbl;

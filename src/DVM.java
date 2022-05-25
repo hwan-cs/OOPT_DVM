@@ -9,18 +9,13 @@ public class DVM {
 	private int dvm3X = 12, dvm3Y = 47;
 	private Card user1Card = new Card(100000); // 임시로 생성한 Card 객체
 	private String id;
-	private int state;
-	private String address; // address가 String 타입? int[] 타입이어야 하는거 아닌가?
 	private Drink[] drinkList = new Drink[20];	//전체 판매 리스트
 	private HashMap<String, Drink> currentSellDrink;
-	private OtherDVMReceiveCode otherDVMReceiveCode;	// 외부 DVM으로 부터 온 verification code 하나씩 확인 한후 및 해시맵에 풋한다.
-	private HashMap<String, Message> ODRCHashMap;//외부 DVM으로 부터 온 verification code 확인 작업
+	private HashMap<String, Message> ODRCHashMap; //외부 DVM으로 부터 온 verification code 확인 작업
 	private Network network;
 	private String createdCode;
-	private String[] calcDVMInfo = new String[3];// = new String[]{"03", String.valueOf(dvm3X), String.valueOf(dvm3Y)};	//[id, x좌표, y좌표] -> 확인된 dvm 변수에서 거리를 계산한 후 저장하는 변수
-	private ArrayList<Message> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,] -> 확인된 dvm이 저장되는 변수
-//	private int[] finalDVMLoc; // 최종적으로 최단거리에 있는 DVM의 위치를 담고있는 변수
-//	private Message[] message;
+	private String[] calcDVMInfo = new String[3]; // = new String[]{"03", String.valueOf(dvm3X), String.valueOf(dvm3Y)};	//[id, x좌표, y좌표] -> 확인된 dvm 변수에서 거리를 계산한 후 저장하는 변수
+	private ArrayList<Message> confirmedDVMList; //[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,] -> 확인된 dvm이 저장되는 변수
 	private int choiceDrinkNum = 0;
 	private String choiceDrinkCode = "00";
 
@@ -28,24 +23,12 @@ public class DVM {
 		return dvm3X;
 	}
 
-	public void setDvm3X(int dvm3X) {
-		this.dvm3X = dvm3X;
-	}
-
 	public int getDvm3Y() {
 		return dvm3Y;
 	}
 
-	public void setDvm3Y(int dvm3Y) {
-		this.dvm3Y = dvm3Y;
-	}
-
 	public HashMap<String, Message> getODRCHashMap() {
 		return ODRCHashMap;
-	}
-
-	public void setODRCHashMap(HashMap<String, Message> ODRCHashMap) {
-		this.ODRCHashMap = ODRCHashMap;
 	}
 
 	public String getChoiceDrinkCode() {
@@ -68,10 +51,6 @@ public class DVM {
 		return this.calcDVMInfo;
 	}
 
-	public void setCalcDVMInfo(String[] calcDVMInfo) {
-		this.calcDVMInfo = calcDVMInfo;
-	}
-
 	public void createNetwork() {
 		this.network = new Network(this.choiceDrinkCode, this.choiceDrinkNum);
 	}
@@ -81,46 +60,15 @@ public class DVM {
 
 	public DVM() {
 		this.id = "Team3"; //임의로 설정
-		this.address = "DVM3";  //임의로 설정
 		this.confirmedDVMList = new ArrayList<>();
 		this.currentSellDrink = new HashMap<String, Drink>(7);
 		this.ODRCHashMap = new HashMap<>();
 		basicSetting();
 	}
 
-//	public void setState(int state) {
-//		this.state = state;
-//	}
-
-//	public String getID() {
-//		return id;
-//	}
-//
-//	public void setID(String id) { // id의 타입이 int, String? 둘 중 어떤거?
-//		this.id = id;
-//	}
-//
-//	public int[] getAddress() {
-//		// TODO implement here
-//		return null;
-//	}
-//
-//	public void setAddress(int[] address) {
-//		// TODO implement here
-//
-//	}
-//	public int[] getLocation() {
-//		// TODO implement here
-//		return null;
-//	}
-
 	public Drink[] getDrinkList() {
 		return this.drinkList;
 	}
-
-//	public void setDrinkList(Drink[] drinkList) {
-//		this.drinkList = drinkList;
-//	}
 
 	public void calcClosestDVMLoc() { // getConfirmedDVMList()로 얻은 return 값을 전달함.
 //		calcDVMInfo = new String[3];
@@ -158,7 +106,6 @@ public class DVM {
 		if(this.confirmedDVMList != null) {
 			this.confirmedDVMList.clear();
 		}
-//		return calcDVMInfo;
 	}
 
 	public ArrayList<Message> getConfirmedDVMList() {
@@ -184,30 +131,10 @@ public class DVM {
 		return false;
 	}
 
-//	public boolean recheckStock(Message msg) {
-//		// 인자로 전달받은 msg를 해독 -> 음료코드&음료개수 얻을 수 있음 -> 얻은 정보를 바탕으로 drinkList
-//		return false;
-//	}
-
-	public void sellDrinkAtOtherDVM(String drinkCode, int drinkNum, String verificationCode) {
-		// TODO implement here
-	}
-
-	public boolean cardPayment(int balance) { // balance 매개변수는 구매한 (음료 개수 * 가격)임
-		return user1Card.getBalance() >= balance;
-	}
-
 	public Card getCard() {
 		return this.user1Card;
 	}
 
-	public int calcPrice(String drinkCode, int drinkNum) {
-		int totalPrice = 0;
-		Drink currDrink = this.currentSellDrink.get(drinkCode);
-		totalPrice += (currDrink.getPrice() * drinkNum);
-
-		return totalPrice;
-	}
 
 	public void createVerificationCode() {
 		String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
@@ -218,12 +145,6 @@ public class DVM {
 	public String getVerificationCode() {
 		createVerificationCode();
 		return this.createdCode;
-	}
-
-	public void stockRefresh(String drinkCode, int drinkNum) {
-		Drink currDrink = this.currentSellDrink.get(drinkCode);
-		currDrink.setStock(drinkNum);
-		// 정상적으로 stock 변경 되는것 확인함.
 	}
 
 	public boolean checkVerificationCode(String verifyCode) {
@@ -276,13 +197,7 @@ public class DVM {
 		this.currentSellDrink.put("06", this.drinkList[5]);
 		this.currentSellDrink.put("07", this.drinkList[6]);
 	}
-
 	public HashMap<String, Drink> getCurrentSellDrink() {
 		return currentSellDrink;
 	}
-
-	public void setCurrentSellDrink(HashMap<String, Drink> currentSellDrink) {
-		this.currentSellDrink = currentSellDrink;
-	}
-
 }

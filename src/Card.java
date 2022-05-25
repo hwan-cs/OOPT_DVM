@@ -14,5 +14,4 @@ public class Card {
 		// TODO implement here
 		this.balance -= balance;
 	}
-
 }

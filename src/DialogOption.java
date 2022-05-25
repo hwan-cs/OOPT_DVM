@@ -5,14 +5,12 @@ public class DialogOption extends JFrame { // 맨 처음 화면 보여주는 다
     private DVM dvm;
     private JButton printMenuBtn;
     private JButton verificationCodeInpBtn;
-    private JPanel optionPanel;
-    private Dimension mainFrameSize, screenSize; // 모니터 화면 크기 & 메인 프레임 크기
+    private Dimension screenSize; // 모니터 화면 크기 & 메인 프레임 크기
     private int xLoc = 0, yLoc = 0;
 
     public DialogOption() {
         this.printMenuBtn = new JButton("메뉴 출력");
         this.verificationCodeInpBtn = new JButton("인증 코드 입력");
-        this.optionPanel = new JPanel();
         initLayout();
     }
 
@@ -26,7 +24,6 @@ public class DialogOption extends JFrame { // 맨 처음 화면 보여주는 다
         getContentPane().setForeground(Color.WHITE); //
         setResizable(false); // 메인 프레임 사이즈 조절 불가능
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // X 버튼 누르면 종료
-//        getContentPane().setLayout(null); // 메인 프레임의 레이아웃 설정
         getContentPane().setLayout(null);
         verificationCodeInpBtn.setBounds(getWidth()/2-150, getHeight()/2-150, 300, 100);
         printMenuBtn.setBounds(getWidth()/2-150,getHeight()/2-50, 300, 100);
@@ -35,7 +32,6 @@ public class DialogOption extends JFrame { // 맨 처음 화면 보여주는 다
     }
 
     private void screenSizeLocation() { // 매인 프레임의 위치 (x, y) 값을 구함
-        mainFrameSize = getSize(); // 프레임의 크기
         screenSize = Toolkit.getDefaultToolkit().getScreenSize(); // 모니터 화면의 크기 구하기
         // (모니터 화면 가로 - 프레임 화면 가로) / 2, (모니터 화면 세로 - 프레임 화면 세로) / 2
         xLoc = (screenSize.width - getWidth()) / 2;
@@ -46,15 +42,7 @@ public class DialogOption extends JFrame { // 맨 처음 화면 보여주는 다
         return this.printMenuBtn;
     }
 
-    public void setPrintMenuBtn(JButton printMenuBtn) {
-        this.printMenuBtn = printMenuBtn;
-    }
-
     public JButton getVerificationCodeInpBtn() {
         return this.verificationCodeInpBtn;
-    }
-
-    public void setVerificationCodeInpBtn(JButton verificationCodeInpBtn) {
-        this.verificationCodeInpBtn = verificationCodeInpBtn;
     }
 }

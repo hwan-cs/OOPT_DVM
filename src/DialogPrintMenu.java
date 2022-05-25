@@ -8,27 +8,23 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class DialogPrintMenu extends JDialog {
-    private int drinkListlength;
-    private String title = "Distributed Vending Machine-Team 3";
+
     private int choiceDrinkNum = 0; // 음료 버튼 눌렀을 때 음료 선택 개수
     private String choiceDrinkCode = ""; // 음료 버튼 눌렀을 때 음료 코드
     private DVM dvm;
     private JPanel printMenuPanel;
-//    private JButton[] drinkBtns;
     private JButton confirmBtn;
     private JTextField enterDrinkCodeTF;
     private JLabel enterDrinkCodeLbl;
     private JTextField enterDrinkNumTF;
     private JLabel enterDrinkNumLbl;
     private int counter;
-    private JScrollPane scrollPane;
     private JLabel item[];
     private int frameW = 600, frameH = 750;
 
 
     public DialogPrintMenu(DVM dvm){
         this.dvm = dvm;
-        this.drinkListlength = dvm.getDrinkList().length;
         this.printMenuPanel = new JPanel();
         this.item = new JLabel[20];
 //        this.drinkBtns = new JButton[this.drinkListlength];
@@ -37,16 +33,13 @@ public class DialogPrintMenu extends JDialog {
         this.enterDrinkNumTF = new JTextField("0");
         this.enterDrinkCodeLbl = new JLabel("번호: ");
         this.enterDrinkNumLbl = new JLabel("개수:");
-        this.scrollPane = new JScrollPane();
         init();
         createButtonAndText();
         attachBtnAndText();
-//        clickListener();
     }
 
     public void init() {
         printMenuPanel.setBounds(20,100, frameW, frameH); // 패널의 위치를 설정
-//        add(printMenuPanel, BorderLayout.NORTH); // 메인 프레임에 패널 붙힘
         getContentPane().add(printMenuPanel);
 
         JScrollPane scrollPane = new JScrollPane(printMenuPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -63,7 +56,6 @@ public class DialogPrintMenu extends JDialog {
         getContentPane().add(scrollPane); // 메인 프레임에 스크롤 패널 붙힘
         setTitle("메뉴 선택");
 
-//        setLayout(new BorderLayout());
         getContentPane().setLayout(null);
         setVisible(false);
         setSize(600, 750);
@@ -82,38 +74,10 @@ public class DialogPrintMenu extends JDialog {
         enterDrinkNumLbl.setBounds(18, scrollPane.getY()+scrollPane.getHeight()+20+40, 30, 50);
         confirmBtn.setBounds(475, scrollPane.getY()+scrollPane.getHeight()+10, 90, 100); // 버튼의 위치 설정
     }
-
-    public JLabel[] getDrinkBtns() {
-        return this.item;
-    }
-
-    public void setDrinkBtns(JLabel[] drinkBtns) {
-        this.item = drinkBtns;
-    }
-
-    public JTextField getDrinkNumText() {
-        return enterDrinkNumTF;
-    }
-
-    public void setDrinkNumText(JTextField drinkNumText) {
-        this.enterDrinkNumTF = drinkNumText;
-    }
-
-    public JTextField getDrinkCodeText() {
-        return enterDrinkCodeTF;
-    }
-
-    public void setDrinkCodeText(JTextField drinkCodeText) {
-        this.enterDrinkCodeTF= drinkCodeText;
-    }
-
     public JButton getConfirmBtn() {
         return confirmBtn;
     }
 
-    public void setConfirmBtn(JButton confirmBtn) {
-        this.confirmBtn = confirmBtn;
-    }
 
     public String getChoiceDrinkCode() {
         if (Integer.toString(Integer.parseInt(enterDrinkCodeTF.getText().replaceAll("\\s+",""))).matches("^[1-9]\\d*$"))

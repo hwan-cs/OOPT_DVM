@@ -6,7 +6,6 @@ import Model.Message;
 import java.util.*;
 
 public class Network {
-	private ArrayList<Message> checkOtherDVMDrinkExistMsgs;
 	private String choiceDrinkCode;
 	private int choiceDrinkNum;
 	private Serializer serializer;
@@ -21,7 +20,6 @@ public class Network {
 	private static HashMap<String, String> ipMap = new HashMap<>();
 
 	public Network(String choiceDrinkCode, int choiceDrinkNum) {
-		checkOtherDVMDrinkExistMsgs = new ArrayList<Message>();
 		this.choiceDrinkCode = choiceDrinkCode;
 		this.choiceDrinkNum = choiceDrinkNum;
 		this.serializer = new Serializer();
@@ -45,6 +43,9 @@ public class Network {
 		}
 	}
 
+	// 상대 DVM들의 IP를 알아야 함. 개인적으로는 보낼 수 없음.
+	// 수업 시간에 같이 있을 때 테스트 할 떄 필요함.
+
 	public void checkOtherDVMDrinkExists(){	// 모두에 전송
 		Message msg1 = new Message();
 		Message msg2 = new Message();
@@ -60,6 +61,7 @@ public class Network {
 		msgSetting(msg5, "Team3", "Team5", "SalesCheckRequest", msgDesc);
 		msgSetting(msg6, "Team3", "Team6", "SalesCheckRequest", msgDesc);
 
+		// 작동하는지 확인하기 위한 임시 코드!
 		sendBroadcastMsg(team3IP, msg1);
 
 		// IP 인자 수정 필요!
@@ -94,8 +96,7 @@ public class Network {
 
 			msgSetting(sendToOtherMsg, srcID, dstID, msgType, msgDesc);
 
-//			sendBroadcastMsg(ipMap.get(dstID), msg);
-			sendBroadcastMsg(team3IP, msg); // 임시
+			sendBroadcastMsg(ipMap.get(dstID), msg);
 		}
 	}
 
@@ -109,6 +110,4 @@ public class Network {
 
 		sendBroadcastMsg(team3IP, sendToOtherMsg); //
 	}
-//	{"srcId":"Team3","dstID":"0","msgType":"StockCheckRequest","msgDescription":{"itemCode":"08","itemNum":3}}
-
 }

@@ -27,13 +27,6 @@ public class Admin extends JDialog {
 		}
 	}
 
-//	public void refillDrink() {
-//		String editDrinkCode = "01"; //임의의 코드
-//		int count = 10;				//임의의 변경할 개수
-//		Drink editDrink = dvm.getCurrentSellDrink().get(editDrinkCode);
-//		editDrink.setStock(editDrink.getStock() + count);
-//	}
-
 	public void systemStart() {
 		System.out.println("flag_systemstart()");
 		Controller controller = new Controller(dvm, this);

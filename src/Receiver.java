@@ -7,17 +7,11 @@ import java.sql.SQLOutput;
 import java.util.*;
 
 public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신하는 파트
-
-	private String receiverID;
 	private DVMServer server;
 	private DVM dvm;
-	private Message msg;
 	private Serializer serializer;
-
 	private static HashMap<String, String> ipMap = new HashMap<>();
-
-	private static final String team3IP = "localhost"; // 임시
-
+	private static final String team3IP = "localhost"; // 작동하는지 확인하기 위한 임시 변수
 	private static final String team1_IP = "";
 	private static final String team2_IP = "";
 	private static final String team4_IP = "";
@@ -43,10 +37,6 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 		return "";
 	}
 
-	public void setReceiverID(String receiverID) {
-		// TODO implement here
-	}
-
 	public int responseStockConfirmMsg(Message msg) { // 재고 응답
 		dvm.getConfirmedDVMList().add(msg);
 		return 0;
@@ -59,7 +49,6 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 	}
 
 	public void handlePrepaymentMsg(Message msg) { // 선결제 메세지 받아서 핸들
-
 		// 재고 차감
 		String drinkCode = msg.getMsgDescription().getItemCode(); // 메세지에 들어있는 음료코드 가져온다.
 		int drinkNum = msg.getMsgDescription().getItemNum(); // 메세지에 들어있느 음료개수 가져온다.
@@ -198,7 +187,6 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 					break;
 			}
 			server.msgList.remove(server.msgList.size() - 1); // add한 메세지 제거
-			System.out.println("hihihihihi");
 		}
 	}
 }

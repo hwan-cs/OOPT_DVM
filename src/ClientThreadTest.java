@@ -6,7 +6,6 @@ import Model.Message;
 
 public class ClientThreadTest extends Thread{
     DVMServer server;
-    Deserializer deserializer = new Deserializer();
     Serializer serializer = new Serializer();
     public ClientThreadTest() {}
 
