@@ -226,34 +226,23 @@ public class DVM {
 		// 정상적으로 stock 변경 되는것 확인함.
 	}
 
-//	public boolean checkVerificationCode(String verifyCode) { // this.createdCode는 인증코드 동작하는지 보기 위해 선언한 변수.
-//		// 실제로 인증코드 확인작업을 하려면 ODRCHashmap에서 가져온 값을 비교해야 함.
-//		// TODO implement here
-//		if(this.createdCode == verifyCode)
-//			return true;
-//		if(verifyCode.equals("aaaaaaaaaa")) // 확인차
-//		{
-//			setChoiceDrinkNum(5);
-//			setChoiceDrinkCode("05");
-//			return true;
-//		}
-//		return false;
-////		return this.createdCode == verifyCode; // 다시 주석 없애야 됨
-//	}
 	public boolean checkVerificationCode(String verifyCode) {
 		// this.createdCode는 인증코드 동작하는지 보기 위해 선언한 변수.
 		// 실제로 인증코드 확인작업을 하려면 ODRCHashmap에서 가져온 값을 비교해야 함.
 		// TODO implement here
 		if(this.ODRCHashMap.get(verifyCode) != null)
 			return true;
-		if(verifyCode.equals("aaaaaaaaaa")) // 확인차
+
+		/* 우리 시스템에서 정상 작동하는지 만든 임시 코드 */
+		if(verifyCode.equals("aaaaaaaaaa"))
 		{
 			setChoiceDrinkNum(5);
 			setChoiceDrinkCode("05");
 			return true;
 		}
 		return false;
-//		return this.createdCode == verifyCode; // 다시 주석 없애야 됨
+		/* */
+//		return this.createdCode == verifyCode; // 다시 주석 없애야 됨 ??
 	}
 
 	private void basicSetting(){
