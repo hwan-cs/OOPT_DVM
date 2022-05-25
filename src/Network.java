@@ -108,6 +108,6 @@ public class Network {
 		msgDesc.setAuthCode(verificationCode);
 		msgSetting(sendToOtherMsg, src_id, dst_id, "PrepaymentCheck", msgDesc);
 
-		sendBroadcastMsg(team3IP, sendToOtherMsg); //
+		sendBroadcastMsg(ipMap.get(dst_id), sendToOtherMsg); //
 	}
 }

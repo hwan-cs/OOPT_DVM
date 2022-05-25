@@ -24,6 +24,7 @@ public class Controller extends JDialog {
 	private DialogPrintMenu dialogPrintMenu;
 	private DialogProvideDrink dialogProvideDrink;
 	private DialogConfirmPayment dialogConfirmPayment;
+	private DialogMakeVeriCodeAndShowDVMInfo dialogMakeVeriCodeAndShowInfo;
 	private Admin admin;
 	private int clickCounter = 0;
 
@@ -202,11 +203,29 @@ public class Controller extends JDialog {
 		returnBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialogProvideDrink.setVisible(false);
+//				dialogProvideDrink.setVisible(false);
+				dialogProvideDrink.dispose();
+			}
+		});
+	}
+	public void provideDrinkWhenPrePaymentToOtherDVM(String vCode, String dstID)
+	{
+		this.dialogMakeVeriCodeAndShowInfo = new DialogMakeVeriCodeAndShowDVMInfo(this.dvm);
+		this.dialogMakeVeriCodeAndShowInfo.setVisible(true);
+		JButton returnBtn = dialogMakeVeriCodeAndShowInfo.returnBtn;
+
+		returnBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				dialogMakeVeriCodeAndShowInfo.dispose();
 			}
 		});
 
+		dialogMakeVeriCodeAndShowInfo.settingLbl(vCode, dstID);
 	}
+
 	public void confirmPayment(String drinkCode, int drinkNum, int totalPrice) {
 		this.dialogConfirmPayment = new DialogConfirmPayment(this.dvm);
 		dialogConfirmPayment.settingTextArea(choiceDrinkNum, dvm.getDrinkList()[Integer.parseInt(choiceDrinkCode) - 1].getName(), totalPrice);
@@ -218,43 +237,48 @@ public class Controller extends JDialog {
 		okBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (dvm.getCalcDVMInfo()[0].equals("Team3")){ //우리 시스템일 때 내부 계산 후
+				if(dvm.getCard().getBalance() < totalPrice) { // 잔액 확인
+					JOptionPane.showMessageDialog(null, "잔액이 부족합니다!");
 					dialogConfirmPayment.dispose();
+					printOption();
+				} else {
+					if (dvm.getCalcDVMInfo()[0].equals("Team3")) { //우리 시스템일 때 내부 계산 후
+						dialogConfirmPayment.dispose();
 
-					dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
-					System.out.println("---------남은 잔액은 ?----------" + dvm.getCard().getBalance());
-					dialogPrintOption.setVisible(true);
-					if(dvm.purchaseDrink(drinkCode, drinkNum)) {
-						System.out.println(dvm.getCurrentSellDrink().get(choiceDrinkCode).getName() + "의 남은 재고는?" + dvm.getCurrentSellDrink().get(choiceDrinkCode).getStock());
-						provideDrink(true);
+						dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
+						System.out.println("---------남은 잔액은 ?----------" + dvm.getCard().getBalance());
+						dialogPrintOption.setVisible(true);
+						if (dvm.purchaseDrink(drinkCode, drinkNum)) {
+							System.out.println(dvm.getCurrentSellDrink().get(choiceDrinkCode).getName() + "의 남은 재고는?" + dvm.getCurrentSellDrink().get(choiceDrinkCode).getStock());
+							provideDrink(true);
+						}
+					} else if (dvm.getCalcDVMInfo()[0].equals(dvm.getConfirmedDVMList().get(0).getSrcId())) {
+						// 외부 시스템일때 recheckStock
+						dialogConfirmPayment.dispose();
+						dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
+						System.out.println("---------남은 잔액은 ?----------" + dvm.getCard().getBalance());
+						ArrayList<Message> tempList = (ArrayList<Message>) (dvm.getConfirmedDVMList().clone());
+						dvm.getConfirmedDVMList().clear();
+
+						Message msg = tempList.get(0);
+
+						msg.setSrcId(msg.getDstID());
+						msg.setDstID(msg.getSrcId());
+						msg.getMsgDescription().setItemCode(drinkCode);
+						msg.getMsgDescription().setItemNum(drinkNum);
+
+						tempList.clear();
+						tempList.add(msg);
+						dvm.getNetwork().checkOtherDVMStock(tempList); // 실제로 메세지 보냄, 다시 recheck 하는 것
+
+						// 다이얼로그(인증코드, 좌표 보여주는) 추가해야 됨
+						String vCode = dvm.getVerificationCode();
+						dvm.getNetwork().sendSoldDrinkInfo(msg.getSrcId(), msg.getDstID(), vCode); // 선결제 메세지 상대 DVM으로 보냄
+
+						dialogPrintOption.setVisible(true);
+						provideDrinkWhenPrePaymentToOtherDVM(vCode, msg.getDstID()); // 다이얼로그가 안뜨는 현상 발쌩
+//						provideDrink(false);
 					}
-				} else if(dvm.getCalcDVMInfo()[0].equals(dvm.getConfirmedDVMList().get(0).getSrcId())){
-					// 외부 시스템일때 recheckStock
-					dialogConfirmPayment.dispose();
-					dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
-					System.out.println("---------남은 잔액은 ?----------" + dvm.getCard().getBalance());
-					ArrayList<Message> tempList = (ArrayList<Message>) (dvm.getConfirmedDVMList().clone());
-					dvm.getConfirmedDVMList().clear();
-					Message msg = tempList.get(0);
-
-					msg.setSrcId(tempList.get(0).getDstID());
-					msg.setDstID(tempList.get(0).getSrcId());
-					msg.getMsgDescription().setItemCode(drinkCode);
-					msg.getMsgDescription().setItemNum(drinkNum);
-
-					tempList.clear();
-					tempList.add(msg);
-					dvm.getNetwork().checkOtherDVMStock(tempList);
-
-
-
-					// 다이얼로그(인증코드, 좌표 보여주는) 추가해야 됨
-					String vCode = dvm.getVerificationCode();
-					dvm.getNetwork().sendSoldDrinkInfo(msg.getSrcId(), msg.getDstID(), vCode);
-
-
-					dialogPrintOption.setVisible(true);
-					provideDrink(false);
 				}
 			}
 		});

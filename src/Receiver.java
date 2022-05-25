@@ -24,19 +24,6 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 		this.serializer = new Serializer();
 	}
 
-	public void initIP() {
-		ipMap.put("Team1", team1_IP);
-		ipMap.put("Team2", team2_IP);
-		ipMap.put("Team4", team4_IP);
-		ipMap.put("Team5", team5_IP);
-		ipMap.put("Team6", team6_IP);
-	}
-
-	public String getReceiverID() {
-		// TODO implement here
-		return "";
-	}
-
 	public int responseStockConfirmMsg(Message msg) { // 재고 응답
 		dvm.getConfirmedDVMList().add(msg);
 		return 0;

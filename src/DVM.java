@@ -167,7 +167,7 @@ public class DVM {
 	}
 
 	private void basicSetting(){
-		this.drinkList[0] = new Drink("콜라", 900, 7, "01");
+		this.drinkList[0] = new Drink("콜라", 900, 999, "01");
 		this.drinkList[1] = new Drink("사이다", 1000, 2, "02");
 		this.drinkList[2] = new Drink("녹차", 800, 8, "03");
 		this.drinkList[3] = new Drink("홍차", 700, 7, "04");
