@@ -103,9 +103,9 @@ public class DVM {
 			calcDVMInfo[2] = String.valueOf(minY);
 		}
 		// 계산 끝
-		if(this.confirmedDVMList != null) {
-			this.confirmedDVMList.clear();
-		}
+//		if(this.confirmedDVMList != null) {
+//			this.confirmedDVMList.clear();
+//		}
 	}
 
 	public ArrayList<Message> getConfirmedDVMList() {
