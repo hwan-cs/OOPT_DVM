@@ -28,6 +28,8 @@ public class DVM
 	private Message[] message;
 	private int choiceDrinkNum = 0;
 	private String choiceDrinkCode = "00";
+	
+	private static DVM dvm = new DVM();
 
 	public int getDvm3X()
 	{
@@ -93,18 +95,26 @@ public class DVM
 	{
 		this.network = new Network(this.choiceDrinkCode, this.choiceDrinkNum);
 	}
+	
 	public Network getNetwork() 
 	{
 		return this.network;
 	}
 
-	public DVM() 
+	//make the constructor private so that this class cannot be
+	//instantiated
+	private DVM() 
 	{
 		this.id = "03"; //임의로 설정
 		this.address = "DVM3";  //임의로 설정
 		basicSetting();
 	}
 
+	public static DVM getInstance()
+	{
+		return dvm;
+	}
+	
 	public void setState(int state) 
 	{
 		this.state = state;
@@ -150,6 +160,31 @@ public class DVM
 		this.drinkList = drinkList;
 	}
 
+	public void start()
+	{
+        ServerThreadTest serverThreadTest = new ServerThreadTest();
+//      ClientThreadTest clientThreadTest = new ClientThreadTest();
+        serverThreadTest.start();
+
+      	Receiver receiver = new Receiver(dvm); //객체 생성
+      	Boolean networkConnect = true;  //임시로 일단 true라고 설정했습니다.
+      
+        Admin admin = new Admin(networkConnect, dvm);    //admin에서 system start()
+        Message msg = new Message();
+        Message.MessageDescription msgDesc = new Message.MessageDescription();
+        
+        msgDesc.setItemCode("This is ItemCode");
+        msgDesc.setItemNum(208051);
+        msgDesc.setDvmXCoord(139);
+        msgDesc.setDvmYCoord(202);
+        msgDesc.setAuthCode("This is AuthCode");
+
+        msg.setSrcId("dvm3");
+        msg.setDstID("hwisik");
+        msg.setMsgType("Check, Is it working?");
+        msg.setMsgDescription(msgDesc);
+	}
+	
 	public void calcClosestDVMLoc() 
 	{ // getConfirmedDVMList()로 얻은 return 값을 전달함.
 //		calcDVMInfo = new String[3];
