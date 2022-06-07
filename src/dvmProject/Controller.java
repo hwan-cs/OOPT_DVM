@@ -27,7 +27,8 @@ public class Controller extends JDialog
 
 	private DialogVerificationCode dialogVerificationCode;
 	private DialogOption dialogPrintOption;
-	private DialogClosestDVM DialogClosestDVM;
+	//dialogClosestDVM -> dialogClosestDVM
+	private DialogClosestDVM dialogClosestDVM;
 	private DialogPrintMenu dialogPrintMenu;
 	private DialogProvideDrink dialogProvideDrink;
 	private DialogConfirmPayment dialogConfirmPayment;
@@ -39,14 +40,15 @@ public class Controller extends JDialog
 	{
 		this.dvm = dvm;
 		//임시로 일단 dvm
-		this.DialogClosestDVM = new DialogClosestDVM(this.dvm);
+		this.dialogClosestDVM = new DialogClosestDVM(this.dvm);
 		this.admin = admin;
+		//PMD 빨간색 -> Overridable method called during object construction
+		//웬만해선 constructor 안에서 메소드 호출 하지 말아라
 		printOption();
 	}
 
 	public void printMenu() 
 	{
-		//인교 조교님 물어봤을때 
 		this.dialogPrintOption.setVisible(false);
 		this.dialogPrintMenu = new DialogPrintMenu(this.dvm);
 		dialogPrintMenu.setLocationRelativeTo(null);
@@ -94,7 +96,7 @@ public class Controller extends JDialog
 							dvm.getNetwork().checkOtherDVMStock(tempList);
 							this.wait(500);
 							dvm.calcClosestDVMLoc(); // 계산헀음
-							DialogClosestDVM.refresh(); // 리프레쉬
+							dialogClosestDVM.refresh(); // 리프레쉬
 							dialogPrintMenu.dispose();
 							printClosestDVMInfo();
 						} 
@@ -107,7 +109,7 @@ public class Controller extends JDialog
 									if(dvm.checkOurDVMStock(choiceDrinkCode, choiceDrinkNum))
 									{
 										dvm.calcClosestDVMLoc(); // 계산헀음
-										DialogClosestDVM.refresh(); // 리프레쉬
+										dialogClosestDVM.refresh(); // 리프레쉬
 										dialogPrintMenu.dispose();
 										printClosestDVMInfo();
 									}
@@ -121,7 +123,7 @@ public class Controller extends JDialog
 									choiceDrinkNum = dvm.getChoiceDrinkNum();
 									choiceDrinkCode = dvm.getChoiceDrinkCode();
 									dvm.calcClosestDVMLoc(); // 계산헀음
-									DialogClosestDVM.refresh(); // 리프레쉬
+									dialogClosestDVM.refresh(); // 리프레쉬
 									dialogPrintMenu.dispose();
 									printClosestDVMInfo();
 								}
@@ -172,8 +174,8 @@ public class Controller extends JDialog
 
 	public void printClosestDVMInfo() 
 	{
-		this.DialogClosestDVM = new DialogClosestDVM(this.dvm);
-		this.DialogClosestDVM.setLocationRelativeTo(null);
+		this.dialogClosestDVM = new DialogClosestDVM(this.dvm);
+		this.dialogClosestDVM.setLocationRelativeTo(null);
 		if(dvm.getCalcDVMInfo()[0].equals("")) 
 		{
 			JOptionPane.showMessageDialog(dialogPrintMenu, "음료가 있는 DVM이 존재하지 않습니다.", "Error", JOptionPane.INFORMATION_MESSAGE);
@@ -185,14 +187,14 @@ public class Controller extends JDialog
 				totalPrice = dvm.getDrinkList()[Integer.parseInt(this.choiceDrinkCode)-1].getPrice() * this.choiceDrinkNum;
 			else
 				totalPrice = dvm.getCurrentSellDrink().get(this.choiceDrinkCode).getPrice() * this.choiceDrinkNum;
-			DialogClosestDVM.setVisible(true);
-			JButton printClosetDVMInfoConfirmBtn = DialogClosestDVM.getDialogClosestDVMConfirmBtn();
+			dialogClosestDVM.setVisible(true);
+			JButton printClosetDVMInfoConfirmBtn = dialogClosestDVM.getDialogClosestDVMConfirmBtn();
 			printClosetDVMInfoConfirmBtn.addActionListener(new ActionListener() 
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
-					DialogClosestDVM.dispose();
+					dialogClosestDVM.dispose();
 					confirmPayment(choiceDrinkCode, choiceDrinkNum, totalPrice);
 				}
 			});
@@ -232,6 +234,7 @@ public class Controller extends JDialog
 		});
 		
 		dialogMakeVeriCodeAndShowInfo.settingLbl(vCode, dstID);
+		dialogMakeVeriCodeAndShowInfo.setVisible(true);
 	}
 	
 	// 이건 상대방이 우리 DVM에다가 선결제 했을떄  죠???? 그니까 우리 DVM에서 인증코드를 입력할때
@@ -287,26 +290,26 @@ public class Controller extends JDialog
 					//외부 시스템일때 recheckStock
 					dialogConfirmPayment.dispose();
 					dvm.getCard().setBalance(dvm.getDrinkList()[Integer.parseInt(drinkCode) - 1].getPrice() * drinkNum);
-					System.out.println("---------남은 잔액은 ?----------" + dvm.getCard().getBalance());
-					ArrayList<Message> tempList = (ArrayList<Message>) (dvm.getConfirmedDVMList().clone());
-					dvm.getConfirmedDVMList().clear();
-					Message msg = tempList.get(0);
-
-					msg.setSrcId(tempList.get(0).getDstID());
-					msg.setDstID(tempList.get(0).getSrcId());
-					msg.getMsgDescription().setItemCode(drinkCode);
-					msg.getMsgDescription().setItemNum(drinkNum);
-
-					tempList.clear();
-					tempList.add(msg);
-					dvm.getNetwork().checkOtherDVMStock(tempList);
-
-					// 다이얼로그(인증코드, 좌표 보여주는) 추가해야 됨
-					String vCode = dvm.getVerificationCode();
-					dvm.getNetwork().sendSoldDrinkInfo(msg.getSrcId(), msg.getDstID(), vCode);
+//					System.out.println("---------남은 잔액은 ?----------" + dvm.getCard().getBalance());
+//					ArrayList<Message> tempList = (ArrayList<Message>) (dvm.getConfirmedDVMList().clone());
+//					dvm.getConfirmedDVMList().clear();
+//					Message msg = tempList.get(0);
+//
+//					msg.setSrcId(tempList.get(0).getDstID());
+//					msg.setDstID(tempList.get(0).getSrcId());
+//					msg.getMsgDescription().setItemCode(drinkCode);
+//					msg.getMsgDescription().setItemNum(drinkNum);
+//
+//					tempList.clear();
+//					tempList.add(msg);
+//					dvm.getNetwork().checkOtherDVMStock(tempList);
+//
+//					// 다이얼로그(인증코드, 좌표 보여주는) 추가해야 됨
+					String vCode = "aaaaaaaaaa";
+//					dvm.getNetwork().sendSoldDrinkInfo(msg.getSrcId(), msg.getDstID(), vCode);
 
 					dialogPrintOption.setVisible(true);
-					provideDrinkWhenPrePaymentToOtherDVM(vCode, msg.getDstID());
+					provideDrinkWhenPrePaymentToOtherDVM(vCode, "VM_06");
 				}
 			}
 		});

@@ -17,6 +17,8 @@ public class DialogOption extends JFrame
         this.printMenuBtn = new JButton("메뉴 출력");
         this.verificationCodeInpBtn = new JButton("인증 코드 입력");
         this.optionPanel = new JPanel();
+		//PMD 빨간색 -> Overridable method called during object construction
+		//웬만해선 constructor 안에서 메소드 호출 하지 말아라
         initLayout();
     }
 

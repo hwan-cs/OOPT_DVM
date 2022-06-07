@@ -9,20 +9,20 @@ public class DialogConfirmPayment extends JDialog
     JPanel confirmPaymentPanel;
     JButton yesBtn;
     JButton noBtn;
-    JLabel NoticeLbl;
+    JLabel noticeLbl;
 
     public DialogConfirmPayment(DVM dvm)
     {
         this.dvm = dvm;
         this.yesBtn = new JButton("YES");
         this.noBtn = new JButton("NO");
-        this.NoticeLbl = new JLabel("");
+        this.noticeLbl = new JLabel("");
         this.confirmPaymentPanel = new JPanel();
     }
 
     public void settingTextArea(int choiceNum, String choiceDrinkName, int totalPrice)
     {
-    	NoticeLbl.setText("<html>Are you sure you want to purchase <br/>"+ choiceNum + " " + choiceDrinkName+"?<br/>결제 금액: "+totalPrice+"원</html>");
+    	noticeLbl.setText("<html>Are you sure you want to purchase <br/>"+ choiceNum + " " + choiceDrinkName+"?<br/>결제 금액: "+totalPrice+"원</html>");
         initLayout();
     }
 
@@ -37,8 +37,8 @@ public class DialogConfirmPayment extends JDialog
     {
     	getContentPane().setLayout(null);
         setSize(300, 400);
-    	NoticeLbl.setBounds(10, 20, getWidth()-20, 50);
-    	NoticeLbl.setHorizontalAlignment(SwingConstants.CENTER);
+    	noticeLbl.setBounds(10, 20, getWidth()-20, 50);
+    	noticeLbl.setHorizontalAlignment(SwingConstants.CENTER);
     	yesBtn.setBounds(30,100, getWidth()/2-40, 50);
     	noBtn.setBounds(160,100, getWidth()/2-40, 50);
 //        add(confirmPaymentPanel);
@@ -46,7 +46,7 @@ public class DialogConfirmPayment extends JDialog
     
     public void attach()
     {
-    	getContentPane().add(NoticeLbl);
+    	getContentPane().add(noticeLbl);
     	getContentPane().add(yesBtn);
     	getContentPane().add(noBtn);
     }

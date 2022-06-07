@@ -22,6 +22,8 @@ public class DialogPaymentConfirmation extends JDialog
         this.okBtn = new JButton("예");
         this.noBtn = new JButton("아니오");
 
+		//PMD 빨간색 -> Overridable method called during object construction
+		//웬만해선 constructor 안에서 메소드 호출 하지 말아라
         initOther();
         initLayout();
     }

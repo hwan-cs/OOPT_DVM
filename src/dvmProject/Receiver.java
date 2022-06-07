@@ -65,8 +65,8 @@ public class Receiver extends Thread
 
 	public void handleStockCheckRequestAndSend(Message msg) 
 	{
-		String src_id = msg.getSrcId(); // 상대 DVM
-		String dst_id = msg.getDstID(); // 우리 DVM
+		String srcId = msg.getSrcId(); // 상대 DVM
+		String dstId = msg.getDstID(); // 우리 DVM
 		int myX = dvm.getDvm3X();
 		int myY = dvm.getDvm3Y();
 		String drinkCode = msg.getMsgDescription().getItemCode();
@@ -82,7 +82,7 @@ public class Receiver extends Thread
 			sendToMsgDesc.setDvmYCoord(myY);
 			// msgDesc 클래스에 setDstID 없음.. 호출 불가
 
-			msgSetting(sendToMsg, dst_id, src_id, "StockCheckResponse", sendToMsgDesc);
+			msgSetting(sendToMsg, dstId, srcId, "StockCheckResponse", sendToMsgDesc);
 
 			// 메세지를 json 타입으로 변환
 			String msgToJson = serializer.message2Json(sendToMsg);
@@ -103,8 +103,8 @@ public class Receiver extends Thread
 	}
 	public void handleSaleCheckRequestAndSend(Message msg) 
 	{
-		String src_id = msg.getSrcId(); // 상대 DVM
-		String dst_id = msg.getDstID(); // 우리 DVM
+		String srcId = msg.getSrcId(); // 상대 DVM
+		String dstId = msg.getDstID(); // 우리 DVM
 		int myX = dvm.getDvm3X();
 		int myY = dvm.getDvm3Y();
 		String drinkCode = msg.getMsgDescription().getItemCode();
@@ -119,7 +119,7 @@ public class Receiver extends Thread
 			sendToMsgDesc.setDvmYCoord(myY);
 			// msgDesc 클래스에 setDstID 없음.. 호출 불가
 
-			msgSetting(sendToMsg, dst_id, src_id, "SalesCheckResponse", sendToMsgDesc);
+			msgSetting(sendToMsg, dstId, srcId, "SalesCheckResponse", sendToMsgDesc);
 
 			// 메세지를 json 타입으로 변환
 			String msgToJson = serializer.message2Json(sendToMsg);

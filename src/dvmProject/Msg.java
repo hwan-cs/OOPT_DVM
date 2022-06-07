@@ -5,8 +5,8 @@ import java.util.*;
 public class Msg 
 {
 
-	public String src_id;
-	public String dst_id;
+	public String srcId;
+	public String dstId;
 	public String msgType;
 	public String msgDesc;
 	public String drinkCode;
@@ -18,32 +18,33 @@ public class Msg
 	// 음료 판매하는지 확인 : 음료코드_음료개수 => BroadCast
 	// 음료 판매하는지 응답 : 음료코드_dstId_dst좌표 => dst > src
 
-	public Msg(String src_id, String dst_id, String msgType, String msgDesc) 
+	//PMD 빨간색
+	public Msg(String srcId, String dstId, String msgType, String msgDesc) 
 	{
-		this.src_id = src_id;
-		this.dst_id = dst_id;
+		this.srcId = srcId;
+		this.dstId = dstId;
 		this.msgType = msgType;
 		this.msgDesc = msgDesc;
 	}
 
 	public String getSrcID() 
 	{
-		return this.src_id;
+		return this.srcId;
 	}
 
-	public void setSrcID(String src_id) 
+	public void setSrcID(String srcId) 
 	{
-		this.src_id = src_id;
+		this.srcId = srcId;
 	}
 
 	public String getDstID() 
 	{
-		return this.dst_id;
+		return this.dstId;
 	}
 
-	public void setDstID(String dst_id) 
+	public void setDstID(String dstId) 
 	{
-		this.dst_id = dst_id;
+		this.dstId = dstId;
 	}
 
 	public String getMsgType() 

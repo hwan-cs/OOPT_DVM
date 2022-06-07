@@ -55,6 +55,8 @@ public class DialogClosestDVM extends JDialog
         getContentPane().setLayout(null);
         
         attach();
+		//PMD 빨간색 -> Overridable method called during object construction
+		//웬만해선 constructor 안에서 메소드 호출 하지 말아라
         refresh();
     }
     

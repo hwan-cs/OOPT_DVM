@@ -44,6 +44,8 @@ public class DialogPrintMenu extends JDialog
         this.enterDrinkCodeLbl = new JLabel("번호: ");
         this.enterDrinkNumLbl = new JLabel("개수:");
         this.scrollPane = new JScrollPane();
+		//PMD 빨간색 -> Overridable method called during object construction
+		//웬만해선 constructor 안에서 메소드 호출 하지 말아라
         init();
         createButtonAndText();
         attachBtnAndText();

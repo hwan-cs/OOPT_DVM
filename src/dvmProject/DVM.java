@@ -18,6 +18,7 @@ public class DVM
 	private Drink[] drinkList = new Drink[20];	//전체 판매 리스트
 	private HashMap<String, Drink> currentSellDrink = new HashMap<String, Drink>(7);
 	private OtherDVMReceiveCode otherDVMReceiveCode;	// 외부 DVM으로 부터 온 verification code 하나씩 확인 한후 및 해시맵에 풋한다.
+	//PMD 빨간색 -> 변수 이름 소문자로 시작해
 	private HashMap<String, Message> ODRCHashMap;	//외부 DVM으로 부터 온 verification code 확인 작업
 	private Network network;
 	private String createdCode;
@@ -52,7 +53,7 @@ public class DVM
 	{
 		return ODRCHashMap;
 	}
-
+	
 	public void setODRCHashMap(HashMap<String, Message> ODRCHashMap) 
 	{
 		this.ODRCHashMap = ODRCHashMap;
@@ -119,10 +120,11 @@ public class DVM
 		this.id = id;
 	}
 
+	//PMD 빨간색 -> null 리턴하지 말아라
 	public int[] getAddress() 
 	{
 		// TODO implement here
-		return null;
+		return new int[2];
 	}
 
 	public void setAddress(int[] address) 
@@ -131,10 +133,11 @@ public class DVM
 
 	}
 
+	//PMD 빨간색 -> null 리턴하지 말아라
 	public int[] getLocation() 
 	{
 		// TODO implement here
-		return null;
+		return new int[2];
 	}
 
 	public Drink[] getDrinkList() 
