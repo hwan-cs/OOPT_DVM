@@ -15,14 +15,14 @@ public class DVM
 	private String id;
 	private int state;
 	private String address; // address가 String 타입? int[] 타입이어야 하는거 아닌가?
-	private Drink[] drinkList = new Drink[20];	//전체 판매 리스트
+	private Drink[] entireDrinkList = new Drink[20];	//전체 판매 리스트
 	private HashMap<String, Drink> currentSellDrink = new HashMap<String, Drink>(7);
 	private OtherDVMReceiveCode otherDVMReceiveCode;	// 외부 DVM으로 부터 온 verification code 하나씩 확인 한후 및 해시맵에 풋한다.
 	//PMD 빨간색 -> 변수 이름 소문자로 시작해
-	private HashMap<String, Message> ODRCHashMap;	//외부 DVM으로 부터 온 verification code 확인 작업
+	private HashMap<String, Message> receivedVerifyCodeMap;	//외부 DVM으로 부터 온 verification code 확인 작업
 	private Network network;
 	private String createdCode;
-	private String[] calcDVMInfo = new String[3];// = new String[]{"03", String.valueOf(dvm3X), String.valueOf(dvm3Y)};	//[id, x좌표, y좌표] -> 확인된 dvm 변수에서 거리를 계산한 후 저장하는 변수
+	private String[] calculatedDVMInfo = new String[3];// = new String[]{"03", String.valueOf(dvm3X), String.valueOf(dvm3Y)};	//[id, x좌표, y좌표] -> 확인된 dvm 변수에서 거리를 계산한 후 저장하는 변수
 	private ArrayList<Message> confirmedDVMList;	//[[id1, x, y], [id2, x, y], [id3, x, y] ,,,,,] -> 확인된 dvm이 저장되는 변수
 	private int[] finalDVMLoc; // 최종적으로 최단거리에 있는 DVM의 위치를 담고있는 변수
 	private Message[] message;
@@ -51,14 +51,14 @@ public class DVM
 		this.dvm3Y = dvm3Y;
 	}
 
-	public HashMap<String, Message> getODRCHashMap() 
+	public HashMap<String, Message> getreceivedVerifyCodeMap() 
 	{
-		return ODRCHashMap;
+		return receivedVerifyCodeMap;
 	}
 	
 	public void setODRCHashMap(HashMap<String, Message> ODRCHashMap) 
 	{
-		this.ODRCHashMap = ODRCHashMap;
+		this.receivedVerifyCodeMap = ODRCHashMap;
 	}
 
 	public String getChoiceDrinkCode() 
@@ -81,14 +81,14 @@ public class DVM
 		this.choiceDrinkNum = choiceDrinkNum;
 	}
 
-	public String[] getCalcDVMInfo() 
+	public String[] getCalculatedDVMInfo() 
 	{
-		return this.calcDVMInfo;
+		return this.calculatedDVMInfo;
 	}
 
 	public void setCalcDVMInfo(String[] calcDVMInfo) 
 	{
-		this.calcDVMInfo = calcDVMInfo;
+		this.calculatedDVMInfo = calcDVMInfo;
 	}
 
 	public void createNetwork() 
@@ -150,14 +150,14 @@ public class DVM
 		return new int[2];
 	}
 
-	public Drink[] getDrinkList() 
+	public Drink[] getEntireDrinkList() 
 	{
-		return this.drinkList;
+		return this.entireDrinkList;
 	}
 
-	public void setDrinkList(Drink[] drinkList) 
+	public void setentireDrinkList(Drink[] entireDrinkList) 
 	{
-		this.drinkList = drinkList;
+		this.entireDrinkList = entireDrinkList;
 	}
 
 	public void start()
@@ -191,18 +191,18 @@ public class DVM
 		// 계산 시작
 		if(checkOurDVMStock(this.choiceDrinkCode, this.choiceDrinkNum)) 
 		{ // true면 선택한 음료 개수보다 우리DVM의 재고가 더 많음
-			calcDVMInfo[0] = id;
-			calcDVMInfo[1] = String.valueOf(dvm3X);
-			calcDVMInfo[2] = String.valueOf(dvm3Y);
+			calculatedDVMInfo[0] = id;
+			calculatedDVMInfo[1] = String.valueOf(dvm3X);
+			calculatedDVMInfo[2] = String.valueOf(dvm3Y);
 			// return calcDVMInfo;
 		} 
 		else 
 		{ // 외부 DVM
-			calcDVMInfo[0] = "VM_06";
-			calcDVMInfo[1] = "37";
-			calcDVMInfo[2] = "37";
+			calculatedDVMInfo[0] = "VM_06";
+			calculatedDVMInfo[1] = "37";
+			calculatedDVMInfo[2] = "37";
 			
-			int min = Integer.MAX_VALUE;
+			int minDistance = Integer.MAX_VALUE;
 			String srcId = "";
 			int minX = 0, minY = 0;
 			if(this.confirmedDVMList != null) 
@@ -216,7 +216,7 @@ public class DVM
 						int y = msg.getMsgDescription().getDvmYCoord();
 						// 거리
 						double d = Math.sqrt((int) Math.pow(dvm3X - x, 2) + (int) Math.pow(dvm3Y - y, 2));
-						if (min > d) 
+						if (minDistance > d) 
 						{
 							srcId = msg.getSrcId();
 							minX = x;
@@ -225,9 +225,9 @@ public class DVM
 					}
 				}
 			}
-//			calcDVMInfo[0] = srcId;
-//			calcDVMInfo[1] = String.valueOf(minX);
-//			calcDVMInfo[2] = String.valueOf(minY);
+			calculatedDVMInfo[0] = srcId;
+			calculatedDVMInfo[1] = String.valueOf(minX);
+			calculatedDVMInfo[2] = String.valueOf(minY);
 		}
 		// 계산 끝
 		if(this.confirmedDVMList != null) 
@@ -249,7 +249,7 @@ public class DVM
 
 	public boolean recheckStock(Message msg) 
 	{
-		// 인자로 전달받은 msg를 해독 -> 음료코드&음료개수 얻을 수 있음 -> 얻은 정보를 바탕으로 drinkList
+		// 인자로 전달받은 msg를 해독 -> 음료코드&음료개수 얻을 수 있음 -> 얻은 정보를 바탕으로 entireDrinkList
 		return false;
 	}
 
@@ -294,7 +294,7 @@ public class DVM
 		/* 잘못 생각함
 		// for문으로 모든 drink를 돌아서 효율성 떨어짐.
 		// 메뉴에서 음료 버튼을 누르면 그 메뉴의 음료 코드가 drinkCode 매개변수로 전달되서
-		// 일일히 for문으로 drinkCode 일치하는 걸 찾지 않게 하는게 더 나아보임. -> drinkList랑 currentSellDrink 헷갈림 ---> 무시!
+		// 일일히 for문으로 drinkCode 일치하는 걸 찾지 않게 하는게 더 나아보임. -> entireDrinkList랑 currentSellDrink 헷갈림 ---> 무시!
 		*/
 		Drink currDrink = this.currentSellDrink.get(drinkCode);
 		currDrink.setStock(drinkNum);
@@ -304,48 +304,51 @@ public class DVM
 	public boolean checkVerificationCode(String verifyCode) 
 	{
 		// TODO implement here
-		if(this.createdCode == verifyCode)
+		if(this.receivedVerifyCodeMap.get(verifyCode) != null)
 			return true;
-		if(verifyCode.equals("aaaaaaaaaa"))
-		{
-			setChoiceDrinkNum(5);
-			setChoiceDrinkCode("05");
-			return true;
-		}
+		
+//		if(this.createdCode == verifyCode)
+//			return true;
+//		if(verifyCode.equals("aaaaaaaaaa"))
+//		{
+//			setChoiceDrinkNum(5);
+//			setChoiceDrinkCode("05");
+//			return true;
+//		}
 		return false;
 	}
 
 	private void basicSetting()
 	{
-		this.drinkList[0] = new Drink("콜라", 900, 7, "01");
-		this.drinkList[1] = new Drink("사이다", 1000, 2, "02");
-		this.drinkList[2] = new Drink("녹차", 800, 8, "03");
-		this.drinkList[3] = new Drink("홍차", 700, 7, "04");
-		this.drinkList[4] = new Drink("밀크티", 1100, 7, "05");
-		this.drinkList[5] = new Drink("탄산수", 1200, 7, "06");
-		this.drinkList[6] = new Drink("보리차", 1300, 7, "07");
-		this.drinkList[7] = new Drink("캔커피", 1400, 0, "08");
-		this.drinkList[8] = new Drink("물", 2300, 0, "09");
-		this.drinkList[9] = new Drink("에너지드링크", 1500, 0, "10");
-		this.drinkList[10] = new Drink("바닷물", 1200, 0, "11");
-		this.drinkList[11] = new Drink("식혜", 1200, 0, "12");
-		this.drinkList[12] = new Drink("아이스티", 1500, 0, "13");
-		this.drinkList[13] = new Drink("딸기주스", 1700, 0, "14");
-		this.drinkList[14] = new Drink("오렌지주스", 2000, 0, "15");
-		this.drinkList[15] = new Drink("포도주스", 2100, 0, "16");
-		this.drinkList[16] = new Drink("이온음료", 3100, 0, "17");
-		this.drinkList[17] = new Drink("아메리카노", 4500, 0, "18");
-		this.drinkList[18] = new Drink("핫초코", 4500, 0, "19");
-		this.drinkList[19] = new Drink("카페라떼", 5000, 0, "20");
+		this.entireDrinkList[0] = new Drink("콜라", 900, 7, "01");
+		this.entireDrinkList[1] = new Drink("사이다", 1000, 2, "02");
+		this.entireDrinkList[2] = new Drink("녹차", 800, 8, "03");
+		this.entireDrinkList[3] = new Drink("홍차", 700, 7, "04");
+		this.entireDrinkList[4] = new Drink("밀크티", 1100, 7, "05");
+		this.entireDrinkList[5] = new Drink("탄산수", 1200, 7, "06");
+		this.entireDrinkList[6] = new Drink("보리차", 1300, 7, "07");
+		this.entireDrinkList[7] = new Drink("캔커피", 1400, 0, "08");
+		this.entireDrinkList[8] = new Drink("물", 2300, 0, "09");
+		this.entireDrinkList[9] = new Drink("에너지드링크", 1500, 0, "10");
+		this.entireDrinkList[10] = new Drink("바닷물", 1200, 0, "11");
+		this.entireDrinkList[11] = new Drink("식혜", 1200, 0, "12");
+		this.entireDrinkList[12] = new Drink("아이스티", 1500, 0, "13");
+		this.entireDrinkList[13] = new Drink("딸기주스", 1700, 0, "14");
+		this.entireDrinkList[14] = new Drink("오렌지주스", 2000, 0, "15");
+		this.entireDrinkList[15] = new Drink("포도주스", 2100, 0, "16");
+		this.entireDrinkList[16] = new Drink("이온음료", 3100, 0, "17");
+		this.entireDrinkList[17] = new Drink("아메리카노", 4500, 0, "18");
+		this.entireDrinkList[18] = new Drink("핫초코", 4500, 0, "19");
+		this.entireDrinkList[19] = new Drink("카페라떼", 5000, 0, "20");
 
 		//현재 판매 목록
-		currentSellDrink.put("01", this.drinkList[0]);
-		currentSellDrink.put("02", this.drinkList[1]);
-		currentSellDrink.put("03", this.drinkList[2]);
-		currentSellDrink.put("04", this.drinkList[3]);
-		currentSellDrink.put("05", this.drinkList[4]);
-		currentSellDrink.put("06", this.drinkList[5]);
-		currentSellDrink.put("07", this.drinkList[6]);
+		currentSellDrink.put("01", this.entireDrinkList[0]);
+		currentSellDrink.put("02", this.entireDrinkList[1]);
+		currentSellDrink.put("03", this.entireDrinkList[2]);
+		currentSellDrink.put("04", this.entireDrinkList[3]);
+		currentSellDrink.put("05", this.entireDrinkList[4]);
+		currentSellDrink.put("06", this.entireDrinkList[5]);
+		currentSellDrink.put("07", this.entireDrinkList[6]);
 	}
 
 	public HashMap<String, Drink> getCurrentSellDrink() 

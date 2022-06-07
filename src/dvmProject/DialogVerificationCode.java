@@ -10,7 +10,7 @@ public class DialogVerificationCode extends JDialog
     private JPanel verifyPanel;
     private JButton okButton;
     private JLabel titleLabel;
-    private JTextField jtf;
+    private JTextField verifyCodeField;
 
     public DialogVerificationCode(DVM dvm) 
     {
@@ -26,10 +26,10 @@ public class DialogVerificationCode extends JDialog
 //        verifyPanel = new JPanel();
         titleLabel = new JLabel("인증코드 입력: ");
         okButton = new JButton("확인");
-        jtf = new JTextField(10);
+        verifyCodeField = new JTextField(10);
 
-        jtf.setBounds(150, 100, 100, 20);
-        jtf.setForeground(Color.BLACK);
+        verifyCodeField.setBounds(150, 100, 100, 20);
+        verifyCodeField.setForeground(Color.BLACK);
 
         titleLabel.setSize(80, 80);
         titleLabel.setLocation(70, 70);
@@ -37,7 +37,7 @@ public class DialogVerificationCode extends JDialog
         verifyPanel.setLayout(null);
         verifyPanel.setSize(150, 150);
         verifyPanel.add(titleLabel, BorderLayout.WEST);
-        verifyPanel.add(jtf, BorderLayout.EAST);
+        verifyPanel.add(verifyCodeField, BorderLayout.EAST);
 
         add(verifyPanel, BorderLayout.CENTER);
         add(okButton, BorderLayout.SOUTH);
@@ -50,12 +50,12 @@ public class DialogVerificationCode extends JDialog
 
     public String getVerifyCodeField() 
     {
-        return this.jtf.getText().toString();
+        return this.verifyCodeField.getText().toString();
     }
 
     public void setVerifyCodeField(String text) 
     {
-        this.jtf.setText(text);
+        this.verifyCodeField.setText(text);
     }
 
     public JButton getOkButton() 

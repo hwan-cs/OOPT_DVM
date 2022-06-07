@@ -34,7 +34,7 @@ public class DialogPrintMenu extends JDialog
     public DialogPrintMenu(DVM dvm)
     {
         this.dvm = dvm;
-        this.drinkListlength = dvm.getDrinkList().length;
+        this.drinkListlength = dvm.getEntireDrinkList().length;
         this.printMenuPanel = new JPanel();
         this.item = new JLabel[20];
 //        this.drinkBtns = new JButton[this.drinkListlength];
@@ -186,9 +186,9 @@ public class DialogPrintMenu extends JDialog
         for(int i = 0; i < item.length; i++) 
         {
             item[i] = new JLabel("<html>음료코드: "+Integer.toString(counter)+"<br/>"+
-                    dvm.getDrinkList()[counter-1].getPrice()+"원</html>", SwingConstants.CENTER); // 아이템 - "음료코드 : #, #원"
+                    dvm.getEntireDrinkList()[counter-1].getPrice()+"원</html>", SwingConstants.CENTER); // 아이템 - "음료코드 : #, #원"
             item[i].setHorizontalAlignment(SwingConstants.CENTER); // 음료 정렬
-            TitledBorder border = BorderFactory.createTitledBorder(dvm.getDrinkList()[counter-1].getName()); // 제목 보더
+            TitledBorder border = BorderFactory.createTitledBorder(dvm.getEntireDrinkList()[counter-1].getName()); // 제목 보더
             item[i].setName(Integer.toString(counter)); // 아이템 이름 설정
             item[i].setHorizontalTextPosition(SwingConstants.CENTER); // 아이템의 텍스트 위치 수평정렬
             item[i].setVerticalTextPosition(SwingConstants.BOTTOM); // 아이템의 텍스트 위치 수직정렬
@@ -240,7 +240,7 @@ public class DialogPrintMenu extends JDialog
             public void mouseClicked(MouseEvent e) 
             {
                 enterDrinkCodeTF.setText(item[i].getName()); // 음료 코드 텍스트 필드에 음료 코드 설정
-                String dCode = dvm.getDrinkList()[i].getDrinkCode();
+                String dCode = dvm.getEntireDrinkList()[i].getDrinkCode();
                 //예외처리 해야됨
                 if (choiceDrinkCode.equals(dCode)) 
                 {
