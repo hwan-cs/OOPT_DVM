@@ -9,13 +9,13 @@ public class Network {
 	private String choiceDrinkCode;
 	private int choiceDrinkNum;
 	private Serializer serializer;
-	private static final String team3IP = "localhost";
+	private static final String TEAM3IP = "localhost";
 	/* IP 수정 필요 */
-	private static final String team1_IP = "";
-	private static final String team2_IP = "";
-	private static final String team4_IP = "";
-	private static final String team5_IP = "";
-	private static final String team6_IP = "";
+	private static final String TEAM1IP = "";
+	private static final String TEAM2IP = "";
+	private static final String TEAM4IP = "";
+	private static final String TEAM5IP = "";
+	private static final String TEAM6IP = "";
 
 	private static HashMap<String, String> ipMap = new HashMap<>();
 
@@ -25,13 +25,15 @@ public class Network {
 		this.serializer = new Serializer();
 		initIP();
 	}
+
 	public void initIP() {
-		ipMap.put("Team1", team1_IP);
-		ipMap.put("Team2", team2_IP);
-		ipMap.put("Team4", team4_IP);
-		ipMap.put("Team5", team5_IP);
-		ipMap.put("Team6", team6_IP);
+		ipMap.put("Team1", TEAM1IP);
+		ipMap.put("Team2", TEAM2IP);
+		ipMap.put("Team4", TEAM4IP);
+		ipMap.put("Team5", TEAM5IP);
+		ipMap.put("Team6", TEAM6IP);
 	}
+
 	public void sendBroadcastMsg(String IP, Message msg) {
 		DVMClient dvmClient = new DVMClient(IP, serializer.message2Json(msg));
 		try {
@@ -62,8 +64,7 @@ public class Network {
 		msgSetting(msg6, "Team3", "Team6", "SalesCheckRequest", msgDesc);
 
 		// 작동하는지 확인하기 위한 임시 코드!
-		sendBroadcastMsg(team3IP, msg1);
-
+		sendBroadcastMsg(TEAM3IP, msg1);
 		// IP 인자 수정 필요!
 //		sendBroadcastMsg(ipMap.get(msg1.getDstID()), msg1); // Team1
 //		sendBroadcastMsg(ipMap.get(msg2.getDstID()), msg2); // Team2
@@ -72,17 +73,17 @@ public class Network {
 //		sendBroadcastMsg(ipMap.get(msg6.getDstID()), msg6); // Team6
 	}
 
-	private void msgSetting(Message sendToOtherMsg, String srcID, String dstID, String msgType, Message.MessageDescription msgDesc){
-		sendToOtherMsg.setSrcId(srcID);
-		sendToOtherMsg.setDstID(dstID);
-		sendToOtherMsg.setMsgType(msgType);
-		sendToOtherMsg.setMsgDescription(msgDesc);
+	private void msgSetting(Message msgOfSendingToOther, String srcID, String dstID, String msgType, Message.MessageDescription msgDesc){
+		msgOfSendingToOther.setSrcId(srcID);
+		msgOfSendingToOther.setDstID(dstID);
+		msgOfSendingToOther.setMsgType(msgType);
+		msgOfSendingToOther.setMsgDescription(msgDesc);
 	}
 
 	public void checkOtherDVMStock(ArrayList<Message> confirmedList) { // 재고 확인 메세지 보냄
 		// 음료 재고 확인 메세지 설정
 		for(Message msg: confirmedList) {
-			Message sendToOtherMsg = new Message(); // 상대 DVM으로 보내는 메세지
+			Message msgOfSendingToOther = new Message(); // 상대 DVM으로 보내는 메세지
 			Message.MessageDescription msgDesc = new Message.MessageDescription();
 
 			String srcID = msg.getDstID(); // 도착지 설정
@@ -94,20 +95,22 @@ public class Network {
 			msgDesc.setItemCode(drinkCode);
 			msgDesc.setItemNum(drinkNum);
 
-			msgSetting(sendToOtherMsg, srcID, dstID, msgType, msgDesc);
+			msgSetting(msgOfSendingToOther, srcID, dstID, msgType, msgDesc);
 
-			sendBroadcastMsg(team3IP, msg);
+			sendBroadcastMsg(TEAM3IP, msg);
 		}
 	}
 
-	public void sendSoldDrinkInfo(String src_id, String dst_id, String verificationCode) {
-		Message sendToOtherMsg = new Message();
+	public void sendSoldDrinkInfo(String srcID, String dstID, String verificationCode) {
+		Message msgOfSendingToOther = new Message();
 		Message.MessageDescription msgDesc = new Message.MessageDescription();
+
 		msgDesc.setItemCode(this.choiceDrinkCode);
 		msgDesc.setItemNum(this.choiceDrinkNum);
 		msgDesc.setAuthCode(verificationCode);
-		msgSetting(sendToOtherMsg, src_id, dst_id, "PrepaymentCheck", msgDesc);
 
-		sendBroadcastMsg(team3IP, sendToOtherMsg); //
+		msgSetting(msgOfSendingToOther, srcID, dstID, "PrepaymentCheck", msgDesc);
+
+		sendBroadcastMsg(TEAM3IP, msgOfSendingToOther); //
 	}
 }

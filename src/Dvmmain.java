@@ -6,13 +6,13 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class dvm_main {
+public class Dvmmain {
     public static void main(String[] args) {
         ServerThreadTest serverThreadTest = new ServerThreadTest();
 //        ClientThreadTest clientThreadTest = new ClientThreadTest();
         serverThreadTest.start();
 
-        DVM dvm = new DVM();
+        DVM dvm = DVM.getInstance();
         Receiver receiver = new Receiver(dvm);
         Boolean networkConnect = true;  //임시로 일단 true라고 설정했습니다.
         if (networkConnect) {

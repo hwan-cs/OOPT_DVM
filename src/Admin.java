@@ -16,7 +16,7 @@ public class Admin extends JDialog {
 	public void refillDrink()
 	{
 		String editDrinkCode = "01"; //임의의 코드
-		for(int i = 0;i<dvm.getDrinkList().length;i++)
+		for(int i = 0; i < dvm.getEntireDrinkList().length; i++)
 		{
 			if(dvm.getCurrentSellDrink().get(editDrinkCode) != null)
 			{

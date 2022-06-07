@@ -6,9 +6,9 @@ public class DialogProvideDrink extends JDialog {
     JLabel noticeLbl;
     JButton returnBtn;
     JPanel provideDrinkPanel;
-    Boolean isMyDVM;
+    boolean isMyDVM;
 
-    public DialogProvideDrink(DVM dvm, Boolean isMyDVM)
+    public DialogProvideDrink(DVM dvm, boolean isMyDVM)
     {
         this.dvm = dvm;
         this.isMyDVM = isMyDVM;

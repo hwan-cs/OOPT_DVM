@@ -10,13 +10,13 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 	private DVMServer server;
 	private DVM dvm;
 	private Serializer serializer;
-	private static HashMap<String, String> ipMap = new HashMap<>();
-	private static final String team3IP = "localhost"; // 작동하는지 확인하기 위한 임시 변수
-	private static final String team1_IP = "";
-	private static final String team2_IP = "";
-	private static final String team4_IP = "";
-	private static final String team5_IP = "";
-	private static final String team6_IP = "";
+	private static HashMap<String, String> IPMAP = new HashMap<>();
+	private static final String TEAM3IP = "localhost"; // 작동하는지 확인하기 위한 임시 변수
+	private static final String TEAM1IP = "";
+	private static final String TEAM2IP = "";
+	private static final String TEAM4IP = "";
+	private static final String TEAM5IP = "";
+	private static final String TEAM6IP = "";
 
 	public Receiver(DVM dvm) {
 		this.dvm = dvm;
@@ -44,29 +44,29 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 		dvm.getCurrentSellDrink().put(drinkCode, tempDrink); // 작동 완료 확인
 		/**/
 		// 인증코드 포함된 메세지 넣음
-		String keyCode = msg.getMsgDescription().getAuthCode();
-		dvm.getODRCHashMap().put(keyCode, msg); // 인증코드를 key값으로해서 msg를 value로 넣는다.
+		String verifyCode = msg.getMsgDescription().getAuthCode();
+		dvm.getreceivedVerifyCodeMap().put(verifyCode, msg); // 인증코드를 key값으로해서 msg를 value로 넣는다.
 	}
 
 	public void handleStockCheckRequestAndSend(Message msg) { // 재고 확인 메세지
-		String src_id = msg.getSrcId(); // 상대 DVM
-		String dst_id = msg.getDstID(); // 우리 DVM
-		int myX = dvm.getDvm3X();
-		int myY = dvm.getDvm3Y();
+		String srcID = msg.getSrcId(); // 상대 DVM
+		String dstID = msg.getDstID(); // 우리 DVM
+		int myCoordX = dvm.getDvm3X();
+		int myCoordY = dvm.getDvm3Y();
 		String drinkCode = msg.getMsgDescription().getItemCode();
 		int drinkNum = msg.getMsgDescription().getItemNum();
-		boolean flag = dvm.checkOurDVMStock(drinkCode, drinkNum);
+		boolean isOurDVMHasStock = dvm.checkOurDVMStock(drinkCode, drinkNum);
 		Message sendToMsg = new Message();
 		Message.MessageDescription sendToMsgDesc = new Message.MessageDescription();
 
-		if(flag) { // 재고 있을 때만 보냄
+		if(isOurDVMHasStock) { // 재고 있을 때만 보냄
 			sendToMsgDesc.setItemCode(drinkCode);
 			sendToMsgDesc.setItemNum(drinkNum);
-			sendToMsgDesc.setDvmXCoord(myX);
-			sendToMsgDesc.setDvmYCoord(myY);
+			sendToMsgDesc.setDvmXCoord(myCoordX);
+			sendToMsgDesc.setDvmYCoord(myCoordY);
 			// msgDesc 클래스에 setDstID 없음.. 호출 불가
 
-			msgSetting(sendToMsg, dst_id, src_id, "StockCheckResponse", sendToMsgDesc);
+			msgSetting(sendToMsg, dstID, srcID, "StockCheckResponse", sendToMsgDesc);
 
 			// 메세지를 json 타입으로 변환
 			String msgToJson = serializer.message2Json(sendToMsg);
@@ -85,22 +85,22 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 		}
 	}
 	public void handleSaleCheckRequestAndSend(Message msg) { // 판매 확인 메세지
-		String src_id = msg.getSrcId(); // 상대 DVM
-		String dst_id = msg.getDstID(); // 우리 DVM
-		int myX = dvm.getDvm3X();
-		int myY = dvm.getDvm3Y();
+		String srcID = msg.getSrcId(); // 상대 DVM
+		String dstID = msg.getDstID(); // 우리 DVM
+		int myCoordX = dvm.getDvm3X();
+		int myCoordY = dvm.getDvm3Y();
 		String drinkCode = msg.getMsgDescription().getItemCode();
-		boolean flag = (dvm.getCurrentSellDrink().get(drinkCode) != null);
+		boolean isOurDVMSellDrink = (dvm.getCurrentSellDrink().get(drinkCode) != null);
 		Message sendToMsg = new Message();
 		Message.MessageDescription sendToMsgDesc = new Message.MessageDescription();
-		if(flag) { // 판매하면 보냄
+		if(isOurDVMSellDrink) { // 판매하면 보냄
 			// 판매하지 않으면 안보냄?
 			sendToMsgDesc.setItemCode(drinkCode);
-			sendToMsgDesc.setDvmXCoord(myX);
-			sendToMsgDesc.setDvmYCoord(myY);
+			sendToMsgDesc.setDvmXCoord(myCoordX);
+			sendToMsgDesc.setDvmYCoord(myCoordY);
 			// msgDesc 클래스에 setDstID 없음.. 호출 불가
 
-			msgSetting(sendToMsg, dst_id, src_id, "SalesCheckResponse", sendToMsgDesc);
+			msgSetting(sendToMsg, dstID, srcID, "SalesCheckResponse", sendToMsgDesc);
 
 			// 메세지를 json 타입으로 변환
 			String msgToJson = serializer.message2Json(sendToMsg);
