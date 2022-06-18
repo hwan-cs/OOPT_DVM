@@ -4,6 +4,8 @@ import DVM_Server.DVMServer;
 
 public class ServerThreadTest extends Thread 
 {
+	private static ServerThreadTest serverThreadTest = new ServerThreadTest();
+	
     DVMServer server;
     public ServerThreadTest() 
     {
@@ -23,6 +25,11 @@ public class ServerThreadTest extends Thread
         {
             e.printStackTrace();
         }
+    }
+    
+    public static ServerThreadTest getInstance()
+    {
+    	return serverThreadTest;
     }
     public void getMsg() 
     {

@@ -2,10 +2,13 @@ package dvmProject;
 
 import java.util.*;
 
-public class Admin  
+public class Admin extends AbstractAdminClass
 {
-	private Boolean networkConnected;
-	private DVM dvm;
+	//static으로 바꿈
+	private static Boolean networkConnected;
+	private static DVM dvm;
+	
+	private static Admin admin = new Admin(networkConnected, dvm);
 
 	public Admin(Boolean networkStatus, DVM dvm) 
 	{
@@ -19,10 +22,15 @@ public class Admin
 		}
 	}
 
+	public static Admin getInstance()
+	{
+		return admin;
+	}
+	@Override
 	public void refillDrink() 
 	{
 		String editDrinkCode = "01"; //임의의 코드
-		for(int i = 0;i<dvm.getDrinkList().length;i++)
+		for(int i = 0;i<dvm.getEntireDrinkList().length;i++)
 		{
 			if(dvm.getCurrentSellDrink().get(editDrinkCode) != null)
 			{

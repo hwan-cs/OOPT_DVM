@@ -46,7 +46,7 @@ public class Controller extends JDialog
 		//웬만해선 constructor 안에서 메소드 호출 하지 말아라
 		printOption();
 	}
-
+	
 	public void printMenu() 
 	{
 		this.dialogPrintOption.setVisible(false);

@@ -12,7 +12,7 @@ public class Dvmmain
 {
     public static void main(String[] args) 
     {
-        DVM dvm = DVM.getInstance();
-        dvm.start();
+        AbstractDVMClass dvm = DVM.getInstance();
+        dvm.templateStart();
     }
 }

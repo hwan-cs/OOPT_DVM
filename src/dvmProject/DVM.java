@@ -7,7 +7,7 @@ import java.util.*;
 
 import javax.swing.JOptionPane;
 
-public class DVM 
+public class DVM extends AbstractDVMClass
 {
 	private int dvm3X = 12, dvm3Y = 47;
 
@@ -160,16 +160,17 @@ public class DVM
 		this.entireDrinkList = entireDrinkList;
 	}
 
+	@Override
 	public void start()
 	{
-        ServerThreadTest serverThreadTest = new ServerThreadTest();
+        ServerThreadTest serverThreadTest = ServerThreadTest.getInstance();
 //      ClientThreadTest clientThreadTest = new ClientThreadTest();
         serverThreadTest.start();
 
-      	Receiver receiver = new Receiver(dvm); //객체 생성
+      	Receiver receiver = Receiver.getInstance(); //객체 생성
       	Boolean networkConnect = true;  //임시로 일단 true라고 설정했습니다.
       
-        Admin admin = new Admin(networkConnect, dvm);    //admin에서 system start()
+        Admin admin = Admin.getInstance();    //admin에서 system start()
         Message msg = new Message();
         Message.MessageDescription msgDesc = new Message.MessageDescription();
         
@@ -185,6 +186,7 @@ public class DVM
         msg.setMsgDescription(msgDesc);
 	}
 	
+	@Override
 	public void calcClosestDVMLoc() 
 	{ // getConfirmedDVMList()로 얻은 return 값을 전달함.
 //		calcDVMInfo = new String[3];
@@ -240,6 +242,7 @@ public class DVM
 		return this.confirmedDVMList;
 	}
 
+	@Override
 	public boolean checkOurDVMStock(String drinkCode, int drinkNum) 
 	{ // 우리 DVM(=DVM3)의 재고 확인
 		if(currentSellDrink.get(drinkCode) == null) 

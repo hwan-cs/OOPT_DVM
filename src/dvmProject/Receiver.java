@@ -10,7 +10,8 @@ import java.util.*;
 
 public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신하는 파트
 	private DVMServer server;
-	private DVM dvm;
+	//dvm static 으로 바꿈
+	private static DVM dvm;
 	private Serializer serializer;
 	private static HashMap<String, String> IPMAP = new HashMap<>();
 	private static final String TEAM3IP = "localhost"; // 작동하는지 확인하기 위한 임시 변수
@@ -20,12 +21,21 @@ public class Receiver extends Thread { // 상대 DVM에서 발신한 MSG 수신�
 	private static final String TEAM5IP = "";
 	private static final String TEAM6IP = "";
 
-	public Receiver(DVM dvm) {
-		this.dvm = dvm;
-		this.server = new DVMServer();
-		this.serializer = new Serializer();
-	}
+//	public Receiver(DVM dvm) {
+//		this.dvm = dvm;
+//		this.server = new DVMServer();
+//		this.serializer = new Serializer();
+//	}
 
+	private static Receiver receiver = new Receiver();
+	
+	public static Receiver getInstance()
+	{
+		receiver.dvm = dvm;
+		receiver.server = new DVMServer();
+		receiver.serializer = new Serializer();
+		return receiver;
+	}
 	public int responseStockConfirmMsg(Message msg) { // 재고 응답
 		dvm.getConfirmedDVMList().add(msg);
 		return 0;
