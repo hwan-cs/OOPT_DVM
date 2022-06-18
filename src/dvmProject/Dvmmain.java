@@ -13,7 +13,6 @@ public class Dvmmain
     public static void main(String[] args) 
     {
         AbstractDVMClass dvm = DVM.getInstance();
-        System.out.println("zz");
         dvm.templateStart();
     }
 }
