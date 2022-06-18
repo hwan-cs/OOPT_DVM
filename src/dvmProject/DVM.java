@@ -163,14 +163,14 @@ public class DVM extends AbstractDVMClass
 	@Override
 	public void start()
 	{
-        ServerThreadTest serverThreadTest = ServerThreadTest.getInstance();
+        //ServerThreadTest serverThreadTest = ServerThreadTest.getInstance();
 //      ClientThreadTest clientThreadTest = new ClientThreadTest();
-        serverThreadTest.start();
+        //serverThreadTest.start();
 
-      	Receiver receiver = Receiver.getInstance(); //객체 생성
+      //	Receiver receiver = Receiver.getInstance(); //객체 생성
       	Boolean networkConnect = true;  //임시로 일단 true라고 설정했습니다.
       
-        Admin admin = Admin.getInstance();    //admin에서 system start()
+        Admin admin = Admin.getInstance(networkConnect, dvm);    //admin에서 system start()
         Message msg = new Message();
         Message.MessageDescription msgDesc = new Message.MessageDescription();
         

@@ -8,7 +8,7 @@ public class Admin extends AbstractAdminClass
 	private static Boolean networkConnected;
 	private static DVM dvm;
 	
-	private static Admin admin = new Admin(networkConnected, dvm);
+	private static Admin admin;
 
 	public Admin(Boolean networkStatus, DVM dvm) 
 	{
@@ -22,8 +22,9 @@ public class Admin extends AbstractAdminClass
 		}
 	}
 
-	public static Admin getInstance()
+	public static Admin getInstance(Boolean networkStatus, DVM dvm)
 	{
+		admin = new Admin(networkStatus, dvm);
 		return admin;
 	}
 	@Override
